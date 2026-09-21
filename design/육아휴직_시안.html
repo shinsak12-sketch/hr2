@@ -1,0 +1,666 @@
+<title>육아휴직 대장 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#E4E9F0; --bg2:#EDF1F6; --sh-d:#b9c2d0; --sh-l:#ffffff;
+  --ink:#1c2433; --ink2:#55627a; --ink3:#8a96ab; --line:#d3dae6;
+  --ac:#00854A; --ac2:#5CB531; --ac3:#9DC815; --ac-soft:rgba(0,133,74,.12);
+  --warn:#D89600; --warn-soft:rgba(216,150,0,.14);
+  --bad:#D0453F; --bad-soft:rgba(208,69,63,.13);
+  --info:#2F6FE4; --info-soft:rgba(47,111,228,.12);
+  --raise:7px 7px 16px var(--sh-d), -7px -7px 16px var(--sh-l);
+  --raise-sm:4px 4px 10px var(--sh-d), -4px -4px 10px var(--sh-l);
+  --inset:inset 4px 4px 9px var(--sh-d), inset -4px -4px 9px var(--sh-l);
+  --inset-sm:inset 2px 2px 5px var(--sh-d), inset -2px -2px 5px var(--sh-l);
+  --r:18px; --r-sm:12px;
+  --font:"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1F2631; --bg2:#27303D; --sh-d:#141a22; --sh-l:#2c3644;
+    --ink:#E8EDF5; --ink2:#AAB5C7; --ink3:#6F7C92; --line:#33404f;
+    --ac:#3FBF7F; --ac-soft:rgba(63,191,127,.16);
+    --warn:#F0B429; --warn-soft:rgba(240,180,41,.16);
+    --bad:#F26B65; --bad-soft:rgba(242,107,101,.16);
+    --info:#6C9BFF; --info-soft:rgba(108,155,255,.16);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1F2631; --bg2:#27303D; --sh-d:#141a22; --sh-l:#2c3644;
+  --ink:#E8EDF5; --ink2:#AAB5C7; --ink3:#6F7C92; --line:#33404f;
+  --ac:#3FBF7F; --ac-soft:rgba(63,191,127,.16);
+  --warn:#F0B429; --warn-soft:rgba(240,180,41,.16);
+  --bad:#F26B65; --bad-soft:rgba(242,107,101,.16);
+  --info:#6C9BFF; --info-soft:rgba(108,155,255,.16);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- App shell ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.side{padding:22px 16px;display:flex;flex-direction:column;gap:18px;border-right:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px}
+.logo{width:38px;height:38px;border-radius:12px;box-shadow:var(--raise-sm);display:grid;place-items:center;background:var(--bg)}
+.logo i{width:18px;height:18px;border-radius:6px;background:linear-gradient(135deg,var(--ac),var(--ac3))}
+.brand b{display:block;font-size:15px;letter-spacing:-.01em}
+.brand small{color:var(--ink3);font-size:11px}
+.nav-h{font-size:11px;letter-spacing:.08em;color:var(--ink3);padding:0 10px;text-transform:uppercase}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);color:var(--ink2);text-align:left;transition:box-shadow .25s,color .2s,transform .2s}
+.nav button:hover{color:var(--ink)}
+.nav button.on{box-shadow:var(--inset);color:var(--ac);font-weight:600}
+.nav button.soon{opacity:.45;cursor:default}
+.nav .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.6;flex:none}
+.nav .cnt{margin-left:auto;font-size:11px;color:var(--ink3)}
+.side .foot{margin-top:auto;padding:12px;border-radius:var(--r-sm);box-shadow:var(--inset-sm);font-size:12px;color:var(--ink2)}
+.side .foot b{display:block;color:var(--ink);font-size:12px}
+.side .foot .path{font-family:var(--mono);font-size:11px;word-break:break-all;color:var(--ink3)}
+
+.main{padding:22px 28px 40px;min-width:0}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.top h1{font-size:22px;margin:0;letter-spacing:-.02em;font-weight:700}
+.top h1 small{font-weight:400;color:var(--ink3);font-size:13px;margin-left:8px}
+.saved{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ac);padding:6px 10px;border-radius:999px;background:var(--ac-soft)}
+.saved i{width:7px;height:7px;border-radius:50%;background:var(--ac);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.top .sp{flex:1}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;box-shadow:var(--raise-sm);background:var(--bg);font-weight:600;transition:transform .15s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{box-shadow:var(--inset-sm);transform:translateY(0)}
+.btn.pri{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;box-shadow:6px 6px 14px var(--sh-d),-4px -4px 10px var(--sh-l),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.pri:active{box-shadow:inset 3px 3px 8px rgba(0,0,0,.25)}
+.icon-btn{width:40px;height:40px;border-radius:12px;box-shadow:var(--raise-sm);display:grid;place-items:center;background:var(--bg);transition:box-shadow .2s}
+.icon-btn:active{box-shadow:var(--inset-sm)}
+.tabs{display:inline-flex;padding:5px;border-radius:14px;box-shadow:var(--inset-sm);gap:4px}
+.tabs button{padding:7px 14px;border-radius:10px;color:var(--ink2);font-weight:500;transition:all .25s}
+.tabs button.on{box-shadow:var(--raise-sm);color:var(--ink);font-weight:600;background:var(--bg)}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px}
+.kpi{padding:18px 20px;border-radius:var(--r);box-shadow:var(--raise);background:var(--bg);position:relative;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;animation:rise .5s both}
+.kpi:nth-child(2){animation-delay:.06s}.kpi:nth-child(3){animation-delay:.12s}.kpi:nth-child(4){animation-delay:.18s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kpi:hover{transform:translateY(-2px)}
+.kpi.on{box-shadow:var(--inset)}
+.kpi .l{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.kpi .l i{width:9px;height:9px;border-radius:3px;background:var(--ac)}
+.kpi.w .l i{background:var(--warn)}.kpi.b .l i{background:var(--bad)}.kpi.i .l i{background:var(--info)}
+.kpi .v{font-size:32px;font-weight:700;letter-spacing:-.03em;margin-top:6px;line-height:1.1}
+.kpi .v small{font-size:13px;font-weight:500;color:var(--ink3);margin-left:4px}
+.kpi .s{font-size:12px;color:var(--ink3);margin-top:6px}
+.kpi .ring{position:absolute;right:-18px;top:-18px;width:86px;height:86px;border-radius:50%;box-shadow:var(--inset-sm);opacity:.7}
+
+/* ---------- Filter ---------- */
+.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.field{display:flex;align-items:center;gap:8px;padding:0 14px;height:42px;border-radius:13px;box-shadow:var(--inset);background:var(--bg)}
+.field input,.field select{border:0;background:transparent;outline:none;min-width:0;height:100%}
+.field input::placeholder{color:var(--ink3)}
+.field svg{flex:none;color:var(--ink3)}
+.field.search{flex:1;min-width:220px}
+.chips{display:flex;gap:6px;padding:5px;border-radius:13px;box-shadow:var(--inset-sm)}
+.chips button{padding:6px 12px;border-radius:9px;font-size:13px;color:var(--ink2);transition:all .2s}
+.chips button.on{box-shadow:var(--raise-sm);background:var(--bg);color:var(--ink);font-weight:600}
+.count{font-size:12px;color:var(--ink3);margin-left:auto}
+
+/* ---------- Table ---------- */
+.card{border-radius:var(--r);box-shadow:var(--raise);background:var(--bg);padding:6px}
+.tw{overflow:auto;border-radius:14px;max-height:62vh}
+table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13px}
+thead th{position:sticky;top:0;z-index:2;background:var(--bg2);color:var(--ink2);font-weight:600;font-size:12px;padding:12px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line)}
+thead th.g{color:var(--ac)}
+thead th .auto{display:inline-block;margin-left:5px;font-size:9px;padding:1px 5px;border-radius:5px;background:var(--ac-soft);color:var(--ac);vertical-align:middle;letter-spacing:.04em}
+tbody td{padding:11px 12px;white-space:nowrap;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr{cursor:pointer;transition:background .15s}
+tbody tr:hover td{background:var(--bg2)}
+tbody tr.sel td{background:var(--ac-soft)}
+th.st,td.st{position:sticky;left:0;z-index:1;background:var(--bg);box-shadow:4px 0 8px -4px var(--sh-d)}
+thead th.st{z-index:3;background:var(--bg2)}
+tbody tr:hover td.st{background:var(--bg2)}
+.name{font-weight:600}
+.sub{color:var(--ink3);font-size:11px;display:block}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-ok{background:var(--ac-soft);color:var(--ac)}
+.p-w{background:var(--warn-soft);color:var(--warn)}
+.p-b{background:var(--bad-soft);color:var(--bad)}
+.p-i{background:var(--info-soft);color:var(--info)}
+.p-n{background:var(--bg2);color:var(--ink3);box-shadow:var(--inset-sm)}
+.bar{height:6px;width:96px;border-radius:99px;box-shadow:var(--inset-sm);overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ac),var(--ac3))}
+.bar.w i{background:linear-gradient(90deg,var(--warn),#f7c95a)}
+.bar.b i{background:var(--bad)}
+.neg{color:var(--bad);font-weight:700}
+.memo{max-width:260px;overflow:hidden;text-overflow:ellipsis;color:var(--ink2);font-size:12px}
+.tfoot{display:flex;align-items:center;gap:14px;padding:12px 10px 8px;font-size:12px;color:var(--ink3);flex-wrap:wrap}
+.tfoot .lg{display:inline-flex;align-items:center;gap:6px}
+.tfoot .lg i{width:8px;height:8px;border-radius:2px}
+
+/* ---------- Drawer ---------- */
+.scrim{position:fixed;inset:0;background:rgba(20,26,34,.35);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--bg);z-index:21;transform:translateX(104%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:-12px 0 32px rgba(0,0,0,.18);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.drawer.on{transform:none}
+.dh{display:flex;align-items:flex-start;gap:14px;padding:22px 24px 16px;border-bottom:1px solid var(--line)}
+.avatar{width:52px;height:52px;border-radius:16px;box-shadow:var(--raise-sm);display:grid;place-items:center;font-weight:700;font-size:18px;color:var(--ac);flex:none}
+.dh h2{margin:0;font-size:18px}
+.dh .meta{font-size:12px;color:var(--ink2)}
+.dh .x{margin-left:auto}
+.db{overflow:auto;padding:18px 24px 90px;display:flex;flex-direction:column;gap:18px}
+.sec{border-radius:var(--r);box-shadow:var(--inset);padding:16px 18px}
+.sec h4{margin:0 0 12px;font-size:12px;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.sec h4 span{margin-left:auto;font-size:11px;letter-spacing:0;text-transform:none;color:var(--ac);font-weight:500}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.kv div{font-size:13px}
+.kv label{display:block;font-size:11px;color:var(--ink3)}
+.kv .a{color:var(--ac);font-size:10px;margin-left:4px}
+.gauge{display:flex;align-items:center;gap:18px}
+.gauge svg{flex:none}
+.gauge .t b{font-size:26px;letter-spacing:-.02em}
+.gauge .t small{display:block;color:var(--ink3);font-size:12px}
+.tl{display:flex;flex-direction:column;gap:0;position:relative;padding-left:22px}
+.tl:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl .it{position:relative;padding:8px 0 12px}
+.tl .it:before{content:"";position:absolute;left:-20px;top:13px;width:10px;height:10px;border-radius:50%;background:var(--bg);box-shadow:var(--raise-sm),inset 0 0 0 3px var(--ac)}
+.tl .it.cur:before{box-shadow:0 0 0 4px var(--ac-soft),inset 0 0 0 5px var(--ac)}
+.tl .it.fut:before{box-shadow:var(--inset-sm)}
+.tl .it b{font-size:13px}
+.tl .it .d{font-size:12px;color:var(--ink2)}
+.actions{position:absolute;left:0;right:0;bottom:0;padding:14px 24px calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.actions .btn{flex:1;justify-content:center;font-size:13px}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal.on{opacity:1;pointer-events:auto}
+.modal .box{width:min(980px,100%);max-height:92vh;overflow:auto;border-radius:24px;background:var(--bg);box-shadow:0 30px 80px rgba(0,0,0,.35),var(--raise);transform:translateY(16px) scale(.98);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.modal.on .box{transform:none}
+.mh{display:flex;align-items:center;gap:12px;padding:22px 26px 12px}
+.mh h2{margin:0;font-size:19px}
+.mh .step{display:inline-flex;gap:6px;margin-left:auto;font-size:11px;color:var(--ink3)}
+.mh .step b{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;box-shadow:var(--inset-sm);color:var(--ink3);font-weight:600}
+.mh .step b.on{box-shadow:var(--raise-sm);color:var(--ac)}
+.mb{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;padding:8px 26px 26px}
+.form{display:flex;flex-direction:column;gap:18px}
+.fs{border-radius:var(--r);box-shadow:var(--raise-sm);padding:16px 18px}
+.fs h4{margin:0 0 12px;font-size:13px;display:flex;align-items:center;gap:8px}
+.fs h4 i{width:22px;height:22px;border-radius:7px;background:var(--ac-soft);color:var(--ac);display:grid;place-items:center;font-size:11px;font-style:normal;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid .f2{grid-column:span 2}.grid .f3{grid-column:span 3}
+.fi label{display:block;font-size:11px;color:var(--ink2);margin-bottom:5px}
+.fi label em{font-style:normal;color:var(--bad)}
+.fi label .a{font-style:normal;color:var(--ac);font-size:10px;margin-left:4px}
+.fi .in{height:40px;border-radius:11px;box-shadow:var(--inset);padding:0 12px;display:flex;align-items:center;gap:8px}
+.fi .in input,.fi .in select{border:0;background:transparent;outline:none;width:100%;height:100%}
+.fi .in.ro{box-shadow:none;background:var(--bg2);color:var(--ink2);white-space:nowrap;overflow:hidden}
+.fi .in.ro .hint{font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.fi .in.ro b{color:var(--ink)}
+.fi textarea{width:100%;min-height:64px;border:0;border-radius:11px;box-shadow:var(--inset);padding:10px 12px;background:transparent;resize:vertical;outline:none}
+.seg{display:flex;gap:4px;padding:4px;border-radius:11px;box-shadow:var(--inset);height:40px}
+.seg button{flex:1;border-radius:8px;font-size:12.5px;color:var(--ink2);transition:all .2s}
+.seg button.on{box-shadow:var(--raise-sm);background:var(--bg);color:var(--ac);font-weight:600}
+.calc{border-radius:var(--r);box-shadow:var(--inset);padding:18px;display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:0}
+.calc h4{margin:0;font-size:12px;letter-spacing:.06em;color:var(--ink3);text-transform:uppercase}
+.calc .row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--ink2)}
+.calc .row b{font-size:15px;color:var(--ink)}
+.calc .big{padding:14px;border-radius:14px;box-shadow:var(--raise-sm);text-align:center}
+.calc .big b{display:block;font-size:34px;letter-spacing:-.03em;line-height:1}
+.calc .big small{color:var(--ink3);font-size:12px}
+.calc .memo-prev{font-size:12px;padding:10px 12px;border-radius:10px;background:var(--bg2);color:var(--ink2);line-height:1.6}
+.calc .memo-prev b{color:var(--ink);display:block;font-size:11px;margin-bottom:3px}
+.alert{display:flex;gap:8px;padding:10px 12px;border-radius:10px;font-size:12px;background:var(--warn-soft);color:var(--warn);align-items:flex-start}
+.alert.bad{background:var(--bad-soft);color:var(--bad)}
+.mf{display:flex;gap:10px;justify-content:flex-end;padding:0 26px 24px}
+.hint{font-size:12px;color:var(--ink3)}
+
+/* ---------- Guide view ---------- */
+.guide{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.g6{grid-column:span 6}.g12{grid-column:span 12}.g4{grid-column:span 4}
+.gcard{border-radius:var(--r);box-shadow:var(--raise);padding:20px 22px}
+.gcard h3{margin:0 0 4px;font-size:15px}
+.gcard p{margin:0 0 14px;color:var(--ink2);font-size:13px}
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw div{width:96px;padding:8px;border-radius:12px;box-shadow:var(--raise-sm);font-size:11px}
+.sw div i{display:block;height:38px;border-radius:8px;margin-bottom:6px}
+.sw b{display:block;font-size:11px}
+.sw span{color:var(--ink3);font-family:var(--mono);font-size:10px}
+.demo{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.demo .d{width:110px;height:70px;border-radius:14px;display:grid;place-items:center;font-size:12px;color:var(--ink2)}
+.demo .d.r{box-shadow:var(--raise)}.demo .d.i{box-shadow:var(--inset)}.demo .d.p{box-shadow:var(--raise-sm)}
+.spec{width:100%;border-collapse:collapse;font-size:12.5px}
+.spec th{text-align:left;color:var(--ink3);font-weight:600;font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line)}
+.spec td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.spec td:first-child{font-weight:600;white-space:nowrap}
+.spec code{font-family:var(--mono);font-size:11px;background:var(--bg2);padding:1px 6px;border-radius:5px}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;font-weight:600}
+.tag.in{background:var(--info-soft);color:var(--info)}
+.tag.au{background:var(--ac-soft);color:var(--ac)}
+ul.notes{margin:0;padding-left:18px;color:var(--ink2);font-size:13px;line-height:1.8}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;padding:12px 18px;border-radius:14px;background:var(--ink);color:var(--bg);font-size:13px;font-weight:600;z-index:40;transition:all .3s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .side{flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--line);padding:14px 16px}
+  .side .nav{flex-direction:row;flex-wrap:wrap}.side .foot,.side .nav-h{display:none}
+  .main{padding:18px 16px 40px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .mb{grid-template-columns:1fr}.calc{position:static}
+  .grid{grid-template-columns:1fr 1fr}.grid .f3{grid-column:span 2}
+  .g6,.g4{grid-column:span 12}
+}
+@media (max-width:520px){.kpis{grid-template-columns:1fr 1fr;gap:12px}.kpi .v{font-size:26px}.grid{grid-template-columns:1fr}.grid .f2,.grid .f3{grid-column:span 1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo"><i></i></div><div><b>휴가·휴직 관리</b><small>오프라인 · 폴더 저장형</small></div></div>
+    <div class="nav-h">제도별 대장</div>
+    <nav class="nav" id="nav">
+      <button class="on"><span class="dot"></span>육아휴직<span class="cnt" id="navCnt">0</span></button>
+      <button class="soon"><span class="dot"></span>육아휴직 外</button>
+      <button class="soon"><span class="dot"></span>육아기단축근무</button>
+      <button class="soon"><span class="dot"></span>출산전후휴가</button>
+      <button class="soon"><span class="dot"></span>임신중단축</button>
+      <button class="soon"><span class="dot"></span>질병휴가</button>
+      <button class="soon"><span class="dot"></span>기타 6개 시트 …</button>
+    </nav>
+    <div class="nav-h">작업</div>
+    <nav class="nav">
+      <button class="soon"><span class="dot"></span>복직 안내</button>
+      <button class="soon"><span class="dot"></span>급여 반영 자료</button>
+      <button class="soon"><span class="dot"></span>엑셀 내보내기</button>
+    </nav>
+    <div class="foot"><b>데이터 폴더</b><span class="path">D:\인사\휴가관리\hr-data.json</span><br>마지막 저장 <span class="num">09-21 14:02</span> · 백업 30개</div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <h1>육아휴직 대장<small>기준일 2026-09-21</small></h1>
+      <span class="saved"><i></i>자동 저장됨</span>
+      <span class="sp"></span>
+      <div class="tabs" id="viewTabs"><button class="on" data-v="list">대장</button><button data-v="guide">디자인 가이드</button></div>
+      <button class="icon-btn" id="themeBtn" title="테마 전환" aria-label="테마 전환">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="btn pri" id="addBtn">＋ 휴직 등록</button>
+    </div>
+
+    <section id="viewList">
+      <div class="kpis" id="kpis"></div>
+      <div class="filters">
+        <label class="field search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="성명, 사번, 소속, 자녀명 검색"></label>
+        <label class="field"><select id="fDept"><option value="">소속 전체</option></select></label>
+        <label class="field"><select id="fKind"><option value="">발령구분 전체</option><option>육아휴직</option><option>육아휴직(임신중)</option></select></label>
+        <div class="chips" id="chips">
+          <button class="on" data-s="">전체</button><button data-s="ing">휴직중</button><button data-s="soon">복직 임박</button><button data-s="plan">예정</button><button data-s="done">종료</button>
+        </div>
+        <span class="count" id="cnt"></span>
+      </div>
+      <div class="card">
+        <div class="tw"><table id="tbl">
+          <thead><tr>
+            <th class="st">순번</th><th class="st" style="left:56px">성명 / 사번</th>
+            <th>소속</th><th>직급</th><th>직위</th><th>직무</th><th>직군</th>
+            <th>발령구분</th><th>자녀구분</th><th>분할차수</th><th>자녀명</th><th>자녀 생년월일</th>
+            <th class="g">자녀 만나이<span class="auto">자동</span></th>
+            <th>휴직 시작일</th><th>휴직 종료일</th>
+            <th class="g">예정기간<span class="auto">자동</span></th>
+            <th class="g">복직(퇴직)예정일<span class="auto">자동</span></th>
+            <th class="g">사용기간<span class="auto">자동</span></th>
+            <th class="g">과거 사용기간합<span class="auto">자동</span></th>
+            <th class="g">잔여기간<span class="auto">자동</span></th>
+            <th>상태</th>
+            <th class="g">비고<span class="auto">자동+수기</span></th>
+          </tr></thead>
+          <tbody id="tb"></tbody>
+        </table></div>
+        <div class="tfoot">
+          <span class="lg"><i style="background:var(--ac)"></i>휴직중</span>
+          <span class="lg"><i style="background:var(--warn)"></i>복직 30일 이내</span>
+          <span class="lg"><i style="background:var(--info)"></i>시작 예정</span>
+          <span class="lg"><i style="background:var(--ink3)"></i>종료·복직</span>
+          <span style="margin-left:auto">한도 <b class="num">365일</b> / 자녀 1명당 · 초록 헤더 컬럼은 입력 없이 자동 계산 · 행 클릭 시 상세</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="viewGuide" hidden>
+      <div class="guide">
+        <div class="gcard g6">
+          <h3>컬러</h3><p>회사 CI 계열의 그린 3단계를 포인트로, 바탕은 푸른기 도는 회색으로 잡아 양각·음각이 살아나게 함. 상태색(주의/경고/정보)은 포인트색과 분리해 의미로만 사용</p>
+          <div class="sw">
+            <div><i style="background:#00854A"></i><b>Primary</b><span>#00854A</span></div>
+            <div><i style="background:#5CB531"></i><b>Primary 2</b><span>#5CB531</span></div>
+            <div><i style="background:#9DC815"></i><b>Primary 3</b><span>#9DC815</span></div>
+            <div><i style="background:#E4E9F0"></i><b>바탕(라이트)</b><span>#E4E9F0</span></div>
+            <div><i style="background:#1F2631"></i><b>바탕(다크)</b><span>#1F2631</span></div>
+            <div><i style="background:#D89600"></i><b>주의</b><span>#D89600</span></div>
+            <div><i style="background:#D0453F"></i><b>경고</b><span>#D0453F</span></div>
+            <div><i style="background:#2F6FE4"></i><b>정보</b><span>#2F6FE4</span></div>
+          </div>
+        </div>
+        <div class="gcard g6">
+          <h3>양각 · 음각 규칙</h3><p>"눌러서 바뀌는 것"은 양각, "값을 담는 것"은 음각. 선택된 탭은 눌린 상태(음각)로 표시해 물리 버튼 느낌을 냄</p>
+          <div class="demo">
+            <div class="d r">카드 · 버튼<br>양각</div>
+            <div class="d i">입력창 · 필터<br>음각</div>
+            <div class="d p">보조 버튼<br>얕은 양각</div>
+            <div style="flex:1;min-width:180px"><ul class="notes"><li>그림자 2방향(좌상 밝음/우하 어두움)</li><li>hover 시 1~2px 상승, active 시 음각 전환</li><li>다크 모드는 그림자 색만 교체, 규칙 동일</li></ul></div>
+          </div>
+        </div>
+        <div class="gcard g4">
+          <h3>타이포</h3><p>시안은 IBM Plex Sans KR. 실제 오프라인 파일은 폰트 내장 없이 <b>맑은 고딕</b>으로 대체됨(용량·보안망 고려). 숫자는 고정폭으로 열 정렬</p>
+          <div style="font-size:22px;font-weight:700;letter-spacing:-.02em">제목 22 / 700</div>
+          <div style="font-size:15px;font-weight:600">소제목 15 / 600</div>
+          <div style="font-size:13px">본문·표 13 / 400</div>
+          <div class="num" style="font-size:13px;color:var(--ink2)">2026-09-21 · 365일 · D-12</div>
+        </div>
+        <div class="gcard g4">
+          <h3>모션</h3>
+          <ul class="notes"><li>화면 진입: KPI 카드 순차 등장 0.5s</li><li>상세 패널: 우측 슬라이드 0.32s (감속 곡선)</li><li>등록 모달: 아래서 떠오르며 확대 0.3s</li><li>저장 표시: 점 깜빡임 → "저장됨" 고정</li><li>표 행 hover: 배경만 변화, 이동 없음(가독성)</li><li>reduced-motion 설정 시 전부 해제</li></ul>
+        </div>
+        <div class="gcard g4">
+          <h3>상태 정의</h3>
+          <ul class="notes">
+            <li><span class="pill p-ok"><i></i>휴직중</span> 오늘이 시작~종료 사이</li>
+            <li><span class="pill p-w"><i></i>복직 D-12</span> 종료까지 30일 이내 → 복직안내 대상</li>
+            <li><span class="pill p-i"><i></i>예정</span> 시작일이 미래</li>
+            <li><span class="pill p-n"><i></i>종료</span> 종료일 경과</li>
+            <li><span class="neg">−15일</span> 잔여 음수 = 한도 초과, 저장 전 경고</li>
+          </ul>
+        </div>
+        <div class="gcard g12">
+          <h3>필드 정의 (육아휴직)</h3><p>파란 태그는 사용자가 입력, 초록 태그는 프로그램이 계산. 자동 필드는 표에서 초록 헤더로 구분</p>
+          <div style="overflow-x:auto"><table class="spec">
+            <thead><tr><th>필드</th><th>구분</th><th>규칙</th></tr></thead>
+            <tbody>
+              <tr><td>순번</td><td><span class="tag au">자동</span></td><td>현재 필터·정렬 기준 표시 순번. 저장값 아님</td></tr>
+              <tr><td>소속·사번·성명·직급·직위·직무·직군</td><td><span class="tag in">입력</span></td><td>사번 입력 시 직원 마스터에서 자동 채움, 없으면 직접 입력 후 마스터에 등록</td></tr>
+              <tr><td>발령구분</td><td><span class="tag in">입력</span></td><td><code>육아휴직</code> / <code>육아휴직(임신중)</code> 선택. 임신중은 자녀명·생년월일 대신 출산예정일 입력</td></tr>
+              <tr><td>자녀구분 · 자녀명 · 자녀생년월일</td><td><span class="tag in">입력</span></td><td>첫째/둘째/셋째… 동일 사번+자녀명 조합이 "한도 계산 단위"</td></tr>
+              <tr><td>분할차수</td><td><span class="tag au">자동</span></td><td>같은 자녀의 기존 건수 + 1. 수정 가능</td></tr>
+              <tr><td>자녀 만나이</td><td><span class="tag au">자동</span></td><td>기준일 − 생년월일 → <code>만 1세 3개월</code>. 만 8세(초2) 초과 시 경고</td></tr>
+              <tr><td>휴직 시작일 · 종료일</td><td><span class="tag in">입력</span></td><td>달력 선택. 종료일 &lt; 시작일 불가</td></tr>
+              <tr><td>예정기간</td><td><span class="tag au">자동</span></td><td>종료일 − 시작일 + 1 (일수). 병기: 개월 환산</td></tr>
+              <tr><td>복직(퇴직)예정일</td><td><span class="tag au">자동</span></td><td>종료일 + 1일. 주말·공휴일이면 다음 영업일로 표시(원일자 병기)</td></tr>
+              <tr><td>사용기간</td><td><span class="tag au">자동</span></td><td>기준일 기준 경과 일수. 종료 후엔 예정기간과 동일</td></tr>
+              <tr><td>과거 사용기간합</td><td><span class="tag au">자동</span></td><td>같은 자녀의 이전 차수 예정기간 합계</td></tr>
+              <tr><td>잔여기간</td><td><span class="tag au">자동</span></td><td>한도(기본 365일, 설정 가능) − 과거합 − 이번 예정기간. 음수면 빨강</td></tr>
+              <tr><td>비고</td><td><span class="tag au">자동</span> + <span class="tag in">수기</span></td><td>분할차수 ≥ 2이면 <code>1차 2025.09.01~2025.11.30(91일), 2차 …</code> 자동 생성 후 수기 메모 이어붙임</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="상세"></aside>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="mh"><h2>육아휴직 등록</h2><span class="hint">입력 즉시 우측에서 기간·잔여 계산</span><span class="step"><b class="on">1</b><b>2</b><b>3</b></span></div>
+    <div class="mb">
+      <div class="form">
+        <div class="fs"><h4><i>1</i>직원 정보 <span class="hint">사번 입력 시 자동 채움</span></h4>
+          <div class="grid">
+            <div class="fi"><label>사번 <em>*</em></label><div class="in"><input id="mEmp" value="11900866" class="num"></div></div>
+            <div class="fi"><label>성명</label><div class="in ro"><b>서진아</b></div></div>
+            <div class="fi"><label>소속</label><div class="in ro"><b>동서울차량보상부</b></div></div>
+            <div class="fi"><label>직급</label><div class="in ro"><b>JA3</b></div></div>
+            <div class="fi"><label>직위</label><div class="in ro"><b>선임</b></div></div>
+            <div class="fi"><label>직무 / 직군</label><div class="in ro"><b>소액전담 · 전문직</b></div></div>
+          </div>
+        </div>
+        <div class="fs"><h4><i>2</i>발령 · 자녀</h4>
+          <div class="grid">
+            <div class="fi f3"><label>발령구분 <em>*</em></label><div class="seg" id="mKind"><button class="on">육아휴직</button><button>육아휴직(임신중)</button></div></div>
+            <div class="fi"><label>자녀구분 <em>*</em></label><div class="in"><select id="mChildOrd"><option>첫째</option><option selected>둘째</option><option>셋째</option></select></div></div>
+            <div class="fi"><label>자녀명 <em>*</em></label><div class="in"><input id="mChild" value="서하람"></div></div>
+            <div class="fi"><label>자녀 생년월일 <em>*</em></label><div class="in"><input id="mBirth" type="date" value="2024-12-21"></div></div>
+            <div class="fi"><label>분할차수 <span class="a">자동</span></label><div class="in ro"><b id="mSeq">2차</b>&nbsp;<span class="hint">같은 자녀 기존 1건</span></div></div>
+            <div class="fi f2"><label>자녀 만나이 <span class="a">자동</span></label><div class="in ro"><b id="mAge">—</b></div></div>
+          </div>
+        </div>
+        <div class="fs"><h4><i>3</i>휴직 기간</h4>
+          <div class="grid">
+            <div class="fi"><label>휴직 시작일 <em>*</em></label><div class="in"><input id="mStart" type="date" value="2026-10-01"></div></div>
+            <div class="fi"><label>휴직 종료일 <em>*</em></label><div class="in"><input id="mEnd" type="date" value="2027-06-30"></div></div>
+            <div class="fi"><label>복직(퇴직)예정일 <span class="a">자동</span></label><div class="in ro"><b id="mReturn">—</b></div></div>
+            <div class="fi f3"><label>비고 <span class="a">자동 생성 + 수기</span></label><textarea id="mMemo" placeholder="추가 메모 (자동 생성분 뒤에 이어붙음)"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="calc" id="calc"></div>
+    </div>
+    <div class="mf"><button class="btn" id="mCancel">취소</button><button class="btn pri" id="mSave">저장</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- 기준일 · 유틸 ---------- */
+const TODAY = new Date(2026, 8, 21);
+const D = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const fmtDot = s => s.replaceAll('-', '.');
+const days = (a, b) => Math.round((D(b) - D(a)) / 864e5) + 1;
+const addDays = (s, n) => { const d = D(s); d.setDate(d.getDate() + n); return fmt(d); };
+const HOL = new Set(['2026-10-03','2026-10-09','2026-12-25','2027-01-01','2027-03-01','2027-05-05']);
+function nextBiz(s){ let d = s, moved = false; while (D(d).getDay() === 0 || D(d).getDay() === 6 || HOL.has(d)) { d = addDays(d, 1); moved = true; } return { d, moved }; }
+function age(birth, ref = TODAY){ const b = D(birth); let y = ref.getFullYear() - b.getFullYear(), m = ref.getMonth() - b.getMonth(); if (ref.getDate() < b.getDate()) m--; if (m < 0) { y--; m += 12; } return y < 0 ? '—' : `만 ${y}세 ${m}개월`; }
+const LIMIT = 365;
+
+/* ---------- 예시 데이터 (가상 인물) ---------- */
+const emps = {
+  '11101171': { name:'이보람', dept:'강북차량보상부', grade:'JA4', pos:'선임', job:'소액전담', group:'전문직' },
+  '11900866': { name:'서진아', dept:'동서울차량보상부', grade:'JA3', pos:'선임', job:'소액전담', group:'전문직' },
+  '11412211': { name:'이현서', dept:'인천차량보상부', grade:'JA5', pos:'선임', job:'소액전담', group:'전문직' },
+  '12100167': { name:'정지윤', dept:'경기차량보상부', grade:'JA2', pos:'책임', job:'대물심사', group:'전문직' },
+  '11800775': { name:'김나윤', dept:'부산차량보상부', grade:'JA4', pos:'선임', job:'소액전담', group:'전문직' },
+  '11800777': { name:'김하영', dept:'대구차량보상부', grade:'JA3', pos:'선임', job:'현장출동', group:'일반직' },
+  '10278391': { name:'박도현', dept:'수도권보상본부', grade:'JB2', pos:'책임', job:'보상기획', group:'일반직' },
+  '12300607': { name:'한유진', dept:'경영지원본부', grade:'JA3', pos:'선임', job:'인사운영', group:'일반직' },
+};
+let rows = [
+  { id:1, emp:'11101171', kind:'육아휴직', ord:'둘째', child:'신하은', birth:'2025-04-02', start:'2026-08-03', end:'2027-08-02', memo:'' },
+  { id:2, emp:'11900866', kind:'육아휴직', ord:'둘째', child:'서하람', birth:'2024-12-21', start:'2025-09-01', end:'2025-11-30', memo:'' },
+  { id:3, emp:'11412211', kind:'육아휴직', ord:'첫째', child:'석유나', birth:'2022-12-28', start:'2026-08-03', end:'2026-10-02', memo:'' },
+  { id:4, emp:'11412211', kind:'육아휴직', ord:'첫째', child:'석유나', birth:'2022-12-28', start:'2024-03-04', end:'2024-08-31', memo:'' },
+  { id:5, emp:'11412211', kind:'육아휴직', ord:'첫째', child:'석유나', birth:'2022-12-28', start:'2025-01-02', end:'2025-05-31', memo:'' },
+  { id:6, emp:'12100167', kind:'육아휴직(임신중)', ord:'첫째', child:'(출산예정 2026-12-15)', birth:'', start:'2026-09-01', end:'2026-12-31', memo:'임신 중 사용, 출산 후 출산전후휴가 전환 예정' },
+  { id:7, emp:'11800775', kind:'육아휴직', ord:'둘째', child:'김건우', birth:'2021-04-22', start:'2026-09-07', end:'2027-09-06', memo:'' },
+  { id:8, emp:'11800777', kind:'육아휴직', ord:'첫째', child:'하예솔', birth:'2025-06-19', start:'2026-09-07', end:'2026-10-19', memo:'' },
+  { id:9, emp:'10278391', kind:'육아휴직', ord:'첫째', child:'박서준', birth:'2023-02-10', start:'2026-11-02', end:'2027-04-30', memo:'배우자 육아휴직 종료 후 이어서 사용' },
+  { id:10,emp:'12300607', kind:'육아휴직', ord:'첫째', child:'한시우', birth:'2024-08-15', start:'2025-10-01', end:'2026-09-30', memo:'' },
+];
+
+/* ---------- 계산 ---------- */
+function enrich(list){
+  const byChild = {};
+  list.forEach(r => { const k = r.emp + '|' + r.child; (byChild[k] ||= []).push(r); });
+  Object.values(byChild).forEach(g => g.sort((a,b) => a.start.localeCompare(b.start)).forEach((r,i) => r.seq = i+1));
+  return list.map(r => {
+    const e = emps[r.emp]; const g = byChild[r.emp+'|'+r.child];
+    const prev = g.filter(x => x.seq < r.seq);
+    const plan = days(r.start, r.end);
+    const past = prev.reduce((s,x) => s + days(x.start, x.end), 0);
+    const t = fmt(TODAY);
+    let used = t < r.start ? 0 : t > r.end ? plan : days(r.start, t);
+    const ret = nextBiz(addDays(r.end, 1));
+    const left = LIMIT - past - plan;
+    const dleft = Math.round((D(r.end) - TODAY) / 864e5);
+    let status = t < r.start ? 'plan' : t > r.end ? 'done' : dleft <= 30 ? 'soon' : 'ing';
+    const autoMemo = prev.map(x => `${x.seq}차 ${fmtDot(x.start)}~${fmtDot(x.end)}(${days(x.start,x.end)}일)`).join(', ');
+    return { ...r, ...e, plan, past, used, left, dleft, status, ret, prev, autoMemo,
+      memoAll: [autoMemo, r.memo].filter(Boolean).join(' · '),
+      ageStr: r.birth ? age(r.birth) : '—' };
+  });
+}
+const ST = { ing:['p-ok','휴직중'], soon:['p-w','복직 D-'], plan:['p-i','예정'], done:['p-n','종료'] };
+const pill = r => { const [c,l] = ST[r.status]; return `<span class="pill ${c}"><i></i>${r.status==='soon' ? l + r.dleft : l}</span>`; };
+const kor = n => `${n}일`;
+const months = n => `${(n/30.4).toFixed(1).replace(/\.0$/,'')}개월`;
+
+/* ---------- 목록 렌더 ---------- */
+let state = { q:'', dept:'', kind:'', s:'', sel:null };
+const $ = s => document.querySelector(s);
+function render(){
+  const all = enrich(rows);
+  $('#navCnt').textContent = all.filter(r => r.status==='ing'||r.status==='soon').length;
+  const k = {
+    ing: all.filter(r => r.status==='ing'||r.status==='soon').length,
+    soon: all.filter(r => r.status==='soon').length,
+    plan: all.filter(r => r.status==='plan').length,
+    over: all.filter(r => r.left < 0).length,
+  };
+  $('#kpis').innerHTML = `
+    <div class="kpi ${state.s===''?'on':''}" data-s=""><div class="ring"></div><div class="l"><i></i>현재 휴직중</div><div class="v num">${k.ing}<small>명</small></div><div class="s">전체 등록 ${all.length}건 · 재직 대비 ${(k.ing/Object.keys(emps).length*100).toFixed(0)}%</div></div>
+    <div class="kpi w ${state.s==='soon'?'on':''}" data-s="soon"><div class="ring"></div><div class="l"><i></i>30일 내 복직 예정</div><div class="v num">${k.soon}<small>명</small></div><div class="s">복직 안내문 발송 대상</div></div>
+    <div class="kpi i ${state.s==='plan'?'on':''}" data-s="plan"><div class="ring"></div><div class="l"><i></i>시작 예정</div><div class="v num">${k.plan}<small>건</small></div><div class="s">급여 반영 사전 확인</div></div>
+    <div class="kpi b ${state.s==='over'?'on':''}" data-s="over"><div class="ring"></div><div class="l"><i></i>한도 초과</div><div class="v num">${k.over}<small>건</small></div><div class="s">잔여기간 음수 · 확인 필요</div></div>`;
+  document.querySelectorAll('.kpi').forEach(el => el.onclick = () => { const s = el.dataset.s; state.s = s; syncChips(); render(); });
+
+  const depts = [...new Set(Object.values(emps).map(e => e.dept))];
+  if ($('#fDept').options.length === 1) depts.forEach(d => $('#fDept').add(new Option(d, d)));
+
+  const q = state.q.trim();
+  const list = all.filter(r => (!state.dept || r.dept===state.dept) && (!state.kind || r.kind===state.kind)
+    && (!state.s || r.status===state.s || (state.s==='ing' && r.status==='soon') || (state.s==='over' && r.left<0))
+    && (!q || [r.name, r.emp, r.dept, r.child].some(v => v.includes(q))))
+    .sort((a,b) => b.start.localeCompare(a.start));
+  $('#cnt').textContent = `${list.length}건 표시`;
+  $('#tb').innerHTML = list.map((r,i) => `<tr data-id="${r.id}" class="${state.sel===r.id?'sel':''}">
+    <td class="st num" style="color:var(--ink3)">${i+1}</td>
+    <td class="st" style="left:56px"><span class="name">${r.name}</span><span class="sub num">${r.emp}</span></td>
+    <td>${r.dept}</td><td class="num">${r.grade}</td><td>${r.pos}</td><td>${r.job}</td><td>${r.group}</td>
+    <td>${r.kind==='육아휴직(임신중)' ? '<span class="pill p-i">임신중</span>' : r.kind}</td>
+    <td>${r.ord}</td><td class="num" style="text-align:center">${r.seq}차${r.seq>1?' <span class="sub">분할</span>':''}</td>
+    <td>${r.child}</td><td class="num">${r.birth||'—'}</td><td>${r.ageStr}</td>
+    <td class="num">${r.start}</td><td class="num">${r.end}</td>
+    <td class="num">${r.plan}일 <span class="sub">${months(r.plan)}</span></td>
+    <td class="num">${r.ret.d}${r.ret.moved?' <span class="sub">영업일 보정</span>':''}</td>
+    <td class="num"><span class="bar ${r.status==='soon'?'w':''}"><i style="width:${Math.min(100,r.used/r.plan*100)}%"></i></span>${r.used}일</td>
+    <td class="num">${r.past}일${r.prev.length?` <span class="sub">${r.prev.length}회</span>`:''}</td>
+    <td class="num ${r.left<0?'neg':''}">${r.left<0?'−'+Math.abs(r.left):r.left}일</td>
+    <td>${pill(r)}</td>
+    <td><div class="memo" title="${r.memoAll}">${r.memoAll||'<span style="color:var(--ink3)">—</span>'}</div></td>
+  </tr>`).join('');
+  document.querySelectorAll('#tb tr').forEach(tr => tr.onclick = () => openDrawer(+tr.dataset.id));
+}
+function syncChips(){ document.querySelectorAll('#chips button').forEach(b => b.classList.toggle('on', b.dataset.s===state.s)); }
+$('#q').oninput = e => { state.q = e.target.value; render(); };
+$('#fDept').onchange = e => { state.dept = e.target.value; render(); };
+$('#fKind').onchange = e => { state.kind = e.target.value; render(); };
+document.querySelectorAll('#chips button').forEach(b => b.onclick = () => { state.s = b.dataset.s; syncChips(); render(); });
+
+/* ---------- Drawer ---------- */
+function openDrawer(id){
+  const r = enrich(rows).find(x => x.id===id); state.sel = id; render();
+  const pct = Math.max(0, Math.min(1, (r.past + r.plan) / LIMIT));
+  const circ = 2*Math.PI*34;
+  const group = enrich(rows).filter(x => x.emp===r.emp && x.child===r.child).sort((a,b)=>a.seq-b.seq);
+  $('#drawer').innerHTML = `
+    <div class="dh"><div class="avatar">${r.name[0]}</div>
+      <div><h2>${r.name} <span class="num" style="font-weight:400;color:var(--ink3);font-size:13px">${r.emp}</span></h2>
+      <div class="meta">${r.dept} · ${r.grade} ${r.pos} · ${r.job} / ${r.group}</div>
+      <div style="margin-top:6px;display:flex;gap:6px">${pill(r)}<span class="pill p-n">${r.kind}</span><span class="pill p-n">${r.seq}차</span></div></div>
+      <button class="icon-btn x" id="dClose" aria-label="닫기">✕</button></div>
+    <div class="db">
+      <div class="sec"><h4>자녀 1명당 한도 사용 현황 <span>${r.ord} ${r.child}</span></h4>
+        <div class="gauge">
+          <svg width="88" height="88" viewBox="0 0 88 88"><circle cx="44" cy="44" r="34" fill="none" stroke="var(--sh-d)" stroke-width="9" opacity=".5"/><circle cx="44" cy="44" r="34" fill="none" stroke="${r.left<0?'var(--bad)':'var(--ac)'}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct)}" transform="rotate(-90 44 44)" style="transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)"/><text x="44" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)" font-family="var(--mono)">${Math.round(pct*100)}%</text></svg>
+          <div class="t"><b class="num ${r.left<0?'neg':''}">${r.left<0?'−'+Math.abs(r.left):r.left}일</b><small>잔여 (한도 ${LIMIT}일)</small>
+            <div style="margin-top:8px;font-size:12px;color:var(--ink2)">과거 <b class="num">${r.past}일</b> + 이번 <b class="num">${r.plan}일</b> = <b class="num">${r.past+r.plan}일</b></div></div>
+        </div></div>
+      <div class="sec"><h4>이번 차수</h4>
+        <div class="kv">
+          <div><label>휴직 시작일</label><span class="num">${r.start}</span></div>
+          <div><label>휴직 종료일</label><span class="num">${r.end}</span></div>
+          <div><label>예정기간<span class="a">자동</span></label><span class="num">${r.plan}일 (${months(r.plan)})</span></div>
+          <div><label>복직(퇴직)예정일<span class="a">자동</span></label><span class="num">${r.ret.d}</span>${r.ret.moved?`<span class="sub">원일자 ${addDays(r.end,1)} 휴일 → 영업일 보정</span>`:''}</div>
+          <div><label>사용기간<span class="a">자동</span></label><span class="num">${r.used}일 / ${r.plan}일</span></div>
+          <div><label>자녀 만나이<span class="a">자동</span></label>${r.ageStr}${r.birth?`<span class="sub num">${r.birth}</span>`:''}</div>
+        </div></div>
+      <div class="sec"><h4>분할 사용 이력 <span>${group.length}차수</span></h4>
+        <div class="tl">${group.map(g => `<div class="it ${g.id===r.id?'cur':g.status==='plan'?'fut':''}"><b>${g.seq}차</b> <span class="num" style="color:var(--ink2)">${fmtDot(g.start)} ~ ${fmtDot(g.end)}</span> <span class="num">(${g.plan}일)</span><div class="d">${g.id===r.id?'현재 선택':ST[g.status][1].replace('D-','')}${g.id!==r.id?' · 클릭하면 이동':''}</div></div>`).join('')}</div>
+      </div>
+      <div class="sec"><h4>비고 <span>자동 생성 + 수기</span></h4>
+        <div style="font-size:13px;line-height:1.7">${r.autoMemo ? `<div><span class="tag au">자동</span> ${r.autoMemo}</div>`:''}${r.memo?`<div><span class="tag in">수기</span> ${r.memo}</div>`:''}${!r.memoAll?'<span style="color:var(--ink3)">—</span>':''}</div>
+      </div>
+    </div>
+    <div class="actions"><button class="btn" onclick="toast('복직 안내문 · 다음 단계에서 설계')">복직 안내문</button><button class="btn" onclick="toast('급여 반영 자료 · 다음 단계에서 설계')">급여 자료</button><button class="btn pri" onclick="toast('수정 폼은 등록 폼과 동일 구조')">수정</button></div>`;
+  $('#dClose').onclick = closeDrawer;
+  $('#scrim').classList.add('on'); $('#drawer').classList.add('on');
+}
+function closeDrawer(){ $('#scrim').classList.remove('on'); $('#drawer').classList.remove('on'); state.sel=null; render(); }
+$('#scrim').onclick = closeDrawer;
+
+/* ---------- Modal (live calc) ---------- */
+const M = { kind:'육아휴직' };
+document.querySelectorAll('#mKind button').forEach(b => b.onclick = () => { document.querySelectorAll('#mKind button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); M.kind=b.textContent; calc(); });
+['mEmp','mChild','mBirth','mStart','mEnd','mMemo','mChildOrd'].forEach(id => $('#'+id).addEventListener('input', calc));
+function calc(){
+  const emp = $('#mEmp').value.trim(), child = $('#mChild').value.trim(), birth = $('#mBirth').value, s = $('#mStart').value, e = $('#mEnd').value, memo = $('#mMemo').value.trim();
+  const prev = enrich(rows).filter(r => r.emp===emp && r.child===child).sort((a,b)=>a.seq-b.seq);
+  const seq = prev.length + 1;
+  $('#mSeq').textContent = seq + '차';
+  $('#mSeq').nextElementSibling.textContent = prev.length ? `같은 자녀 기존 ${prev.length}건` : '첫 사용';
+  $('#mAge').textContent = birth ? age(birth) : '—';
+  const ok = s && e && e >= s;
+  const plan = ok ? days(s, e) : 0;
+  const past = prev.reduce((a,r)=>a+r.plan,0);
+  const left = LIMIT - past - plan;
+  const ret = ok ? nextBiz(addDays(e,1)) : null;
+  $('#mReturn').textContent = ret ? ret.d + (ret.moved ? ' (영업일 보정)' : '') : '—';
+  const autoMemo = prev.map(x => `${x.seq}차 ${fmtDot(x.start)}~${fmtDot(x.end)}(${x.plan}일)`).join(', ');
+  const ageWarn = birth && (TODAY - D(birth))/864e5/365.25 > 8;
+  $('#calc').innerHTML = `
+    <h4>자동 계산</h4>
+    <div class="big"><b class="num ${left<0?'neg':''}">${ok ? (left<0?'−'+Math.abs(left):left) : '—'}<span style="font-size:14px;font-weight:500">일</span></b><small>잔여기간 (한도 ${LIMIT}일 − 과거 ${past}일 − 이번 ${plan}일)</small></div>
+    <div class="row"><span>예정기간</span><b class="num">${ok?`${plan}일 · ${months(plan)}`:'—'}</b></div>
+    <div class="row"><span>복직(퇴직)예정일</span><b class="num">${ret?ret.d:'—'}</b></div>
+    <div class="row"><span>과거 사용기간합</span><b class="num">${past}일 <span style="font-weight:400;color:var(--ink3)">${prev.length}회</span></b></div>
+    <div class="row"><span>분할차수</span><b class="num">${seq}차</b></div>
+    <div class="memo-prev"><b>비고 미리보기</b>${[autoMemo, memo].filter(Boolean).join(' · ') || '<span style="color:var(--ink3)">분할차수 1차는 자동 생성 없음</span>'}</div>
+    ${!ok && s && e ? '<div class="alert bad">⚠ 종료일이 시작일보다 앞섬</div>' : ''}
+    ${left<0 ? `<div class="alert bad">⚠ 한도 ${Math.abs(left)}일 초과 · 저장 시 확인 필요</div>` : ''}
+    ${ok && left>=0 && left<=30 ? '<div class="alert">ⓘ 잔여 30일 이하 · 추가 분할 사용 여의치 않음</div>' : ''}
+    ${ageWarn ? '<div class="alert">ⓘ 자녀 만 8세 초과 · 자격 확인 필요</div>' : ''}
+    ${M.kind==='육아휴직(임신중)' ? '<div class="alert">ⓘ 임신중 사용: 자녀명 대신 출산예정일 입력, 출산 후 출산전후휴가로 전환</div>' : ''}`;
+  return { ok, emp, child, birth, s, e, memo, seq };
+}
+$('#addBtn').onclick = () => { $('#modal').classList.add('on'); calc(); };
+$('#mCancel').onclick = () => $('#modal').classList.remove('on');
+$('#mSave').onclick = () => {
+  const v = calc(); if (!v.ok) return toast('기간을 확인하세요');
+  const ord = $('#mChildOrd').value;
+  rows.push({ id: Date.now(), emp:v.emp, kind:M.kind, ord, child:v.child, birth:v.birth, start:v.s, end:v.e, memo:v.memo });
+  $('#modal').classList.remove('on'); render(); toast('저장됨 · hr-data.json 갱신 (시안)');
+};
+$('#modal').onclick = e => { if (e.target.id==='modal') $('#modal').classList.remove('on'); };
+
+/* ---------- 기타 ---------- */
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2200); }
+document.querySelectorAll('#viewTabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#viewTabs button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  $('#viewList').hidden = b.dataset.v!=='list'; $('#viewGuide').hidden = b.dataset.v!=='guide';
+});
+$('#themeBtn').onclick = () => { const r=document.documentElement; const dark = r.dataset.theme==='dark' || (!r.dataset.theme && matchMedia('(prefers-color-scheme:dark)').matches); r.dataset.theme = dark ? 'light' : 'dark'; };
+document.querySelectorAll('.nav .soon').forEach(b => b.onclick = () => toast('이 화면은 다음 설계 단계'));
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeDrawer(); $('#modal').classList.remove('on'); } });
+render();
+</script>
