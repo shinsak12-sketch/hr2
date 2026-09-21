@@ -103,8 +103,8 @@ button{cursor:pointer;border:0;background:none}
 .tabs button.on{box-shadow:var(--raise-sm);color:var(--ink);font-weight:600;background:var(--surf2)}
 
 /* ---------- KPI ---------- */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px}
-.kpi{padding:18px 20px;border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);position:relative;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;animation:rise .5s both;border:1px solid transparent}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.kpi{padding:10px 16px;min-height:60px;display:flex;align-items:center;gap:12px;border-radius:14px;box-shadow:var(--raise);background:var(--surf);position:relative;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;animation:rise .5s both;border:1px solid transparent}
 .kpi:nth-child(2){animation-delay:.06s}.kpi:nth-child(3){animation-delay:.12s}.kpi:nth-child(4){animation-delay:.18s}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .kpi:hover{transform:translateY(-2px);box-shadow:var(--raise-hover)}
@@ -112,25 +112,28 @@ button{cursor:pointer;border:0;background:none}
 .kpi.w.on{border-color:var(--warn);box-shadow:var(--raise),0 0 0 3px var(--warn-soft)}
 .kpi.i.on{border-color:var(--info);box-shadow:var(--raise),0 0 0 3px var(--info-soft)}
 .kpi.b.on{border-color:var(--bad);box-shadow:var(--raise),0 0 0 3px var(--bad-soft)}
-.kpi .l{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.kpi .txt{flex:1;min-width:0}
+.kpi .l{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:7px;font-weight:600}
 .kpi .l i{width:9px;height:9px;border-radius:3px;background:var(--ac)}
 .kpi.w .l i{background:var(--warn)}.kpi.b .l i{background:var(--bad)}.kpi.i .l i{background:var(--info)}
-.kpi .v{font-size:32px;font-weight:700;letter-spacing:-.03em;margin-top:6px;line-height:1.1}
+.kpi .v{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1;flex:none;position:relative;z-index:1}
 .kpi .v small{font-size:13px;font-weight:500;color:var(--ink3);margin-left:4px}
-.kpi .s{font-size:12px;color:var(--ink3);margin-top:6px}
-.kpi .ring{position:absolute;right:-22px;top:-22px;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--ac-soft),transparent 70%);opacity:.9}
+.kpi .s{font-size:11px;color:var(--ink3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .ring{position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--ac-soft),transparent 70%);opacity:.9}
 .kpi.w .ring{background:radial-gradient(circle at 35% 35%,var(--warn-soft),transparent 70%)}
 .kpi.i .ring{background:radial-gradient(circle at 35% 35%,var(--info-soft),transparent 70%)}
 .kpi.b .ring{background:radial-gradient(circle at 35% 35%,var(--bad-soft),transparent 70%)}
 
 /* ---------- Filter ---------- */
-.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;padding:10px 12px;border-radius:14px;background:var(--surf);box-shadow:var(--raise-sm)}
+.filters .field{height:38px;background:var(--surf2)}
+.filters .chips{background:var(--bg2)}
 .field{display:flex;align-items:center;gap:8px;padding:0 14px;height:42px;border-radius:13px;box-shadow:var(--inset);background:var(--bg2);border:1px solid var(--line);transition:box-shadow .2s,border-color .2s}
 .field:focus-within{border-color:var(--ac);box-shadow:var(--inset),0 0 0 3px var(--ac-soft)}
 .field input,.field select{border:0;background:transparent;outline:none;min-width:0;height:100%}
 .field input::placeholder{color:var(--ink3)}
 .field svg{flex:none;color:var(--ink3)}
-.field.search{flex:1;min-width:220px}
+.field.search{flex:1;min-width:200px}
 .chips{display:flex;gap:4px;padding:4px;border-radius:13px;background:var(--bg2);border:1px solid var(--line)}
 .chips button{padding:6px 12px;border-radius:9px;font-size:13px;color:var(--ink2);transition:all .2s}
 .chips button:hover{color:var(--ink)}
@@ -165,6 +168,15 @@ thead th.st{z-index:3}
 .bar.w i{background:linear-gradient(90deg,var(--warn),#f7c95a)}
 .bar.b i{background:var(--bad)}
 .neg{color:var(--bad);font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:7px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent;line-height:1.5}
+.badge b{font-size:10px;padding:0 5px;border-radius:5px;background:rgba(255,255,255,.7);font-weight:700}
+.b-ok{background:var(--ac-soft);color:var(--ac)}
+.b-info{background:var(--info-soft);color:var(--info)}
+.b-warn{background:var(--warn-soft);color:var(--warn)}
+.b-n{background:var(--bg2);color:var(--ink2);border-color:var(--line)}
+:root[data-theme="dark"] .badge b{background:rgba(0,0,0,.25)}
+td.ret,td.ret .sub,td.ret .memo{color:var(--bad)}
+td.ret .sub{opacity:.8}
 .memo{max-width:260px;overflow:hidden;text-overflow:ellipsis;color:var(--ink2);font-size:12px}
 .tfoot{display:flex;align-items:center;gap:14px;padding:12px 10px 8px;font-size:12px;color:var(--ink3);flex-wrap:wrap}
 .tfoot .lg{display:inline-flex;align-items:center;gap:6px}
@@ -326,16 +338,18 @@ ul.notes{margin:0;padding-left:18px;color:var(--ink2);font-size:13px;line-height
     </div>
 
     <section id="viewList">
-      <div class="kpis" id="kpis"></div>
       <div class="filters">
         <label class="field search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="성명, 사번, 소속, 자녀명 검색"></label>
+        <label class="field"><select id="fYear"><option value="">연도 전체</option><option>2027</option><option selected>2026</option><option>2025</option><option>2024</option></select></label>
         <label class="field"><select id="fDept"><option value="">소속 전체</option></select></label>
         <label class="field"><select id="fKind"><option value="">발령구분 전체</option><option>육아휴직</option><option>육아휴직(임신중)</option></select></label>
+        <label class="field"><select id="fOrd"><option value="">자녀구분 전체</option><option>첫째</option><option>둘째</option><option>셋째</option></select></label>
         <div class="chips" id="chips">
           <button class="on" data-s="">전체</button><button data-s="ing">휴직중</button><button data-s="soon">복직 임박</button><button data-s="plan">예정</button><button data-s="done">종료</button>
         </div>
         <span class="count" id="cnt"></span>
       </div>
+      <div class="kpis" id="kpis"></div>
       <div class="card">
         <div class="tw"><table id="tbl">
           <thead><tr>
@@ -358,7 +372,7 @@ ul.notes{margin:0;padding-left:18px;color:var(--ink2);font-size:13px;line-height
           <span class="lg"><i style="background:var(--ac)"></i>휴직중</span>
           <span class="lg"><i style="background:var(--warn)"></i>복직 30일 이내</span>
           <span class="lg"><i style="background:var(--info)"></i>시작 예정</span>
-          <span class="lg"><i style="background:var(--ink3)"></i>종료·복직</span>
+          <span class="lg"><i style="background:var(--bad)"></i>복직완료 · 복직예정일부터 빨간 글씨</span>
           <span style="margin-left:auto">한도 <b class="num">365일</b> / 자녀 1명당 · 초록 헤더 컬럼은 입력 없이 자동 계산 · 행 클릭 시 상세</span>
         </div>
       </div>
@@ -406,7 +420,7 @@ ul.notes{margin:0;padding-left:18px;color:var(--ink2);font-size:13px;line-height
             <li><span class="pill p-ok"><i></i>휴직중</span> 오늘이 시작~종료 사이</li>
             <li><span class="pill p-w"><i></i>복직 D-12</span> 종료까지 30일 이내 → 복직안내 대상</li>
             <li><span class="pill p-i"><i></i>예정</span> 시작일이 미래</li>
-            <li><span class="pill p-n"><i></i>종료</span> 종료일 경과</li>
+            <li><span class="pill p-b"><i></i>복직완료</span> 기준일 ≥ 복직예정일. 복직예정일 이후 컬럼 전부 빨간 글씨</li>
             <li><span class="neg">−15일</span> 잔여 음수 = 한도 초과, 저장 전 경고</li>
           </ul>
         </div>
@@ -536,18 +550,18 @@ function enrich(list){
     const dleft = Math.round((D(r.end) - TODAY) / 864e5);
     let status = t < r.start ? 'plan' : t > r.end ? 'done' : dleft <= 30 ? 'soon' : 'ing';
     const autoMemo = prev.map(x => `${x.seq}차 ${fmtDot(x.start)}~${fmtDot(x.end)}(${days(x.start,x.end)}일)`).join(', ');
-    return { ...r, ...e, plan, past, used, left, dleft, status, ret, prev, autoMemo,
+    return { ...r, ...e, plan, past, used, left, dleft, status, ret, prev, autoMemo, ret_: t >= ret.d,
       memoAll: [autoMemo, r.memo].filter(Boolean).join(' · '),
       ageStr: r.birth ? age(r.birth) : '—' };
   });
 }
-const ST = { ing:['p-ok','휴직중'], soon:['p-w','복직 D-'], plan:['p-i','예정'], done:['p-n','종료'] };
+const ST = { ing:['p-ok','휴직중'], soon:['p-w','복직 D-'], plan:['p-i','예정'], done:['p-b','복직완료'] };
 const pill = r => { const [c,l] = ST[r.status]; return `<span class="pill ${c}"><i></i>${r.status==='soon' ? l + r.dleft : l}</span>`; };
 const kor = n => `${n}일`;
 const months = n => `${(n/30.4).toFixed(1).replace(/\.0$/,'')}개월`;
 
 /* ---------- 목록 렌더 ---------- */
-let state = { q:'', dept:'', kind:'', s:'', sel:null };
+let state = { q:'', dept:'', kind:'', ord:'', year:'2026', s:'', sel:null };
 const $ = s => document.querySelector(s);
 function render(){
   const all = enrich(rows);
@@ -559,36 +573,37 @@ function render(){
     over: all.filter(r => r.left < 0).length,
   };
   $('#kpis').innerHTML = `
-    <div class="kpi ${state.s===''?'on':''}" data-s=""><div class="ring"></div><div class="l"><i></i>현재 휴직중</div><div class="v num">${k.ing}<small>명</small></div><div class="s">전체 등록 ${all.length}건 · 재직 대비 ${(k.ing/Object.keys(emps).length*100).toFixed(0)}%</div></div>
-    <div class="kpi w ${state.s==='soon'?'on':''}" data-s="soon"><div class="ring"></div><div class="l"><i></i>30일 내 복직 예정</div><div class="v num">${k.soon}<small>명</small></div><div class="s">복직 안내문 발송 대상</div></div>
-    <div class="kpi i ${state.s==='plan'?'on':''}" data-s="plan"><div class="ring"></div><div class="l"><i></i>시작 예정</div><div class="v num">${k.plan}<small>건</small></div><div class="s">급여 반영 사전 확인</div></div>
-    <div class="kpi b ${state.s==='over'?'on':''}" data-s="over"><div class="ring"></div><div class="l"><i></i>한도 초과</div><div class="v num">${k.over}<small>건</small></div><div class="s">잔여기간 음수 · 확인 필요</div></div>`;
+    <div class="kpi ${state.s===''?'on':''}" data-s=""><div class="ring"></div><div class="txt"><div class="l"><i></i>현재 휴직중</div><div class="s">전체 등록 ${all.length}건 · 재직 대비 ${(k.ing/Object.keys(emps).length*100).toFixed(0)}%</div></div><div class="v num">${k.ing}<small>명</small></div></div>
+    <div class="kpi w ${state.s==='soon'?'on':''}" data-s="soon"><div class="ring"></div><div class="txt"><div class="l"><i></i>30일 내 복직 예정</div><div class="s">복직 안내문 발송 대상</div></div><div class="v num">${k.soon}<small>명</small></div></div>
+    <div class="kpi i ${state.s==='plan'?'on':''}" data-s="plan"><div class="ring"></div><div class="txt"><div class="l"><i></i>시작 예정</div><div class="s">급여 반영 사전 확인</div></div><div class="v num">${k.plan}<small>건</small></div></div>
+    <div class="kpi b ${state.s==='over'?'on':''}" data-s="over"><div class="ring"></div><div class="txt"><div class="l"><i></i>한도 초과</div><div class="s">잔여기간 음수 · 확인 필요</div></div><div class="v num">${k.over}<small>건</small></div></div>`;
   document.querySelectorAll('.kpi').forEach(el => el.onclick = () => { const s = el.dataset.s; state.s = s; syncChips(); render(); });
 
   const depts = [...new Set(Object.values(emps).map(e => e.dept))];
   if ($('#fDept').options.length === 1) depts.forEach(d => $('#fDept').add(new Option(d, d)));
 
   const q = state.q.trim();
-  const list = all.filter(r => (!state.dept || r.dept===state.dept) && (!state.kind || r.kind===state.kind)
+  const list = all.filter(r => (!state.dept || r.dept===state.dept) && (!state.kind || r.kind===state.kind) && (!state.ord || r.ord===state.ord)
+    && (!state.year || (r.start.slice(0,4) <= state.year && r.end.slice(0,4) >= state.year))
     && (!state.s || r.status===state.s || (state.s==='ing' && r.status==='soon') || (state.s==='over' && r.left<0))
     && (!q || [r.name, r.emp, r.dept, r.child].some(v => v.includes(q))))
     .sort((a,b) => b.start.localeCompare(a.start));
-  $('#cnt').textContent = `${list.length}건 표시`;
+  $('#cnt').textContent = `${list.length}건 표시${state.year ? ' · '+state.year+'년 기준' : ''}`;
   $('#tb').innerHTML = list.map((r,i) => `<tr data-id="${r.id}" class="${state.sel===r.id?'sel':''}">
     <td class="st num" style="color:var(--ink3)">${i+1}</td>
     <td class="st" style="left:56px"><span class="name">${r.name}</span><span class="sub num">${r.emp}</span></td>
     <td>${r.dept}</td><td class="num">${r.grade}</td><td>${r.pos}</td><td>${r.job}</td><td>${r.group}</td>
-    <td>${r.kind==='육아휴직(임신중)' ? '<span class="pill p-i">임신중</span>' : r.kind}</td>
-    <td>${r.ord}</td><td class="num" style="text-align:center">${r.seq}차${r.seq>1?' <span class="sub">분할</span>':''}</td>
+    <td>${r.kind==='육아휴직(임신중)' ? '<span class="badge b-info">육아휴직<b>임신중</b></span>' : '<span class="badge b-ok">육아휴직</span>'}</td>
+    <td><span class="badge b-n">${r.ord}</span></td><td style="text-align:center"><span class="badge ${r.seq>1?'b-warn':'b-n'} num">${r.seq}차${r.seq>1?'<b>분할</b>':''}</span></td>
     <td>${r.child}</td><td class="num">${r.birth||'—'}</td><td>${r.ageStr}</td>
     <td class="num">${r.start}</td><td class="num">${r.end}</td>
     <td class="num">${r.plan}일 <span class="sub">${months(r.plan)}</span></td>
-    <td class="num">${r.ret.d}${r.ret.moved?' <span class="sub">영업일 보정</span>':''}</td>
-    <td class="num"><span class="bar ${r.status==='soon'?'w':''}"><i style="width:${Math.min(100,r.used/r.plan*100)}%"></i></span>${r.used}일</td>
-    <td class="num">${r.past}일${r.prev.length?` <span class="sub">${r.prev.length}회</span>`:''}</td>
-    <td class="num ${r.left<0?'neg':''}">${r.left<0?'−'+Math.abs(r.left):r.left}일</td>
-    <td>${pill(r)}</td>
-    <td><div class="memo" title="${r.memoAll}">${r.memoAll||'<span style="color:var(--ink3)">—</span>'}</div></td>
+    <td class="num ${r.ret_?'ret':''}">${r.ret.d}${r.ret.moved?' <span class="sub">영업일 보정</span>':''}</td>
+    <td class="num ${r.ret_?'ret':''}"><span class="bar ${r.status==='soon'?'w':r.ret_?'b':''}"><i style="width:${Math.min(100,r.used/r.plan*100)}%"></i></span>${r.used}일</td>
+    <td class="num ${r.ret_?'ret':''}">${r.past}일${r.prev.length?` <span class="sub">${r.prev.length}회</span>`:''}</td>
+    <td class="num ${r.left<0?'neg':''} ${r.ret_?'ret':''}">${r.left<0?'−'+Math.abs(r.left):r.left}일</td>
+    <td class="${r.ret_?'ret':''}">${pill(r)}</td>
+    <td class="${r.ret_?'ret':''}"><div class="memo" title="${r.memoAll}">${r.memoAll||'<span style="color:var(--ink3)">—</span>'}</div></td>
   </tr>`).join('');
   document.querySelectorAll('#tb tr').forEach(tr => tr.onclick = () => openDrawer(+tr.dataset.id));
 }
@@ -596,6 +611,8 @@ function syncChips(){ document.querySelectorAll('#chips button').forEach(b => b.
 $('#q').oninput = e => { state.q = e.target.value; render(); };
 $('#fDept').onchange = e => { state.dept = e.target.value; render(); };
 $('#fKind').onchange = e => { state.kind = e.target.value; render(); };
+$('#fOrd').onchange = e => { state.ord = e.target.value; render(); };
+$('#fYear').onchange = e => { state.year = e.target.value; render(); };
 document.querySelectorAll('#chips button').forEach(b => b.onclick = () => { state.s = b.dataset.s; syncChips(); render(); });
 
 /* ---------- Drawer ---------- */
@@ -627,7 +644,7 @@ function openDrawer(id){
           <div><label>자녀 만나이<span class="a">자동</span></label>${r.ageStr}${r.birth?`<span class="sub num">${r.birth}</span>`:''}</div>
         </div></div>
       <div class="sec"><h4>분할 사용 이력 <span>${group.length}차수</span></h4>
-        <div class="tl">${group.map(g => `<div class="it ${g.id===r.id?'cur':g.status==='plan'?'fut':''}"><b>${g.seq}차</b> <span class="num" style="color:var(--ink2)">${fmtDot(g.start)} ~ ${fmtDot(g.end)}</span> <span class="num">(${g.plan}일)</span><div class="d">${g.id===r.id?'현재 선택':ST[g.status][1].replace('D-','')}${g.id!==r.id?' · 클릭하면 이동':''}</div></div>`).join('')}</div>
+        <div class="tl">${group.map(g => `<div class="it ${g.id===r.id?'cur':g.status==='plan'?'fut':''}"><b>${g.seq}차</b> <span class="num" style="color:var(--ink2)">${fmtDot(g.start)} ~ ${fmtDot(g.end)}</span> <span class="num">(${g.plan}일)</span><div class="d">${g.id===r.id?'현재 선택':ST[g.status][1].replace('D-','임박')}${g.id!==r.id?' · 클릭하면 이동':''}</div></div>`).join('')}</div>
       </div>
       <div class="sec"><h4>비고 <span>자동 생성 + 수기</span></h4>
         <div style="font-size:13px;line-height:1.7">${r.autoMemo ? `<div><span class="tag au">자동</span> ${r.autoMemo}</div>`:''}${r.memo?`<div><span class="tag in">수기</span> ${r.memo}</div>`:''}${!r.memoAll?'<span style="color:var(--ink3)">—</span>':''}</div>
