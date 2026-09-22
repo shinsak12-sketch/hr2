@@ -48,7 +48,7 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 button:disabled{opacity:.5;cursor:default}
@@ -74,8 +74,8 @@ button:disabled{opacity:.5;cursor:default}
 .splash .err{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--bad-soft);color:var(--bad);font-size:12.5px}
 
 /* ---------- App shell ---------- */
-.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
-.side{padding:22px 16px;display:flex;flex-direction:column;gap:18px;background:var(--surf);border-right:1px solid var(--line);box-shadow:4px 0 18px -10px var(--sh-d);position:relative;z-index:2}
+.app{display:grid;grid-template-columns:232px 1fr;height:100vh;height:100dvh;overflow:hidden}
+.side{padding:22px 16px;display:flex;flex-direction:column;gap:18px;overflow:auto;min-height:0;background:var(--surf);border-right:1px solid var(--line);box-shadow:4px 0 18px -10px var(--sh-d);position:relative;z-index:2}
 .brand{display:flex;align-items:center;gap:10px;padding:6px 8px}
 .logo{width:38px;height:38px;border-radius:12px;box-shadow:var(--raise-sm);display:grid;place-items:center;background:var(--surf2)}
 .logo i{width:18px;height:18px;border-radius:6px;background:linear-gradient(135deg,var(--ac),var(--ac3))}
@@ -94,8 +94,10 @@ button:disabled{opacity:.5;cursor:default}
 .side .foot b{display:block;color:var(--ink);font-size:12px}
 .side .foot .path{font-family:var(--mono);font-size:11px;word-break:break-all;color:var(--ink3)}
 
-.main{padding:22px 28px 40px;min-width:0}
-.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.main{padding:18px 28px 14px;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+#viewList{flex:1;min-height:0;display:flex;flex-direction:column}
+#viewSettings{flex:1;min-height:0;overflow:auto;padding-bottom:20px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;flex:none}
 .top h1{font-size:22px;margin:0;letter-spacing:-.02em;font-weight:700}
 .top h1 small{font-weight:400;color:var(--ink3);font-size:13px;margin-left:8px}
 .saved{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ac);padding:6px 10px;border-radius:999px;background:var(--ac-soft)}
@@ -136,7 +138,7 @@ tr:hover .badge.ghost{opacity:1}
 .tabs button.on{box-shadow:var(--raise-sm);color:var(--ink);font-weight:600;background:var(--surf2)}
 
 /* ---------- Filter ---------- */
-.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;padding:10px 12px;border-radius:14px;background:var(--surf);box-shadow:var(--raise-sm)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;flex:none;padding:10px 12px;border-radius:14px;background:var(--surf);box-shadow:var(--raise-sm)}
 .field{display:flex;align-items:center;gap:8px;padding:0 12px;height:38px;border-radius:12px;box-shadow:var(--inset);background:var(--surf2);border:1px solid var(--line);transition:box-shadow .2s,border-color .2s}
 .field:focus-within{border-color:var(--ac);box-shadow:var(--inset),0 0 0 3px var(--ac-soft)}
 .field input,.field select{border:0;background:transparent;outline:none;min-width:0;height:100%}
@@ -174,8 +176,8 @@ tr:hover .badge.ghost{opacity:1}
 .kpi.b .ring{background:radial-gradient(circle at 35% 35%,var(--bad-soft),transparent 70%)}
 
 /* ---------- Table ---------- */
-.card{border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);padding:6px 6px 4px}
-.tw{overflow:auto;border-radius:14px;max-height:calc(100vh - 150px);min-height:240px;background:var(--surf2);border:1px solid var(--line2);contain:content}
+.card{border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);padding:6px;flex:1;min-height:0;display:flex;flex-direction:column}
+.tw{overflow:auto;border-radius:14px;flex:1;min-height:0;background:var(--surf2);border:1px solid var(--line2);contain:content}
 table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13.5px}
 thead th{position:sticky;top:0;z-index:2;background:var(--surf);color:var(--ink2);font-weight:600;font-size:12px;padding:8px 10px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--line);cursor:pointer;user-select:none}
 thead th.g{color:var(--ac)}
@@ -397,7 +399,10 @@ td.ret .sub{opacity:.8}
 .toast.bad{background:var(--bad);color:#fff}
 
 @media (max-width:980px){
-  .app{grid-template-columns:1fr}
+  body{overflow:auto}
+  .app{grid-template-columns:1fr;height:auto;overflow:visible}
+  .main{overflow:visible;display:block}
+  .tw{max-height:70vh}
   .side{flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--line);padding:14px 16px}
   .side .nav{flex-direction:row;flex-wrap:wrap}.side .foot,.side .nav-h{display:none}
   .main{padding:18px 16px 40px}
@@ -910,7 +915,7 @@ function render(){
     <td class="num ed" data-f="start">${r.start}</td><td class="num ed vl" data-f="end">${r.end}</td>
     <td class="num vl ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':''}</td>
     <td class="num" title="${mdStr(r.cur)} · ${mStr(r.planM)}"><span class="v1">${r.plan}일</span></td>
-    <td class="num ${R}" title="${mStr(r.past)}${r.prev.length?' · '+r.prev.length+'회':''}"><span class="v1">${r.pastDays}일</span></td>
+    <td class="num ${R}" title="${mStr(r.past)}${r.prev.length?' · '+r.prev.length+'회':''}">${r.pastDays?`<span class="v1">${r.pastDays}일</span>`:''}</td>
     <td class="num vl ${R}" title="${mStr(r.left)}${r.endIfContinue?' · 이어 쓰면 ~'+r.endIfContinue:''}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.leftDays<0?'−'+Math.abs(r.leftDays):r.leftDays}일</span></td>
     <td class="memo-td ed ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
   </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="16" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
