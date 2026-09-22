@@ -487,7 +487,7 @@ td.ret .sub{opacity:.8}
             <th data-k="" style="cursor:default;padding-left:4px;padding-right:2px">No</th>
             <th data-k="status">상태</th>
             <th data-k="kind" class="bc">임신</th><th data-k="ext" class="bc vl">+6</th>
-            <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade">직급</th><th data-k="ord">자녀</th><th data-k="seq" class="vl">차수</th>
+            <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade" class="vl">직급</th><th data-k="ord">자녀</th><th data-k="seq">차수</th>
             <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
             <th class="g vl" data-k="retDate" title="복직(퇴직)예정일 = 종료일 + 1 · 자동">복직예정일</th>
             <th class="g" data-k="plan" title="이번 차수 사용(예정) 일수 · 자동">사용기간</th>
@@ -895,12 +895,12 @@ function render(){
     <td class="ed" data-f="dept">${esc(r.dept)}</td>
     <td class="num" style="color:var(--ink2)">${esc(r.emp)}</td>
     <td><span class="name name-link" data-open="${r.id}" title="클릭: 상세 보기">${esc(r.name)}</span></td>
-    <td class="num ed" data-f="grade">${esc(r.grade)}</td>
+    <td class="num ed vl" data-f="grade">${esc(r.grade)}</td>
     <td class="ed" data-f="ord">${esc(r.ord)}</td>
-    <td class="num vl" style="color:${r.seq>1?'var(--warn)':'var(--ink2)'};font-weight:${r.seq>1?'700':'400'}" title="분할차수(자동)">${r.seq}차</td>
+    <td class="num" style="color:${r.seq>1?'var(--warn)':'var(--ink2)'};font-weight:${r.seq>1?'700':'400'}" title="분할차수(자동)">${r.seq}차</td>
     <td class="num ed" data-f="start">${r.start}</td><td class="num ed vl" data-f="end">${r.end}</td>
     <td class="num vl ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':''}</td>
-    <td class="num" title="${mdStr(r.cur)} · ${mStr(r.planM)}"><span class="v1">${r.plan}일</span></td>
+    <td class="num ${R}" title="${mdStr(r.cur)} · ${mStr(r.planM)}"><span class="v1">${r.plan}일</span></td>
     <td class="num ${R}" title="${mStr(r.past)}${r.prev.length?' · '+r.prev.length+'회':''}">${r.pastDays?`<span class="v1">${r.pastDays}일</span>`:''}</td>
     <td class="num vl ${R}" title="${mStr(r.left)}${r.endIfContinue?' · 이어 쓰면 ~'+r.endIfContinue:''}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.leftDays<0?'−'+Math.abs(r.leftDays):r.leftDays}일</span></td>
     <td class="memo-td ed vl ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
