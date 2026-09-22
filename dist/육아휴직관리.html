@@ -8,12 +8,15 @@
 :root{
   --bg:#DDE3EC; --bg2:#E8EDF4; --surf:#F7F9FC; --surf2:#FFFFFF;
   --sh-d:#aeb8c8; --sh-l:#ffffff; --edge:rgba(255,255,255,.9);
-  --ink:#1c2433; --ink2:#55627a; --ink3:#8a96ab; --line:#cfd7e3; --line2:#e3e8f0;
+  --ink:#1c2433; --ink2:#4a5670; --ink3:#6f7d95; --line:#cfd7e3; --line2:#e3e8f0;
   --ac:#00854A; --ac2:#5CB531; --ac3:#9DC815; --ac-soft:rgba(0,133,74,.11);
   --warn:#D89600; --warn-soft:rgba(216,150,0,.14);
   --bad:#D0453F; --bad-soft:rgba(208,69,63,.13);
   --info:#2F6FE4; --info-soft:rgba(47,111,228,.12);
   --ext:#7A4DD8; --ext-soft:rgba(122,77,216,.13);
+  --row-ing:#FFF7CC; --row-ing-h:#FFF0A8; --row-plan:#FBE4E2; --row-plan-h:#F7D3CF;
+  --c1:#2F6FE4; --c1s:rgba(47,111,228,.13); --c2:#0E9F8A; --c2s:rgba(14,159,138,.14); --c3:#C2570E; --c3s:rgba(194,87,14,.14); --c4:#5B6470; --c4s:rgba(91,100,112,.14);
+  --preg:#C0397A; --preg-soft:rgba(192,57,122,.13);
   --raise:inset 0 1px 0 var(--edge), 0 10px 24px -10px var(--sh-d), 0 3px 8px -2px rgba(120,135,160,.35);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(120,135,160,.3);
   --raise-hover:inset 0 1px 0 var(--edge), 0 16px 30px -12px var(--sh-d), 0 4px 10px -2px rgba(120,135,160,.35);
@@ -33,6 +36,9 @@
   --bad:#F26B65; --bad-soft:rgba(242,107,101,.16);
   --info:#6C9BFF; --info-soft:rgba(108,155,255,.16);
   --ext:#B08CFF; --ext-soft:rgba(176,140,255,.18);
+  --row-ing:#3A3518; --row-ing-h:#4A431C; --row-plan:#3E2426; --row-plan-h:#4E2C2E;
+  --c1:#6C9BFF; --c1s:rgba(108,155,255,.18); --c2:#3FCDB6; --c2s:rgba(63,205,182,.16); --c3:#F09A5A; --c3s:rgba(240,154,90,.16); --c4:#AAB5C7; --c4s:rgba(170,181,199,.16);
+  --preg:#F07AB5; --preg-soft:rgba(240,122,181,.16);
   --raise:inset 0 1px 0 var(--edge), 0 12px 26px -10px var(--sh-d), 0 3px 8px -2px rgba(0,0,0,.4);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(0,0,0,.35);
   --raise-hover:inset 0 1px 0 var(--edge), 0 18px 32px -12px var(--sh-d), 0 4px 10px -2px rgba(0,0,0,.45);
@@ -148,18 +154,30 @@ button:disabled{opacity:.5;cursor:default}
 /* ---------- Table ---------- */
 .card{border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);padding:6px}
 .tw{overflow:auto;border-radius:14px;max-height:calc(100vh - 330px);min-height:240px;background:var(--surf2);border:1px solid var(--line2);contain:content}
-table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13px}
+table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13.5px}
 thead th{position:sticky;top:0;z-index:2;background:var(--surf);color:var(--ink2);font-weight:600;font-size:12px;padding:11px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--line);cursor:pointer;user-select:none}
 thead th.g{color:var(--ac)}
 thead th .auto{display:inline-block;margin-left:5px;font-size:9px;padding:1px 5px;border-radius:5px;background:var(--ac-soft);color:var(--ac);vertical-align:middle;letter-spacing:.04em}
 thead th .arr{font-size:10px;margin-left:3px;color:var(--ink3)}
-tbody td{padding:10px 12px;white-space:nowrap;border-bottom:1px solid var(--line2);vertical-align:middle;background:var(--surf2)}
-tbody tr:nth-child(even) td{background:var(--surf)}
+tbody td{padding:9px 12px;white-space:nowrap;border-bottom:1px solid var(--line);vertical-align:middle;background:var(--surf2)}
 tbody tr{cursor:pointer}
+tbody tr.r-ing td{background:var(--row-ing)}
+tbody tr.r-plan td{background:var(--row-plan)}
 tbody tr:hover td{background:var(--bg2)}
-tbody tr.sel td{background:var(--ac-soft)}
-th.st,td.st{position:sticky;left:0;z-index:1}
-td.st:nth-child(2),th.st:nth-child(2){border-right:1px solid var(--line)}
+tbody tr.r-ing:hover td{background:var(--row-ing-h)}
+tbody tr.r-plan:hover td{background:var(--row-plan-h)}
+tbody tr.sel td{box-shadow:inset 0 2px 0 var(--ac), inset 0 -2px 0 var(--ac)}
+td.bd{padding-left:8px}
+.bds{display:inline-flex;gap:4px;align-items:center}
+.v1{font-weight:700;font-size:1.04em}
+.pos{color:var(--ac)}
+td.memo-td{white-space:normal;min-width:220px;max-width:320px}
+.memo3{font-size:11.5px;line-height:1.4;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
+.b-c1{background:var(--c1s);color:var(--c1)}.b-c2{background:var(--c2s);color:var(--c2)}.b-c3{background:var(--c3s);color:var(--c3)}.b-c4{background:var(--c4s);color:var(--c4)}
+.b-s1{background:var(--bg2);color:var(--ink2);border-color:var(--line)}.b-s2{background:var(--warn-soft);color:var(--warn)}.b-s3{background:var(--bad-soft);color:var(--bad)}.b-s4{background:var(--ink);color:var(--bg)}
+.b-preg{background:var(--preg-soft);color:var(--preg)}
+.badge{padding:2px 7px;font-size:11px}
+
 thead th.st{z-index:3}
 .name{font-weight:600}
 .sub{color:var(--ink3);font-size:11px;display:block}
@@ -203,7 +221,7 @@ thead th.st{z-index:3}
 .neg{color:var(--bad);font-weight:700}
 td.ret,td.ret .sub,td.ret .memo{color:var(--bad)}
 td.ret .sub{opacity:.8}
-.memo{max-width:280px;overflow:hidden;text-overflow:ellipsis;color:var(--ink2);font-size:12px}
+
 .tfoot{display:flex;align-items:center;gap:14px;padding:12px 10px 8px;font-size:12px;color:var(--ink3);flex-wrap:wrap}
 .tfoot .lg{display:inline-flex;align-items:center;gap:6px}
 .tfoot .lg i{width:8px;height:8px;border-radius:2px}
@@ -408,15 +426,13 @@ td.ret .sub{opacity:.8}
       <div class="card">
         <div class="tw"><table id="tbl">
           <thead><tr>
-            <th class="st" data-k="">순번</th><th class="st" style="left:56px" data-k="name">성명 / 사번</th>
-            <th data-k="dept">소속</th><th data-k="grade">직급</th><th data-k="pos">직위</th><th data-k="job">직무</th><th data-k="group">직군</th>
-            <th data-k="kind">발령구분</th><th data-k="ord">자녀구분</th><th data-k="seq">분할차수</th><th data-k="limit">한도</th><th data-k="child">자녀명</th><th data-k="birth">자녀 생년월일</th>
-            <th class="g" data-k="birth">자녀 만나이<span class="auto">자동</span></th>
-            <th data-k="start">휴직 시작일</th><th data-k="end">휴직 종료일</th>
-            <th class="g" data-k="planM">예정기간<span class="auto">자동</span></th>
+            <th data-k="" style="cursor:default">순번</th>
+            <th data-k="" style="cursor:default">구분</th>
+            <th data-k="dept">소속</th><th data-k="name">성명 / 사번</th><th data-k="grade">직급</th>
+            <th data-k="start">시작일</th><th data-k="end">종료일</th>
             <th class="g" data-k="retDate">복직(퇴직)예정일<span class="auto">자동</span></th>
-            <th class="g" data-k="usedM">사용기간<span class="auto">자동</span></th>
-            <th class="g" data-k="past">과거 사용기간합<span class="auto">자동</span></th>
+            <th class="g" data-k="planM">사용(예정)기간<span class="auto">자동</span></th>
+            <th class="g" data-k="past">과거 사용기간<span class="auto">자동</span></th>
             <th class="g" data-k="left">잔여기간<span class="auto">자동</span></th>
             <th data-k="status">상태</th>
             <th class="g" data-k="memoAll">비고<span class="auto">자동+수기</span></th>
@@ -424,11 +440,12 @@ td.ret .sub{opacity:.8}
           <tbody id="tb"></tbody>
         </table></div>
         <div class="tfoot">
-          <span class="lg"><i style="background:var(--ac)"></i>휴직중</span>
-          <span class="lg"><i style="background:var(--warn)"></i>복직 30일 이내</span>
-          <span class="lg"><i style="background:var(--info)"></i>시작 예정</span>
+          <span class="lg"><i style="background:var(--row-ing);border:1px solid #e6d27a"></i>휴직중 행</span>
+          <span class="lg"><i style="background:var(--row-plan);border:1px solid #e3a9a4"></i>시작 예정 행</span>
           <span class="lg"><i style="background:var(--bad)"></i>복직완료 · 복직예정일부터 빨간 글씨</span>
-          <span class="lg"><i style="background:var(--ext)"></i>+6개월 (배우자 3개월 이상 사용 → 한도 18개월)</span>
+          <span class="lg"><span class="badge b-c1">첫째</span><span class="badge b-c2">둘째</span><span class="badge b-c3">셋째</span></span>
+          <span class="lg"><span class="badge b-s1">1차</span><span class="badge b-s2">2차</span><span class="badge b-s3">3차</span></span>
+          <span class="lg"><span class="badge b-ext">+6개월</span><span class="badge b-preg">임신중</span></span>
           <span style="margin-left:auto" id="footNote"></span>
         </div>
       </div>
@@ -470,7 +487,7 @@ td.ret .sub{opacity:.8}
           <div class="row"><button class="btn danger" id="sWipe">육아휴직 데이터 전체 삭제</button></div>
           <h3 style="margin-top:22px">정보</h3>
           <table class="info-tbl">
-            <tr><td>버전</td><td>육아휴직 모듈 0.3 (테스트) · 산식: DATEDIF 개월 기준</td></tr>
+            <tr><td>버전</td><td>육아휴직 모듈 0.4 (테스트) · 산식: DATEDIF 개월 기준</td></tr>
             <tr><td>브라우저</td><td id="sUA" class="num" style="font-size:11px">—</td></tr>
             <tr><td>엑셀 엔진</td><td>SheetJS <span id="sXlsx" class="num"></span></td></tr>
           </table>
@@ -708,6 +725,8 @@ function enrich(list){
       memoAll:[autoMemo, r.memo].filter(Boolean).join(' · '), ageStr: ageStr(r.birth, ref) };
   });
 }
+const ordCls = o => ({'첫째':'b-c1','둘째':'b-c2','셋째':'b-c3'})[o] || 'b-c4';
+const seqCls = n => n<=1?'b-s1':n===2?'b-s2':n===3?'b-s3':'b-s4';
 const ST = { ing:['p-ok','휴직중'], soon:['p-w','복직 D-'], plan:['p-i','예정'], done:['p-b','복직완료'] };
 const pill = r => { const [c,l]=ST[r.status]; return `<span class="pill ${c}"><i></i>${r.status==='soon'? l+Math.max(0,r.dleft) : l}</span>`; };
 
@@ -826,7 +845,7 @@ function render(){
   const ref = refDate();
   $('#refLabel').textContent = '기준일 '+fmt(ref)+(data.settings.refDate?' (수동)':'');
   $('#navCnt').textContent = all.filter(r=>r.status==='ing'||r.status==='soon').length;
-  $('#footNote').innerHTML = `한도 <b class="num">${data.settings.baseMonths}개월</b> / 자녀 1명당 (배우자 조건 시 +${data.settings.extMonths}) · 개월수는 DATEDIF 방식 · 헤더 클릭 정렬 · 행 클릭 상세`;
+  $('#footNote').innerHTML = `한도 <b class="num">${data.settings.baseMonths}개월</b>/자녀 (+${data.settings.extMonths} 배우자) · 직위·직무·자녀정보는 행 클릭 시 상세`;
 
   // 필터 옵션 (복수 선택)
   const years=[...new Set(all.flatMap(r=>{ const a=+r.start.slice(0,4), b=+r.end.slice(0,4); const out=[]; for(let y=a;y<=b;y++) out.push(String(y)); return out; }))].sort().reverse();
@@ -862,28 +881,24 @@ function render(){
   $$('#tbl thead th').forEach(th=>{ const a=th.querySelector('.arr'); if(a) a.remove(); if(th.dataset.k===sk && sk){ const s=document.createElement('span'); s.className='arr'; s.textContent = sd>0?'▲':'▼'; th.appendChild(s); } });
 
   if(!all.length){
-    $('#tb').innerHTML = `<tr><td colspan="23" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
+    $('#tb').innerHTML = `<tr><td colspan="13" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
     return;
   }
   const shown = list.slice(0, state.limitRows);
-  $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; return `<tr data-id="${r.id}" class="${state.sel===r.id?'sel':''}">
-    <td class="st num" style="color:var(--ink3)">${i+1}</td>
-    <td class="st" style="left:56px"><span class="name">${esc(r.name)}</span><span class="sub num">${esc(r.emp)}</span></td>
-    <td>${esc(r.dept)}</td><td class="num">${esc(r.grade)}</td><td>${esc(r.pos)}</td><td>${esc(r.job)}</td><td>${esc(r.group)}</td>
-    <td>${r.kind==='육아휴직(임신중)'?'<span class="badge b-info">육아휴직<b>임신중</b></span>':'<span class="badge b-ok">육아휴직</span>'}</td>
-    <td><span class="badge b-n">${esc(r.ord)}</span></td>
-    <td style="text-align:center"><span class="badge ${r.seq>1?'b-warn':'b-n'} num">${r.seq}차${r.seq>1?'<b>분할</b>':''}</span></td>
-    <td>${r.ext?`<span class="badge b-ext num">${r.limit}개월<b>+${data.settings.extMonths}</b></span>`:`<span class="badge b-n num">${r.limit}개월</span>`}</td>
-    <td>${esc(r.child)||'<span class="sub">—</span>'}</td><td class="num">${r.birth||'—'}</td><td>${r.ageStr}</td>
+  $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; const rowC = r.status==='plan'?'r-plan':(r.status==='ing'||r.status==='soon')?'r-ing':''; return `<tr data-id="${r.id}" class="${rowC} ${state.sel===r.id?'sel':''}">
+    <td class="num" style="color:var(--ink3);padding-right:4px">${i+1}</td>
+    <td class="bd"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg">임신중</span>':''}<span class="badge ${ordCls(r.ord)}">${esc(r.ord)}</span><span class="badge ${seqCls(r.seq)} num">${r.seq}차</span>${r.ext?`<span class="badge b-ext num">+${data.settings.extMonths}개월</span>`:''}</span></td>
+    <td>${esc(r.dept)}</td>
+    <td><span class="name">${esc(r.name)}</span><span class="sub num">${esc(r.emp)}</span></td>
+    <td class="num">${esc(r.grade)}</td>
     <td class="num">${r.start}</td><td class="num">${r.end}</td>
-    <td class="num">${mdStr(r.cur)} <span class="sub">${mStr(r.planM)} · ${r.plan}일</span></td>
-    <td class="num ${R}">${r.retDate}${r.returnDate?' <span class="sub">실제 복직</span>':r.ret.moved?' <span class="sub">영업일 보정</span>':''}</td>
-    <td class="num ${R}"><span class="bar ${r.status==='soon'?'w':r.isDone?'b':''}"><i style="width:${Math.min(100,r.planM?r.usedM/r.planM*100:0)}%"></i></span>${mStr(r.usedM)} <span class="sub">${r.used}일</span></td>
-    <td class="num ${R}">${mStr(r.past)}${r.prev.length?` <span class="sub">${r.prev.length}회</span>`:''}</td>
-    <td class="num ${r.left<0?'neg':''} ${R}">${r.left<0?'−'+Math.abs(r.left):r.left}개월${r.endIfContinue?` <span class="sub">이어 쓰면 ~${r.endIfContinue}</span>`:''}</td>
+    <td class="num ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':r.ret.moved?'<span class="sub">영업일 보정</span>':''}</td>
+    <td class="num"><span class="v1">${mStr(r.planM)}</span><span class="sub">${mdStr(r.cur)} · ${r.plan}일</span></td>
+    <td class="num ${R}"><span class="v1">${mStr(r.past)}</span>${r.prev.length?`<span class="sub">${r.prev.length}회</span>`:''}</td>
+    <td class="num ${R}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.left<0?'−'+Math.abs(r.left):r.left}개월</span>${r.endIfContinue?`<span class="sub">→ ${r.endIfContinue}</span>`:''}</td>
     <td class="${R}">${pill(r)}</td>
-    <td class="${R}"><div class="memo" title="${esc(r.memoAll)}">${esc(r.memoAll)||'<span style="color:var(--ink3)">—</span>'}</div></td>
-  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="23" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
+    <td class="memo-td ${R}"><div class="memo3" title="${esc(r.memoAll)}">${esc(r.memoAll)||'<span style="color:var(--ink3)">—</span>'}</div></td>
+  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="13" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
 $('#tb').addEventListener('click', e=>{ const tr=e.target.closest('tr[data-id]'); if(tr) openDrawer(tr.dataset.id); });
@@ -891,7 +906,7 @@ function syncChips(){ $$('#chips button').forEach(b=>b.classList.toggle('on', b.
 function toggleStatus(v){ if(!v) state.s.clear(); else if(state.s.has(v)) state.s.delete(v); else state.s.add(v); syncChips(); render(); }
 let _qT; $('#q').oninput=e=>{ state.q=e.target.value; clearTimeout(_qT); _qT=setTimeout(render, 160); };
 $$('#chips button').forEach(b=>b.onclick=()=>toggleStatus(b.dataset.s));
-$$('#tbl thead th').forEach(th=>th.onclick=()=>{ const k=th.dataset.k; if(!k) return; if(state.sortK===k) state.sortD*=-1; else { state.sortK=k; state.sortD = ['start','end','retDate','planM','usedM','past','left','birth','limit'].includes(k)?-1:1; } render(); });
+$$('#tbl thead th').forEach(th=>th.onclick=()=>{ const k=th.dataset.k; if(!k) return; if(state.sortK===k) state.sortD*=-1; else { state.sortK=k; state.sortD = ['start','end','retDate','planM','past','left'].includes(k)?-1:1; } render(); });
 
 /* =========================================================
    상세 패널
@@ -914,6 +929,15 @@ function openDrawer(id){
           <div class="t"><b class="num ${r.left<0?'neg':''}">${r.left<0?'−'+Math.abs(r.left):r.left}개월</b><small>잔여 (한도 ${r.limit}개월${r.ext?' = 기본 '+data.settings.baseMonths+' + 배우자 '+data.settings.extMonths:''})</small>
             <div style="margin-top:8px;font-size:12px;color:var(--ink2)">과거 <b class="num">${mStr(r.past)}</b> + 이번 <b class="num">${mStr(r.planM)}</b> = <b class="num">${mStr(round3(r.past+r.planM))}</b></div></div>
         </div></div>
+      <div class="sec"><h4>직원 · 자녀</h4>
+        <div class="kv">
+          <div><label>직급 / 직위</label>${esc([r.grade,r.pos].filter(Boolean).join(' / '))||'—'}</div>
+          <div><label>직무 / 직군</label>${esc([r.job,r.group].filter(Boolean).join(' / '))||'—'}</div>
+          <div><label>발령구분</label>${esc(r.kind)}</div>
+          <div><label>자녀구분 · 자녀명</label><span class="badge ${ordCls(r.ord)}">${esc(r.ord)}</span> ${esc(r.child)||'<span class="sub">미입력</span>'}</div>
+          <div><label>${r.kind==='육아휴직(임신중)'?'출산예정일':'자녀 생년월일'}</label><span class="num">${r.birth||'—'}</span></div>
+          <div><label>자녀 만나이<span class="a">자동</span></label>${r.ageStr}</div>
+        </div></div>
       <div class="sec"><h4>이번 차수</h4>
         <div class="kv">
           <div><label>휴직 시작일</label><span class="num">${r.start}</span></div>
@@ -921,7 +945,6 @@ function openDrawer(id){
           <div><label>예정기간<span class="a">자동</span></label><span class="num">${mdStr(r.cur)}</span><span class="sub num">${mStr(r.planM)} · ${r.plan}일 · 분모 ${r.cur?r.cur.daysInMonth:'-'}일</span></div>
           <div><label>복직(퇴직)예정일<span class="a">자동</span></label><span class="num">${r.ret.d}</span>${r.ret.moved?`<span class="sub">원일자 ${addDays(r.end,1)} 휴일 → 영업일 보정</span>`:''}</div>
           <div><label>사용기간<span class="a">자동</span></label><span class="num">${mStr(r.usedM)} / ${mStr(r.planM)}</span><span class="sub num">${r.used}일 경과</span></div>
-          <div><label>자녀 만나이<span class="a">자동</span></label>${r.ageStr}${r.birth?`<span class="sub num">${r.birth}</span>`:''}</div>
           ${r.returnDate?`<div><label>실제 복직일</label><span class="num" style="color:var(--bad)">${r.returnDate}</span></div>`:''}
         </div></div>
       <div class="sec"><h4>잔여 이어 쓸 경우 <span>노동부 실무 방식</span></h4>
