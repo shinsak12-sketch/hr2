@@ -13,10 +13,10 @@
   --warn:#D89600; --warn-soft:rgba(216,150,0,.14);
   --bad:#D0453F; --bad-soft:rgba(208,69,63,.13);
   --info:#2F6FE4; --info-soft:rgba(47,111,228,.12);
-  --ext:#7A4DD8; --ext-soft:rgba(122,77,216,.13);
+  --ext:#A88BE0; --ext-soft:rgba(122,77,216,.13);
   --row-ing:#FFFBE8; --row-ing-h:#FFF4C4; --row-plan:#FDF1F0; --row-plan-h:#F9E1DF;
   --c1:#3B7BF0; --c1s:rgba(47,111,228,.09); --c2:#12A38C; --c2s:rgba(14,159,138,.10); --c3:#E07A1F; --c3s:rgba(194,87,14,.10); --c4:#8A93A3; --c4s:rgba(91,100,112,.10);
-  --preg:#D2478C; --preg-soft:rgba(192,57,122,.09);
+  --preg:#E08DBB; --preg-soft:rgba(192,57,122,.09);
   --raise:inset 0 1px 0 var(--edge), 0 10px 24px -10px var(--sh-d), 0 3px 8px -2px rgba(120,135,160,.35);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(120,135,160,.3);
   --raise-hover:inset 0 1px 0 var(--edge), 0 16px 30px -12px var(--sh-d), 0 4px 10px -2px rgba(120,135,160,.35);
@@ -208,7 +208,7 @@ thead th:last-child{text-align:center}
 .memo3{font-size:11px;line-height:1.3;color:var(--ink2);word-break:break-all}
 /* 구분 배지: 채움형(자녀·+6·임신중) / 테두리형(차수) */
 .bds .badge{height:20px;min-width:44px;padding:0 8px;font-size:11.5px;font-weight:700;border-radius:6px;letter-spacing:-.01em;line-height:1;justify-content:center}
-.b-c1,.b-c2,.b-c3,.b-c4,.b-preg,.bds .b-ext{color:#fff;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
+.b-c1,.b-c2,.b-c3,.b-c4,.b-preg,.bds .b-ext{color:#fff;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
 .b-c1{background:var(--c1)}.b-c2{background:var(--c2)}.b-c3{background:var(--c3)}.b-c4{background:var(--c4)}
 .b-preg{background:var(--preg)}
 .bds .b-ext{background:var(--ext)}
@@ -224,13 +224,13 @@ thead th.st{z-index:3}
 .name{font-weight:600;display:inline-block;line-height:1.25}
 .sub{color:var(--ink3);font-size:11px;display:block;line-height:1.2}
 /* 배지 공통 규격 (A안 · 채움형): 높이 20px · 최소폭 44px · 흰 글씨 */
-.pill{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:20px;min-width:44px;padding:0 8px;border-radius:6px;font-size:11.5px;font-weight:700;line-height:1;white-space:nowrap;color:#fff;letter-spacing:-.01em;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:20px;min-width:44px;padding:0 8px;border-radius:6px;font-size:11.5px;font-weight:700;line-height:1;white-space:nowrap;color:#fff;letter-spacing:-.01em;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
 .pill i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.9;flex:none}
-.p-ok{background:#149A57}
-.p-w{background:#D89600}
-.p-b{background:#D0453F}
-.p-i{background:#3B7BF0}
-.p-n{background:#8A93A3}
+.p-ok{background:#5FB585}
+.p-w{background:#E3B14E}
+.p-b{background:#E07A76}
+.p-i{background:#7AA3EA}
+.p-n{background:#A3ABB8}
 .badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:7px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent;line-height:1.5}
 .badge b{font-size:10px;padding:0 5px;border-radius:5px;background:rgba(255,255,255,.7);font-weight:700}
 :root[data-theme="dark"] .badge b{background:rgba(0,0,0,.25)}
@@ -486,8 +486,8 @@ td.ret .sub{opacity:.8}
           <thead><tr>
             <th data-k="" style="cursor:default;padding-left:4px;padding-right:2px">No</th>
             <th data-k="status">상태</th>
-            <th data-k="kind" class="bc">임신</th><th data-k="ord" class="bc">자녀</th><th data-k="seq" class="bc">차수</th><th data-k="ext" class="bc vl">+6</th>
-            <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade" class="vl">직급</th>
+            <th data-k="kind" class="bc">임신</th><th data-k="ext" class="bc vl">+6</th>
+            <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade">직급</th><th data-k="ord">자녀</th><th data-k="seq" class="vl">차수</th>
             <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
             <th class="g vl" data-k="retDate" title="복직(퇴직)예정일 = 종료일 + 1 · 자동">복직예정일</th>
             <th class="g" data-k="plan" title="이번 차수 사용(예정) 일수 · 자동">사용기간</th>
@@ -903,7 +903,7 @@ function render(){
   $$('#tbl thead th').forEach(th=>{ const a=th.querySelector('.arr'); if(a) a.remove(); if(th.dataset.k===sk && sk){ const s=document.createElement('span'); s.className='arr'; s.textContent = sd>0?'▲':'▼'; th.appendChild(s); } });
 
   if(!all.length){
-    $('#tb').innerHTML = `<tr><td colspan="18" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
+    $('#tb').innerHTML = `<tr><td colspan="17" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
     return;
   }
   const shown = list.slice(0, state.limitRows);
@@ -911,15 +911,15 @@ function render(){
   $('#deptList').innerHTML=[...new Set(Object.values(data.employees).map(e=>e.dept).filter(Boolean))].map(d=>`<option value="${esc(d)}">`).join('');
   $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; const rowC = r.status==='plan'?'r-plan':(r.status==='ing'||r.status==='soon')?'r-ing':''; return `<tr data-id="${r.id}" class="${rowC} ${state.sel===r.id?'sel':''}">
     <td class="num" style="color:var(--ink3);padding-left:4px;padding-right:2px;font-size:12px">${i+1}</td>
-    <td class="ed st-td ${R}" data-f="returnDate" title="클릭: 실제 복직일 입력 (비우면 자동 판정)">${pill(r)}</td>
+    <td class="ed st-td ${R}" data-f="returnDate" title="클릭: 실제 복직일 입력 (비우면 자동 판정)">${r.isDone?`<span class="sub" style="display:inline;color:var(--ink3)">${r.returnDate?'복직 '+r.returnDate.slice(5):''}</span>`:pill(r)}</td>
     <td class="bd bc"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg tg" data-t="preg" title="클릭: 임신중 해제">임신중</span>':'<span class="badge ghost" data-t="preg" title="임신중으로 표시">임신</span>'}</span></td>
-    <td class="bd bc"><span class="bds"><span class="badge ${ordCls(r.ord)} ed-ord tg" data-t="ord" title="클릭: 자녀구분 변경">${esc(r.ord)}</span></span></td>
-    <td class="bd bc"><span class="bds"><span class="badge ${seqCls(r.seq)} num" title="분할차수(자동)">${r.seq}차</span></span></td>
     <td class="bd bc vl"><span class="bds">${r.ext?`<span class="badge b-ext num tg" data-t="ext" title="클릭: +${EXTM}개월 해제 (같은 자녀 전체)">+${EXTM}</span>`:`<span class="badge ghost" data-t="ext" title="+${EXTM}개월 적용 (배우자 조건)">+${EXTM}</span>`}</span></td>
     <td class="ed" data-f="dept">${esc(r.dept)}</td>
     <td class="num" style="color:var(--ink2)">${esc(r.emp)}</td>
     <td><span class="name name-link" data-open="${r.id}" title="클릭: 상세 보기">${esc(r.name)}</span></td>
-    <td class="num ed vl" data-f="grade">${esc(r.grade)}</td>
+    <td class="num ed" data-f="grade">${esc(r.grade)}</td>
+    <td class="ed" data-f="ord">${esc(r.ord)}</td>
+    <td class="num vl" style="color:${r.seq>1?'var(--warn)':'var(--ink2)'};font-weight:${r.seq>1?'700':'400'}" title="분할차수(자동)">${r.seq}차</td>
     <td class="num ed" data-f="start">${r.start}</td><td class="num ed vl" data-f="end">${r.end}</td>
     <td class="num vl ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':''}</td>
     <td class="num" title="${mdStr(r.cur)} · ${mStr(r.planM)}"><span class="v1">${r.plan}일</span></td>
@@ -927,7 +927,7 @@ function render(){
     <td class="num vl ${R}" title="${mStr(r.left)}${r.endIfContinue?' · 이어 쓰면 ~'+r.endIfContinue:''}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.leftDays<0?'−'+Math.abs(r.leftDays):r.leftDays}일</span></td>
     <td class="memo-td ed vl ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
     <td class="prog-td ed" data-f="progress"><div class="memo3" style="color:var(--ink)">${esc(r.progress||'')}</div></td>
-  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="18" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
+  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="17" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
 $('#tb').addEventListener('click', e=>{
@@ -935,7 +935,7 @@ $('#tb').addEventListener('click', e=>{
   const tg=e.target.closest('[data-t]'); if(tg){ toggleBadge(tg.closest('tr').dataset.id, tg.dataset.t, tg); return; }
   const td=e.target.closest('td.ed'); if(td && !td.querySelector('.cell-in')) startEdit(td);
 });
-const EDIT_ORDER=['returnDate','dept','grade','start','end','memo','progress'];
+const EDIT_ORDER=['returnDate','dept','grade','ord','start','end','memo','progress'];
 function recOf(id){ return data.leaves.find(x=>x.id===id); }
 function applyEdit(rec, f, v){
   if(f==='start'||f==='end'){ if(!isDate(v)) { toast('날짜 형식이 아님', true); return false; } const st=f==='start'?v:rec.start, en=f==='end'?v:rec.end; if(en<st){ toast('종료일이 시작일보다 앞섬', true); return false; } rec[f]=v; }
@@ -950,15 +950,17 @@ function applyEdit(rec, f, v){
 function startEdit(td){
   const tr=td.closest('tr'), id=tr.dataset.id, f=td.dataset.f, rec=recOf(id); if(!rec) return;
   const cur = (rec[f]||'');
-  const el=document.createElement('input'); el.className='cell-in';
-  el.type = (f==='start'||f==='end'||f==='returnDate') ? 'date' : 'text'; el.value=cur;
+  let el;
+  if(f==='ord'){ el=document.createElement('select'); el.className='cell-in'; el.style.minWidth='70px'; ['첫째','둘째','셋째','넷째','기타'].forEach(o=>el.add(new Option(o,o,false,o===cur))); }
+  else { el=document.createElement('input'); el.className='cell-in'; el.type = (f==='start'||f==='end'||f==='returnDate') ? 'date' : 'text'; el.value=cur; }
   if(f==='dept') el.setAttribute('list','deptList');
   if(f==='returnDate'){ el.title='실제 복직일 · 비우고 Enter 하면 자동 판정으로 복귀'; }
   td.innerHTML=''; td.appendChild(el); el.focus(); if(el.type==='text') el.select();
+  if(el.tagName==='SELECT'){ el.onchange=()=>finish(true); }
   let done=false;
-  const finish=(commitIt, next)=>{ if(done) return; done=true; const v=el.value.trim();
+  function finish(commitIt, next){ if(done) return; done=true; const v=el.value.trim();
     if(commitIt && v!==cur){ if(applyEdit(rec,f,v)) commit(); else render(); } else render();
-    if(next) focusNext(id,f,next); };
+    if(next) focusNext(id,f,next); }
   el.onblur=()=>setTimeout(()=>finish(true),0);
   el.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); finish(true,'down'); } else if(e.key==='Escape'){ e.preventDefault(); finish(false); } else if(e.key==='Tab'){ e.preventDefault(); finish(true, e.shiftKey?'left':'right'); } };
 }
