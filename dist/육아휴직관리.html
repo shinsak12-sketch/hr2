@@ -483,16 +483,16 @@ td.ret .sub{opacity:.8}
       <div class="card">
         <div class="tw"><table id="tbl">
           <thead><tr>
-            <th data-k="" style="cursor:default">순번</th>
+            <th data-k="" style="cursor:default;padding-left:4px;padding-right:2px">No</th>
             <th data-k="status">상태</th>
             <th data-k="kind" class="bc">임신</th><th data-k="ord" class="bc">자녀</th><th data-k="seq" class="bc">차수</th><th data-k="ext" class="bc vl">+6</th>
             <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade" class="vl">직급</th>
             <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
-            <th class="g vl" data-k="retDate">복직(퇴직)예정일<span class="auto">자동</span></th>
-            <th class="g" data-k="plan">사용(예정)기간<span class="auto">자동</span></th>
-            <th class="g" data-k="pastDays">과거 사용기간<span class="auto">자동</span></th>
-            <th class="g vl" data-k="leftDays">잔여기간<span class="auto">자동</span></th>
-            <th class="g vl" data-k="memoAll">비고<span class="auto">자동+수기</span></th>
+            <th class="g vl" data-k="retDate" title="복직(퇴직)예정일 = 종료일 + 1 · 자동">복직예정일</th>
+            <th class="g" data-k="plan" title="이번 차수 사용(예정) 일수 · 자동">사용기간</th>
+            <th class="g" data-k="pastDays" title="이전 차수 합계 · 자동">과거사용</th>
+            <th class="g vl" data-k="leftDays" title="잔여 · 자동">잔여</th>
+            <th class="g vl" data-k="memoAll" title="자동 생성 + 수기">비고</th>
             <th data-k="progress">진행</th>
           </tr></thead>
           <tbody id="tb"></tbody>
@@ -909,7 +909,7 @@ function render(){
   const EXTM=data.settings.extMonths;
   $('#deptList').innerHTML=[...new Set(Object.values(data.employees).map(e=>e.dept).filter(Boolean))].map(d=>`<option value="${esc(d)}">`).join('');
   $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; const rowC = r.status==='plan'?'r-plan':(r.status==='ing'||r.status==='soon')?'r-ing':''; return `<tr data-id="${r.id}" class="${rowC} ${state.sel===r.id?'sel':''}">
-    <td class="num" style="color:var(--ink3);padding-right:4px">${i+1}</td>
+    <td class="num" style="color:var(--ink3);padding-left:4px;padding-right:2px;font-size:12px">${i+1}</td>
     <td class="ed st-td ${R}" data-f="returnDate" title="클릭: 실제 복직일 입력 (비우면 자동 판정)">${pill(r)}</td>
     <td class="bd bc"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg tg" data-t="preg" title="클릭: 임신중 해제">임신중</span>':'<span class="badge ghost" data-t="preg" title="임신중으로 표시">임신</span>'}</span></td>
     <td class="bd bc"><span class="bds"><span class="badge ${ordCls(r.ord)} ed-ord tg" data-t="ord" title="클릭: 자녀구분 변경">${esc(r.ord)}</span></span></td>
