@@ -511,11 +511,11 @@ td.ret .sub{opacity:.8}
             <div class="fi"><label>배우자 조건 충족 시 추가(개월)</label><div class="in"><input id="sExt" type="number" min="0" class="num"></div></div>
             <div class="fi"><label>기준일 (비우면 오늘)</label><div class="in"><input id="sRef" type="date"></div></div>
             <div class="fi"><label>복직 임박 알림 기준(일)</label><div class="in"><input id="sSoon" type="number" min="1" class="num"></div></div>
-            <div class="fi"><label>복직예정일 영업일 보정</label><div class="seg" id="sBiz"><button data-v="1">주말·공휴일이면 다음 영업일</button><button data-v="0">종료일 +1 그대로</button></div></div>
+            <div class="fi"><label>복직예정일 영업일 보정</label><div class="seg" id="sBiz"><button data-v="0">종료일 +1 그대로 (기본)</button><button data-v="1">주말·공휴일이면 다음 영업일</button></div></div>
           </div>
         </div>
         <div class="gcard g6">
-          <h3>공휴일</h3><p>한 줄에 하나, <span class="num">YYYY-MM-DD 이름</span> 형식. 복직예정일 영업일 보정에 사용. 기본값은 2026~2027년 예상 공휴일이므로 확인 필요</p>
+          <h3>공휴일</h3><p>한 줄에 하나, <span class="num">YYYY-MM-DD 이름</span> 형식. "다음 영업일" 옵션을 켰을 때만 사용. 기본값은 2026~2027년 예상 공휴일이므로 확인 필요</p>
           <textarea id="sHol" spellcheck="false"></textarea>
           <div class="row"><button class="btn" id="sHolSave">공휴일 저장</button><span class="hint" id="sHolCnt"></span></div>
         </div>
@@ -666,8 +666,8 @@ const DEFAULT_HOL = `2026-01-01 신정
    데이터 모델
    ========================================================= */
 let data = null;
-function freshData(){ return { meta:{version:1, module:'육아휴직', createdAt:new Date().toISOString(), updatedAt:null}, settings:{baseMonths:12, extMonths:6, soonDays:30, bizAdjust:true, autoSave:false, refDate:'', holidays:DEFAULT_HOL}, employees:{}, leaves:[] }; }
-function migrate(d){ const f=freshData(); d.meta = {...f.meta, ...(d.meta||{})}; d.settings={...f.settings, ...(d.settings||{})}; delete d.settings.limitDays; d.employees=d.employees||{}; d.leaves=(d.leaves||[]).filter(x=>x&&!x.deleted); return d; }
+function freshData(){ return { meta:{version:1, module:'육아휴직', createdAt:new Date().toISOString(), updatedAt:null}, settings:{baseMonths:12, extMonths:6, soonDays:30, bizAdjust:false, autoSave:false, refDate:'', holidays:DEFAULT_HOL}, employees:{}, leaves:[] }; }
+function migrate(d){ const f=freshData(); d.meta = {...f.meta, ...(d.meta||{})}; d.settings={...f.settings, ...(d.settings||{})}; delete d.settings.limitDays; if(!d.settings.bizChoice){ d.settings.bizAdjust=false; d.settings.bizChoice=true; } d.employees=d.employees||{}; d.leaves=(d.leaves||[]).filter(x=>x&&!x.deleted); return d; }
 function refDate(){ return isDate(data.settings.refDate) ? D(data.settings.refDate) : new Date(new Date().toDateString()); }
 function holidaySet(){ const s=new Set(); (data.settings.holidays||'').split('\n').forEach(l=>{ const m=l.trim().match(/^(\d{4}-\d{2}-\d{2})/); if(m) s.add(m[1]); }); return s; }
 function nextBiz(s, HOL){ if(!data.settings.bizAdjust) return {d:s, moved:false}; let d=s, moved=false, guard=0; while(guard++<30 && (D(d).getDay()===0 || D(d).getDay()===6 || HOL.has(d))){ d=addDays(d,1); moved=true; } return {d, moved}; }
@@ -1292,7 +1292,7 @@ $('#sBase').onchange=e=>{ data.settings.baseMonths=Math.max(1,+e.target.value||1
 $('#sExt').onchange=e=>{ data.settings.extMonths=Math.max(0,+e.target.value||0); commit(); };
 $('#sSoon').onchange=e=>{ data.settings.soonDays=Math.max(1,+e.target.value||30); commit(); };
 $('#sRef').onchange=e=>{ data.settings.refDate=isDate(e.target.value)?e.target.value:''; commit(); };
-$$('#sBiz button').forEach(b=>b.onclick=()=>{ data.settings.bizAdjust=b.dataset.v==='1'; commit(); renderSettings(); });
+$$('#sBiz button').forEach(b=>b.onclick=()=>{ data.settings.bizAdjust=b.dataset.v==='1'; data.settings.bizChoice=true; commit(); renderSettings(); });
 $$('#sAuto button').forEach(b=>b.onclick=()=>{ data.settings.autoSave=b.dataset.v==='1'; commit(); renderSettings(); });
 $('#sHolSave').onclick=()=>{ data.settings.holidays=$('#sHol').value; commit(); renderSettings(); toast('공휴일 저장됨'); };
 $('#sPick').onclick=async()=>{ if(!store.supported) return toast('이 브라우저는 폴더 저장 미지원', true); try{ const old=data; await store.pick(); if(!data.leaves.length && old.leaves.length && confirm('새 폴더가 비어 있음. 현재 데이터를 새 폴더로 복사할까요?')){ data=old; await store.save(); } renderFoot(); renderSettings(); render(); toast('폴더 변경됨: '+store.dir.name); }catch(e){ if(e.name!=='AbortError') toast(e.message, true); } };
