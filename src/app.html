@@ -15,7 +15,7 @@
   --info:#2F6FE4; --info-soft:rgba(47,111,228,.12);
   --ext:#7A4DD8; --ext-soft:rgba(122,77,216,.13);
   --row-ing:#FFFBE8; --row-ing-h:#FFF4C4; --row-plan:#FDF1F0; --row-plan-h:#F9E1DF;
-  --c1:#3B7BF0; --c1s:rgba(47,111,228,.09); --c2:#12A38C; --c2s:rgba(14,159,138,.10); --c3:#E07A1F; --c3s:rgba(194,87,14,.10); --c4:#6B7482; --c4s:rgba(91,100,112,.10);
+  --c1:#3B7BF0; --c1s:rgba(47,111,228,.09); --c2:#12A38C; --c2s:rgba(14,159,138,.10); --c3:#E07A1F; --c3s:rgba(194,87,14,.10); --c4:#8A93A3; --c4s:rgba(91,100,112,.10);
   --preg:#D2478C; --preg-soft:rgba(192,57,122,.09);
   --raise:inset 0 1px 0 var(--edge), 0 10px 24px -10px var(--sh-d), 0 3px 8px -2px rgba(120,135,160,.35);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(120,135,160,.3);
@@ -118,7 +118,7 @@ td.ed.st-td{cursor:pointer}
 .name-link:hover{color:var(--ac);border-bottom-color:var(--ac)}
 .badge.tg{cursor:pointer}
 .badge.tg:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.badge.ghost{background:transparent!important;color:var(--ink3)!important;border:1.5px dashed var(--line)!important;box-shadow:none!important;opacity:0;cursor:pointer;font-weight:600}
+.badge.ghost{background:transparent!important;color:var(--ink3)!important;border:1.5px dashed var(--line)!important;box-shadow:none!important;opacity:0;cursor:pointer;font-weight:600;height:20px}
 tr:hover .badge.ghost{opacity:1}
 .badge.ghost:hover{color:var(--ac)!important;border-color:var(--ac)!important}
 .hintbar{font-size:11.5px;color:var(--ink3)}
@@ -195,7 +195,7 @@ tbody tr.r-plan:hover td{background:var(--row-plan-h)}
 tbody tr.sel td{box-shadow:inset 0 2px 0 var(--ac), inset 0 -2px 0 var(--ac)}
 td.bd{padding-left:8px;text-align:center}
 th.bc,td.bc{padding-left:3px;padding-right:3px}
-td.bc .badge{min-width:40px;justify-content:center}
+td.bc .badge{min-width:44px;justify-content:center}
 th.vl,td.vl{border-right:2px solid var(--line)}
 :root[data-theme="dark"] th.vl,:root[data-theme="dark"] td.vl{border-right-color:#46546a}
 .bds{display:inline-flex;gap:5px;align-items:center;justify-content:center}
@@ -207,29 +207,30 @@ td.prog-td .cell-in{text-align:left;min-width:170px}
 thead th:last-child{text-align:center}
 .memo3{font-size:11px;line-height:1.3;color:var(--ink2);word-break:break-all}
 /* 구분 배지: 채움형(자녀·+6·임신중) / 테두리형(차수) */
-.bds .badge{height:19px;padding:0 7px;font-size:11.5px;font-weight:700;border-radius:6px;letter-spacing:-.01em;line-height:1}
+.bds .badge{height:20px;min-width:44px;padding:0 8px;font-size:11.5px;font-weight:700;border-radius:6px;letter-spacing:-.01em;line-height:1;justify-content:center}
 .b-c1,.b-c2,.b-c3,.b-c4,.b-preg,.bds .b-ext{color:#fff;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
 .b-c1{background:var(--c1)}.b-c2{background:var(--c2)}.b-c3{background:var(--c3)}.b-c4{background:var(--c4)}
 .b-preg{background:var(--preg)}
 .bds .b-ext{background:var(--ext)}
-.b-s1,.b-s2,.b-s3,.b-s4{background:var(--surf2);border:1.5px solid currentColor;font-weight:800}
-.b-s1{color:#7B8494}.b-s2{color:#C98A00}.b-s3{color:var(--bad)}.b-s4{color:#fff;background:var(--ink);border-color:var(--ink)}
-:root[data-theme="dark"] .b-s1,:root[data-theme="dark"] .b-s2,:root[data-theme="dark"] .b-s3{background:transparent}
+.b-s1,.b-s2,.b-s3,.b-s4{color:#fff;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
+.b-s1{background:#8A93A3}.b-s2{background:#C98A00}.b-s3{background:#D0453F}.b-s4{background:#2B3444}
 .tfoot .badge{height:20px;padding:0 7px;font-size:11px;font-weight:700;border-radius:6px;line-height:1}
 .tfoot .b-c1,.tfoot .b-c2,.tfoot .b-c3,.tfoot .b-preg,.tfoot .b-ext{color:#fff}.tfoot .b-ext{background:var(--ext)}
-.kv .b-c1,.kv .b-c2,.kv .b-c3,.kv .b-c4,.dh .b-c1,.dh .b-c2,.dh .b-c3,.dh .b-c4,.dh .b-preg,.dh .b-ext{color:#fff;padding:2px 8px;border-radius:6px}
-.dh .b-ext{background:var(--ext)}
+.kv .badge,.dh .badge{height:20px;min-width:44px;padding:0 8px;border-radius:6px;justify-content:center;color:#fff}
+.dh .b-ext,.kv .b-ext{background:var(--ext)}
+.b-ext{background:var(--ext);color:#fff}
 
 thead th.st{z-index:3}
 .name{font-weight:600;display:inline-block;line-height:1.25}
 .sub{color:var(--ink3);font-size:11px;display:block;line-height:1.2}
-.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap}
-.pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
-.p-ok{background:var(--ac-soft);color:var(--ac)}
-.p-w{background:var(--warn-soft);color:var(--warn)}
-.p-b{background:var(--bad-soft);color:var(--bad)}
-.p-i{background:var(--info-soft);color:var(--info)}
-.p-n{background:var(--bg2);color:var(--ink3);border:1px solid var(--line)}
+/* 배지 공통 규격 (A안 · 채움형): 높이 20px · 최소폭 44px · 흰 글씨 */
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:20px;min-width:44px;padding:0 8px;border-radius:6px;font-size:11.5px;font-weight:700;line-height:1;white-space:nowrap;color:#fff;letter-spacing:-.01em;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
+.pill i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.9;flex:none}
+.p-ok{background:#149A57}
+.p-w{background:#D89600}
+.p-b{background:#D0453F}
+.p-i{background:#3B7BF0}
+.p-n{background:#8A93A3}
 .badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:7px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent;line-height:1.5}
 .badge b{font-size:10px;padding:0 5px;border-radius:5px;background:rgba(255,255,255,.7);font-weight:700}
 :root[data-theme="dark"] .badge b{background:rgba(0,0,0,.25)}
@@ -238,7 +239,7 @@ thead th.st{z-index:3}
 .b-warn{background:var(--warn-soft);color:var(--warn)}
 .b-n{background:var(--bg2);color:var(--ink2);border-color:var(--line)}
 .b-ext{background:var(--ext-soft);color:var(--ext)}
-.p-ext{background:var(--ext-soft);color:var(--ext)}
+.p-ext{background:var(--ext)}
 /* 복수 선택 드롭다운 */
 .ms{position:relative}
 .ms-btn{display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:12px;background:var(--surf2);border:1px solid var(--line);box-shadow:var(--inset);font-size:13px;white-space:nowrap;transition:border-color .2s,box-shadow .2s}
