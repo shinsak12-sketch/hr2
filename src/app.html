@@ -14,9 +14,9 @@
   --bad:#D0453F; --bad-soft:rgba(208,69,63,.13);
   --info:#2F6FE4; --info-soft:rgba(47,111,228,.12);
   --ext:#7A4DD8; --ext-soft:rgba(122,77,216,.13);
-  --row-ing:#FFF7CC; --row-ing-h:#FFF0A8; --row-plan:#FBE4E2; --row-plan-h:#F7D3CF;
-  --c1:#2F6FE4; --c1s:rgba(47,111,228,.13); --c2:#0E9F8A; --c2s:rgba(14,159,138,.14); --c3:#C2570E; --c3s:rgba(194,87,14,.14); --c4:#5B6470; --c4s:rgba(91,100,112,.14);
-  --preg:#C0397A; --preg-soft:rgba(192,57,122,.13);
+  --row-ing:#FFFBE8; --row-ing-h:#FFF4C4; --row-plan:#FDF1F0; --row-plan-h:#F9E1DF;
+  --c1:#2F6FE4; --c1s:rgba(47,111,228,.09); --c2:#0E9F8A; --c2s:rgba(14,159,138,.10); --c3:#C2570E; --c3s:rgba(194,87,14,.10); --c4:#5B6470; --c4s:rgba(91,100,112,.10);
+  --preg:#C0397A; --preg-soft:rgba(192,57,122,.09);
   --raise:inset 0 1px 0 var(--edge), 0 10px 24px -10px var(--sh-d), 0 3px 8px -2px rgba(120,135,160,.35);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(120,135,160,.3);
   --raise-hover:inset 0 1px 0 var(--edge), 0 16px 30px -12px var(--sh-d), 0 4px 10px -2px rgba(120,135,160,.35);
@@ -24,7 +24,7 @@
   --inset-sm:inset 1px 1px 4px rgba(120,135,160,.35), inset -1px -1px 2px var(--sh-l);
   --r:18px; --r-sm:12px;
   --font:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
-  --mono:Consolas,"D2Coding","Malgun Gothic",monospace;
+  --mono:"Segoe UI","Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",sans-serif;
   color-scheme:light;
 }
 :root[data-theme="dark"]{
@@ -36,7 +36,7 @@
   --bad:#F26B65; --bad-soft:rgba(242,107,101,.16);
   --info:#6C9BFF; --info-soft:rgba(108,155,255,.16);
   --ext:#B08CFF; --ext-soft:rgba(176,140,255,.18);
-  --row-ing:#3A3518; --row-ing-h:#4A431C; --row-plan:#3E2426; --row-plan-h:#4E2C2E;
+  --row-ing:#2E2C1F; --row-ing-h:#3B381F; --row-plan:#332326; --row-plan-h:#42292C;
   --c1:#6C9BFF; --c1s:rgba(108,155,255,.18); --c2:#3FCDB6; --c2s:rgba(63,205,182,.16); --c3:#F09A5A; --c3s:rgba(240,154,90,.16); --c4:#AAB5C7; --c4s:rgba(170,181,199,.16);
   --preg:#F07AB5; --preg-soft:rgba(240,122,181,.16);
   --raise:inset 0 1px 0 var(--edge), 0 12px 26px -10px var(--sh-d), 0 3px 8px -2px rgba(0,0,0,.4);
@@ -53,7 +53,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 button:disabled{opacity:.5;cursor:default}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:0}
 [hidden]{display:none!important}
 
 /* ---------- Splash ---------- */
@@ -440,8 +440,8 @@ td.ret .sub{opacity:.8}
           <tbody id="tb"></tbody>
         </table></div>
         <div class="tfoot">
-          <span class="lg"><i style="background:var(--row-ing);border:1px solid #e6d27a"></i>휴직중 행</span>
-          <span class="lg"><i style="background:var(--row-plan);border:1px solid #e3a9a4"></i>시작 예정 행</span>
+          <span class="lg"><i style="background:var(--row-ing);border:1px solid #e8d98f"></i>휴직중 행</span>
+          <span class="lg"><i style="background:var(--row-plan);border:1px solid #e8b7b3"></i>시작 예정 행</span>
           <span class="lg"><i style="background:var(--bad)"></i>복직완료 · 복직예정일부터 빨간 글씨</span>
           <span class="lg"><span class="badge b-c1">첫째</span><span class="badge b-c2">둘째</span><span class="badge b-c3">셋째</span></span>
           <span class="lg"><span class="badge b-s1">1차</span><span class="badge b-s2">2차</span><span class="badge b-s3">3차</span></span>
@@ -903,7 +903,7 @@ function openDrawer(id){
     <div class="db">
       <div class="sec"><h4>자녀 1명당 한도 사용 현황 <span>${esc(r.ord)} ${esc(r.child)}</span></h4>
         <div class="gauge">
-          <svg width="88" height="88" viewBox="0 0 88 88"><circle cx="44" cy="44" r="34" fill="none" stroke="var(--sh-d)" stroke-width="9" opacity=".5"/><circle cx="44" cy="44" r="34" fill="none" stroke="${r.left<0?'var(--bad)':'var(--ac)'}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct)}" transform="rotate(-90 44 44)"/><text x="44" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)" font-family="Consolas,monospace">${Math.round(pct*100)}%</text></svg>
+          <svg width="88" height="88" viewBox="0 0 88 88"><circle cx="44" cy="44" r="34" fill="none" stroke="var(--sh-d)" stroke-width="9" opacity=".5"/><circle cx="44" cy="44" r="34" fill="none" stroke="${r.left<0?'var(--bad)':'var(--ac)'}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct)}" transform="rotate(-90 44 44)"/><text x="44" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)" font-family="Segoe UI,Malgun Gothic,sans-serif">${Math.round(pct*100)}%</text></svg>
           <div class="t"><b class="num ${r.left<0?'neg':''}">${r.left<0?'−'+Math.abs(r.left):r.left}개월</b><small>잔여 (한도 ${r.limit}개월${r.ext?' = 기본 '+data.settings.baseMonths+' + 배우자 '+data.settings.extMonths:''})</small>
             <div style="margin-top:8px;font-size:12px;color:var(--ink2)">과거 <b class="num">${mStr(r.past)}</b> + 이번 <b class="num">${mStr(r.planM)}</b> = <b class="num">${mStr(round3(r.past+r.planM))}</b></div></div>
         </div></div>
