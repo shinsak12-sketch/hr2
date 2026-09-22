@@ -106,7 +106,8 @@ button:disabled{opacity:.5;cursor:default}
 #saveBtn.dirty{background:linear-gradient(180deg,#F5B400,#D89600);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 0 0 #9A6B00,0 8px 18px -8px var(--warn);animation:nudge 1.6s infinite}
 @keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-1px)}}
 /* 인라인 편집 */
-td.ed{cursor:text;position:relative}
+td.ed{cursor:text;position:relative;min-width:40px}
+td.ed:empty::after{content:'';display:inline-block;height:1em}
 td.ed:hover{box-shadow:inset 0 0 0 1.5px var(--ac);border-radius:4px}
 td.ed .cell-in{width:100%;min-width:90px;height:28px;border:1.5px solid var(--ac);border-radius:6px;padding:0 6px;background:var(--surf2);outline:none;font:inherit;text-align:center;box-shadow:0 0 0 3px var(--ac-soft)}
 td.memo-td .cell-in{text-align:left;min-width:260px}
@@ -141,7 +142,7 @@ tr:hover .badge.ghost{opacity:1}
 .field input,.field select{border:0;background:transparent;outline:none;min-width:0;height:100%}
 .field input::placeholder{color:var(--ink3)}
 .field svg{flex:none;color:var(--ink3)}
-.field.search{flex:1;min-width:200px}
+.field.search{flex:0 0 220px;min-width:160px}
 .chips{display:flex;gap:4px;padding:4px;border-radius:13px;background:var(--bg2);border:1px solid var(--line)}
 .chips button{padding:6px 12px;border-radius:9px;font-size:13px;color:var(--ink2);transition:all .2s}
 .chips button:hover{color:var(--ink)}
@@ -173,8 +174,8 @@ tr:hover .badge.ghost{opacity:1}
 .kpi.b .ring{background:radial-gradient(circle at 35% 35%,var(--bad-soft),transparent 70%)}
 
 /* ---------- Table ---------- */
-.card{border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);padding:6px}
-.tw{overflow:auto;border-radius:14px;max-height:calc(100vh - 215px);min-height:240px;background:var(--surf2);border:1px solid var(--line2);contain:content}
+.card{border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);padding:6px 6px 4px}
+.tw{overflow:auto;border-radius:14px;max-height:calc(100vh - 150px);min-height:240px;background:var(--surf2);border:1px solid var(--line2);contain:content}
 table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13.5px}
 thead th{position:sticky;top:0;z-index:2;background:var(--surf);color:var(--ink2);font-weight:600;font-size:12px;padding:8px 10px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--line);cursor:pointer;user-select:none}
 thead th.g{color:var(--ac)}
@@ -249,6 +250,16 @@ thead th.st{z-index:3}
 .ms-pop .ms-tools button{font-size:11px;color:var(--ac);padding:3px 8px;border-radius:7px;background:var(--ac-soft)}
 .ms-pop .ms-tools button.c{color:var(--ink2);background:var(--bg2)}
 .ms-pop .empty-o{padding:10px;color:var(--ink3);font-size:12px}
+.ms-pop.mr{min-width:260px;padding:10px}
+.mr-h{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 8px}
+.mr-h b{font-size:14px}
+.mr-h button{width:28px;height:28px;border-radius:8px;box-shadow:var(--raise-sm);background:var(--surf2);font-size:16px;line-height:1}
+.mr-g{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.mr-g button{height:34px;border-radius:8px;font-size:13px;color:var(--ink);background:var(--bg2);border:1px solid var(--line2)}
+.mr-g button:hover{border-color:var(--ac)}
+.mr-g button.in{background:var(--ac-soft);border-color:transparent;color:var(--ac);font-weight:600}
+.mr-g button.st,.mr-g button.en{background:var(--ac);color:#fff}
+.ms-pop.mr .ms-tools{border-bottom:0;border-top:1px solid var(--line2);margin:8px 0 0;padding:8px 2px 0}
 .bar{height:6px;width:80px;border-radius:99px;background:var(--bg2);border:1px solid var(--line2);overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
 .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ac),var(--ac3))}
 .bar.w i{background:linear-gradient(90deg,var(--warn),#f7c95a)}
@@ -450,14 +461,13 @@ td.ret .sub{opacity:.8}
 
     <section id="viewList">
       <div class="filters" style="margin-bottom:10px">
-        <label class="field search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="성명, 사번, 소속, 자녀명 검색"></label>
+        <label class="field search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="단어 검색"></label>
+        <div class="ms" id="fRange"></div>
         <div class="ms" id="fYear"></div>
-        <div class="ms" id="fDept"></div>
         <div class="ms" id="fKind"></div>
-        <div class="ms" id="fOrd"></div>
         <div class="ms" id="fLimit"></div>
         <div class="chips" id="chips" title="복수 선택 가능">
-          <button class="on" data-s="">전체</button><button data-s="ing">휴직중</button><button data-s="soon">복직 임박</button><button data-s="plan">예정</button><button data-s="done">복직완료</button><button data-s="over" class="warn">한도 초과</button>
+          <button class="on" data-s="">전체</button><button data-s="ing">휴직중</button><button data-s="plan">휴직예정</button><button data-s="done">복직완료</button>
         </div>
         <span class="count" id="cnt"></span>
       </div>
@@ -470,22 +480,13 @@ td.ret .sub{opacity:.8}
             <th data-k="dept">소속</th><th data-k="name">성명 / 사번</th><th data-k="grade" class="vl">직급</th>
             <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
             <th class="g vl" data-k="retDate">복직(퇴직)예정일<span class="auto">자동</span></th>
-            <th class="g" data-k="planM">사용(예정)기간<span class="auto">자동</span></th>
-            <th class="g" data-k="past">과거 사용기간<span class="auto">자동</span></th>
-            <th class="g vl" data-k="left">잔여기간<span class="auto">자동</span></th>
+            <th class="g" data-k="plan">사용(예정)기간<span class="auto">자동</span></th>
+            <th class="g" data-k="pastDays">과거 사용기간<span class="auto">자동</span></th>
+            <th class="g vl" data-k="leftDays">잔여기간<span class="auto">자동</span></th>
             <th class="g" data-k="memoAll">비고<span class="auto">자동+수기</span></th>
           </tr></thead>
           <tbody id="tb"></tbody>
         </table></div>
-        <div class="tfoot">
-          <span class="lg"><i style="background:var(--row-ing);border:1px solid #e8d98f"></i>휴직중 행</span>
-          <span class="lg"><i style="background:var(--row-plan);border:1px solid #e8b7b3"></i>시작 예정 행</span>
-          <span class="lg"><i style="background:var(--bad)"></i>복직완료 · 복직예정일부터 빨간 글씨</span>
-          <span class="lg"><span class="badge b-c1">첫째</span><span class="badge b-c2">둘째</span><span class="badge b-c3">셋째</span></span>
-          <span class="lg"><span class="badge b-s1">1차</span><span class="badge b-s2">2차</span><span class="badge b-s3">3차</span></span>
-          <span class="lg"><span class="badge b-ext">+6개월</span><span class="badge b-preg">임신중</span></span>
-          <span style="margin-left:auto" id="footNote"></span>
-        </div>
       </div>
     </section>
 
@@ -689,9 +690,11 @@ function enrich(list){
     const isLast = seq === g.length;
     const simStart = retDate > t ? retDate : t;
     const endIfContinue = (isLast && left>0) ? calcEndDate(simStart, left) : null;
+    const pastDays = prev.reduce((s,x)=>s+x.plan, 0);
+    const leftDays = left>0 ? days(retDate, calcEndDate(retDate,left)) : left<0 ? -days(retDate, calcEndDate(retDate,-left)) : 0;
     return { ...r, name:r.name||e.name||'', dept:r.dept||e.dept||'', grade:r.grade||e.grade||'', pos:r.pos||e.pos||'', job:r.job||e.job||'', group:r.group||e.group||'',
       seq, cur, planM, plan, past, usedM, used, left, dleft, status, ret, retDate, prev, autoMemo, isDone: status==='done',
-      limit:L.limit, ext:L.ext, endIfContinue, isLast, simStart,
+      limit:L.limit, ext:L.ext, endIfContinue, isLast, simStart, pastDays, leftDays,
       memoAll:[autoMemo, r.memo].filter(Boolean).join(' · '), ageStr: ageStr(r.birth, ref) };
   });
 }
@@ -804,8 +807,27 @@ class MultiSel{
   pass(v){ return this.sel.size===0 || this.sel.has(v); }
 }
 document.addEventListener('click', ()=>$$('.ms.open').forEach(x=>x.classList.remove('open')));
+class MonthRange{
+  constructor(el,onChange){ this.el=el; this.a=null; this.b=null; this.year=new Date().getFullYear(); this.onChange=onChange;
+    el.innerHTML=`<button type="button" class="ms-btn"><span class="t">기간 전체</span><span class="car">▼</span></button><div class="ms-pop mr"></div>`;
+    el.querySelector('.ms-btn').onclick=e=>{ e.stopPropagation(); const o=el.classList.contains('open'); $$('.ms.open').forEach(x=>x.classList.remove('open')); if(!o){ el.classList.add('open'); this.renderPop(); } };
+    el.querySelector('.ms-pop').onclick=e=>e.stopPropagation(); this.renderPop(); }
+  get sel(){ return this.a ? new Set([1]) : new Set(); }
+  key(y,m){ return y*12+m; }
+  renderPop(){ const pop=this.el.querySelector('.ms-pop'); const lo=this.a, hi=this.b??this.a;
+    pop.innerHTML=`<div class="mr-h"><button type="button" data-a="py">‹</button><b>${this.year}년</b><button type="button" data-a="ny">›</button></div>
+      <div class="mr-g">${Array.from({length:12},(_,i)=>{ const k=this.key(this.year,i); const c=[lo!==null&&k>=lo&&k<=hi?'in':'', k===lo?'st':'', k===hi&&lo!==null?'en':''].join(' '); return `<button type="button" class="${c}" data-m="${i}">${i+1}월</button>`; }).join('')}</div>
+      <div class="ms-tools"><button type="button" class="c" data-a="clear">해제</button><span class="hint" style="align-self:center">${this.a===null?'시작월 클릭 → 종료월 클릭':this.b===null?'종료월 클릭':this.label()}</span></div>`;
+    pop.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ if(b.dataset.a==='py') this.year--; else if(b.dataset.a==='ny') this.year++; else { this.a=this.b=null; this.sync(); this.onChange(); } this.renderPop(); });
+    pop.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{ const k=this.key(this.year,+b.dataset.m); if(this.a===null || this.b!==null){ this.a=k; this.b=null; } else { if(k<this.a){ this.b=this.a; this.a=k; } else this.b=k; } this.renderPop(); this.sync(); if(this.b!==null || this.a===null) this.onChange(); else this.onChange(); }); }
+  fmtK(k){ const y=Math.floor(k/12), m=k%12+1; return `${String(y).slice(2)}.${p2(m)}`; }
+  label(){ if(this.a===null) return '기간 전체'; const hi=this.b??this.a; return this.a===hi ? this.fmtK(this.a) : `${this.fmtK(this.a)} ~ ${this.fmtK(hi)}`; }
+  sync(){ this.el.classList.toggle('has', this.a!==null); this.el.querySelector('.t').textContent=this.label(); }
+  pass(r){ if(this.a===null) return true; const hi=this.b??this.a; const ys=Math.floor(this.a/12), ms=this.a%12, ye=Math.floor(hi/12), me=hi%12; const from=`${ys}-${p2(ms+1)}-01`; const last=new Date(ye, me+1, 0).getDate(); const to=`${ye}-${p2(me+1)}-${p2(last)}`; return r.start<=to && r.end>=from; }
+  clear(){ this.a=this.b=null; this.sync(); this.renderPop(); }
+}
 const MS = {};
-function initFilters(){ MS.year=new MultiSel($('#fYear'),'연도',render); MS.dept=new MultiSel($('#fDept'),'소속',render); MS.kind=new MultiSel($('#fKind'),'발령구분',render); MS.ord=new MultiSel($('#fOrd'),'자녀구분',render); MS.limit=new MultiSel($('#fLimit'),'한도',render); }
+function initFilters(){ MS.range=new MonthRange($('#fRange'),render); MS.year=new MultiSel($('#fYear'),'연도',render); MS.kind=new MultiSel($('#fKind'),'임신중 구분',render); MS.limit=new MultiSel($('#fLimit'),'한도',render); }
 function renderFoot(){
   $('#footMode').textContent = store.mode==='fs' ? '데이터 폴더' : '브라우저 저장 (테스트)';
   $('#footPath').textContent = store.mode==='fs' ? `${store.dir.name}\\hr-data.json` : 'localStorage · JSON 백업 권장';
@@ -817,14 +839,11 @@ function render(){
   const ref = refDate();
   $('#refLabel').textContent = '기준일 '+fmt(ref)+(data.settings.refDate?' (수동)':'');
   $('#navCnt').textContent = all.filter(r=>r.status==='ing'||r.status==='soon').length;
-  $('#footNote').innerHTML = `<span class="hintbar">이름 클릭 = 상세 · 칸 클릭 = 바로 수정 (Enter ↓ · Tab → · Esc 취소) · 배지 클릭 = 토글 · 상태 클릭 = 실제 복직일</span>`;
 
   // 필터 옵션 (복수 선택)
   const years=[...new Set(all.flatMap(r=>{ const a=+r.start.slice(0,4), b=+r.end.slice(0,4); const out=[]; for(let y=a;y<=b;y++) out.push(String(y)); return out; }))].sort().reverse();
   MS.year.setOptions(years, Object.fromEntries(years.map(y=>[y,y+'년'])));
-  MS.dept.setOptions([...new Set(all.map(r=>r.dept).filter(Boolean))].sort(cmpKo));
-  MS.kind.setOptions(['육아휴직','육아휴직(임신중)']);
-  MS.ord.setOptions([...new Set(all.map(r=>r.ord).filter(Boolean))].sort(cmpKo));
+  MS.kind.setOptions(['육아휴직','육아휴직(임신중)'], {'육아휴직':'일반 육아휴직','육아휴직(임신중)':'임신중 사용'});
   const BASE=+data.settings.baseMonths||12, EXT=+data.settings.extMonths||0;
   MS.limit.setOptions(['base','ext'], {base:`${BASE}개월 (기본)`, ext:`${BASE+EXT}개월 (+${EXT} 배우자)`});
 
@@ -835,18 +854,18 @@ function render(){
 
   const q=state.q.trim().toLowerCase();
   const S=state.s;
-  const sig=[q,[...S].join(),...[MS.year,MS.dept,MS.kind,MS.ord,MS.limit].map(m=>[...m.sel].join()),state.sortK,state.sortD].join('#'); if(sig!==state._sig){ state._sig=sig; state.limitRows=150; }
+  const sig=[q,[...S].join(),MS.range.label(),...[MS.year,MS.kind,MS.limit].map(m=>[...m.sel].join()),state.sortK,state.sortD].join('#'); if(sig!==state._sig){ state._sig=sig; state.limitRows=150; }
   const passStatus = r => S.size===0 || S.has(r.status) || (S.has('ing')&&r.status==='soon') || (S.has('over')&&r.left<0);
-  let list = all.filter(r => MS.dept.pass(r.dept) && MS.kind.pass(r.kind) && MS.ord.pass(r.ord) && MS.limit.pass(r.ext?'ext':'base')
+  let list = all.filter(r => MS.range.pass(r) && MS.kind.pass(r.kind) && MS.limit.pass(r.ext?'ext':'base')
     && (MS.year.sel.size===0 || [...MS.year.sel].some(y => r.start.slice(0,4)<=y && r.end.slice(0,4)>=y))
     && passStatus(r)
     && (!q || [r.name,r.emp,r.dept,r.child,r.memoAll].some(v=>String(v||'').toLowerCase().includes(q))));
   const sk=state.sortK, sd=state.sortD;
   const isDateKey=['start','end','retDate','birth'].includes(sk);
   list.sort((a,b)=>{ let x=a[sk], y=b[sk]; if(typeof x==='boolean'){ x=+x; y=+y; } if(typeof x==='number'||typeof y==='number'){ x=+x||0; y=+y||0; return (x-y)*sd || (a.start<b.start?1:-1); } x=String(x??''); y=String(y??''); const c = isDateKey ? (x<y?-1:x>y?1:0) : cmpKo(x,y); return c*sd || (a.start<b.start?1:a.start>b.start?-1:0); });
-  const nf=[MS.year,MS.dept,MS.kind,MS.ord,MS.limit].filter(m=>m.sel.size).length+(S.size?1:0);
+  const nf=[MS.range,MS.year,MS.kind,MS.limit].filter(m=>m.sel.size).length+(S.size?1:0);
   $('#cnt').innerHTML = `${list.length}건 표시${nf?` · 필터 ${nf}개 <button type="button" style="color:var(--ac);font-weight:600" id="clearF">초기화</button>`:''}`;
-  const cf=$('#clearF'); if(cf) cf.onclick=()=>{ [MS.year,MS.dept,MS.kind,MS.ord,MS.limit].forEach(m=>{ m.sel.clear(); m.renderPop(); }); state.s.clear(); syncChips(); render(); };
+  const cf=$('#clearF'); if(cf) cf.onclick=()=>{ MS.range.clear(); [MS.year,MS.kind,MS.limit].forEach(m=>{ m.sel.clear(); m.renderPop(); }); state.s.clear(); syncChips(); render(); };
   $$('#tbl thead th').forEach(th=>{ const a=th.querySelector('.arr'); if(a) a.remove(); if(th.dataset.k===sk && sk){ const s=document.createElement('span'); s.className='arr'; s.textContent = sd>0?'▲':'▼'; th.appendChild(s); } });
 
   if(!all.length){
@@ -863,15 +882,15 @@ function render(){
     <td class="bd bc"><span class="bds"><span class="badge ${ordCls(r.ord)} ed-ord tg" data-t="ord" title="클릭: 자녀구분 변경">${esc(r.ord)}</span></span></td>
     <td class="bd bc"><span class="bds"><span class="badge ${seqCls(r.seq)} num" title="분할차수(자동)">${r.seq}차</span></span></td>
     <td class="bd bc vl"><span class="bds">${r.ext?`<span class="badge b-ext num tg" data-t="ext" title="클릭: +${EXTM}개월 해제 (같은 자녀 전체)">+${EXTM}</span>`:`<span class="badge ghost" data-t="ext" title="+${EXTM}개월 적용 (배우자 조건)">+${EXTM}</span>`}</span></td>
-    <td class="ed" data-f="dept">${esc(r.dept)||'<span class="sub">—</span>'}</td>
+    <td class="ed" data-f="dept">${esc(r.dept)}</td>
     <td><span class="name name-link" data-open="${r.id}" title="클릭: 상세 보기">${esc(r.name)}</span><span class="sub num">${esc(r.emp)}</span></td>
-    <td class="num ed vl" data-f="grade">${esc(r.grade)||'<span class="sub">—</span>'}</td>
+    <td class="num ed vl" data-f="grade">${esc(r.grade)}</td>
     <td class="num ed" data-f="start">${r.start}</td><td class="num ed vl" data-f="end">${r.end}</td>
     <td class="num vl ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':''}</td>
-    <td class="num"><span class="v1">${mStr(r.planM)}</span><span class="sub">${mdStr(r.cur)} · ${r.plan}일</span></td>
-    <td class="num ${R}"><span class="v1">${mStr(r.past)}</span>${r.prev.length?`<span class="sub">${r.prev.length}회</span>`:''}</td>
-    <td class="num vl ${R}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.left<0?'−'+Math.abs(r.left):r.left}개월</span>${r.endIfContinue?`<span class="sub">→ ${r.endIfContinue}</span>`:''}</td>
-    <td class="memo-td ed ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)||(!r.autoMemo?'<span style="color:var(--ink3)">—</span>':'')}</div></td>
+    <td class="num" title="${mdStr(r.cur)} · ${mStr(r.planM)}"><span class="v1">${r.plan}일</span></td>
+    <td class="num ${R}" title="${mStr(r.past)}${r.prev.length?' · '+r.prev.length+'회':''}"><span class="v1">${r.pastDays}일</span></td>
+    <td class="num vl ${R}" title="${mStr(r.left)}${r.endIfContinue?' · 이어 쓰면 ~'+r.endIfContinue:''}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.leftDays<0?'−'+Math.abs(r.leftDays):r.leftDays}일</span></td>
+    <td class="memo-td ed ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
   </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="16" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
@@ -921,7 +940,7 @@ function syncChips(){ $$('#chips button').forEach(b=>b.classList.toggle('on', b.
 function toggleStatus(v){ if(!v) state.s.clear(); else if(state.s.has(v)) state.s.delete(v); else state.s.add(v); syncChips(); render(); }
 let _qT; $('#q').oninput=e=>{ state.q=e.target.value; clearTimeout(_qT); _qT=setTimeout(render, 160); };
 $$('#chips button').forEach(b=>b.onclick=()=>toggleStatus(b.dataset.s));
-$$('#tbl thead th').forEach(th=>th.onclick=()=>{ const k=th.dataset.k; if(!k) return; if(state.sortK===k) state.sortD*=-1; else { state.sortK=k; state.sortD = ['start','end','retDate','planM','past','left'].includes(k)?-1:1; } render(); });
+$$('#tbl thead th').forEach(th=>th.onclick=()=>{ const k=th.dataset.k; if(!k) return; if(state.sortK===k) state.sortD*=-1; else { state.sortK=k; state.sortD = ['start','end','retDate','plan','pastDays','leftDays'].includes(k)?-1:1; } render(); });
 
 /* =========================================================
    상세 패널
