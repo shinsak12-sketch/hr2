@@ -102,6 +102,23 @@ button:disabled{opacity:.5;cursor:default}
 .saved i{width:7px;height:7px;border-radius:50%;background:var(--ac)}
 .saved.saving{color:var(--warn);background:var(--warn-soft)}.saved.saving i{background:var(--warn);animation:pulse 1s infinite}
 .saved.error{color:var(--bad);background:var(--bad-soft)}.saved.error i{background:var(--bad)}
+.saved.dirty{color:#9A6B00;background:var(--warn-soft)}.saved.dirty i{background:var(--warn)}
+#saveBtn.dirty{background:linear-gradient(180deg,#F5B400,#D89600);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 0 0 #9A6B00,0 8px 18px -8px var(--warn);animation:nudge 1.6s infinite}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-1px)}}
+/* 인라인 편집 */
+td.ed{cursor:text;position:relative}
+td.ed:hover{box-shadow:inset 0 0 0 1.5px var(--ac);border-radius:4px}
+td.ed .cell-in{width:100%;min-width:90px;height:28px;border:1.5px solid var(--ac);border-radius:6px;padding:0 6px;background:var(--surf2);outline:none;font:inherit;text-align:center;box-shadow:0 0 0 3px var(--ac-soft)}
+td.memo-td .cell-in{text-align:left;min-width:260px}
+td.ed.st-td{cursor:pointer}
+.name-link{cursor:pointer;border-bottom:1.5px dashed transparent;transition:all .15s}
+.name-link:hover{color:var(--ac);border-bottom-color:var(--ac)}
+.badge.tg{cursor:pointer}
+.badge.tg:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.badge.ghost{background:transparent!important;color:var(--ink3)!important;border:1.5px dashed var(--line)!important;box-shadow:none!important;opacity:0;cursor:pointer;font-weight:600}
+tr:hover .badge.ghost{opacity:1}
+.badge.ghost:hover{color:var(--ac)!important;border-color:var(--ac)!important}
+.hintbar{font-size:11.5px;color:var(--ink3)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .top .sp{flex:1}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:13px;box-shadow:var(--raise-sm),0 2px 0 0 var(--line);background:var(--surf2);font-weight:600;font-size:13px;transition:transform .15s,box-shadow .2s;white-space:nowrap}
@@ -422,6 +439,7 @@ td.ret .sub{opacity:.8}
       <h1 id="pageTitle">육아휴직 대장<small id="refLabel"></small></h1>
       <span class="saved" id="savedPill"><i></i><span>저장됨</span></span>
       <span class="sp"></span>
+      <button class="btn" id="saveBtn" title="Ctrl+S">💾 저장</button>
       <button class="btn" id="btnImport">⬆ 엑셀 업로드</button>
       <button class="btn" id="btnExport">⬇ 엑셀 내보내기</button>
       <button class="icon-btn" id="themeBtn" title="다크/라이트 전환" aria-label="테마 전환">◐</button>
@@ -479,6 +497,7 @@ td.ret .sub{opacity:.8}
             <tr><td>마지막 저장</td><td id="sSaved" class="num">—</td></tr>
             <tr><td>등록 건수</td><td id="sCount" class="num">—</td></tr>
           </table>
+          <div class="fi" style="margin-top:12px"><label>저장 방식</label><div class="seg" id="sAuto" style="max-width:460px"><button data-v="0">수동 · 상단 저장 버튼 / Ctrl+S</button><button data-v="1">자동 · 변경 1초 후 저장</button></div></div>
           <div class="row">
             <button class="btn" id="sPick">폴더 변경</button>
             <button class="btn" id="sJsonOut">JSON 백업 파일 만들기</button>
@@ -505,7 +524,7 @@ td.ret .sub{opacity:.8}
           <div class="row"><button class="btn danger" id="sWipe">육아휴직 데이터 전체 삭제</button></div>
           <h3 style="margin-top:22px">정보</h3>
           <table class="info-tbl">
-            <tr><td>버전</td><td>육아휴직 모듈 0.4 (테스트) · 산식: DATEDIF 개월 기준</td></tr>
+            <tr><td>버전</td><td>육아휴직 모듈 0.6 (테스트) · 인라인 편집 · 수동 저장</td></tr>
             <tr><td>브라우저</td><td id="sUA" class="num" style="font-size:11px">—</td></tr>
             <tr><td>엑셀 엔진</td><td>SheetJS <span id="sXlsx" class="num"></span></td></tr>
           </table>
@@ -647,7 +666,7 @@ const DEFAULT_HOL = `2026-01-01 신정
    데이터 모델
    ========================================================= */
 let data = null;
-function freshData(){ return { meta:{version:1, module:'육아휴직', createdAt:new Date().toISOString(), updatedAt:null}, settings:{baseMonths:12, extMonths:6, soonDays:30, bizAdjust:true, refDate:'', holidays:DEFAULT_HOL}, employees:{}, leaves:[] }; }
+function freshData(){ return { meta:{version:1, module:'육아휴직', createdAt:new Date().toISOString(), updatedAt:null}, settings:{baseMonths:12, extMonths:6, soonDays:30, bizAdjust:true, autoSave:false, refDate:'', holidays:DEFAULT_HOL}, employees:{}, leaves:[] }; }
 function migrate(d){ const f=freshData(); d.meta = {...f.meta, ...(d.meta||{})}; d.settings={...f.settings, ...(d.settings||{})}; delete d.settings.limitDays; d.employees=d.employees||{}; d.leaves=(d.leaves||[]).filter(x=>x&&!x.deleted); return d; }
 function refDate(){ return isDate(data.settings.refDate) ? D(data.settings.refDate) : new Date(new Date().toDateString()); }
 function holidaySet(){ const s=new Set(); (data.settings.holidays||'').split('\n').forEach(l=>{ const m=l.trim().match(/^(\d{4}-\d{2}-\d{2})/); if(m) s.add(m[1]); }); return s; }
@@ -773,7 +792,7 @@ const store = {
     try{
       if(this.mode==='fs') await this.write(this.dir,'hr-data.json',json);
       else localStorage.setItem('hr-leave-data', json);
-      this.lastSaved=data.meta.updatedAt; setSaved('saved'); renderFoot();
+      this.lastSaved=data.meta.updatedAt; dirtyN=0; setSaved('saved'); renderFoot();
     }catch(e){ console.error(e); setSaved('error'); toast('저장 실패: '+e.message+' · 설정에서 JSON 백업을 먼저 만들 것', true); }
   },
   async saveBinary(sub, name, buf){
@@ -781,8 +800,10 @@ const store = {
     download(name, new Blob([buf])); return null;
   },
 };
-function setSaved(s){ const p=$('#savedPill'); p.className='saved '+(s==='saved'?'':s); p.querySelector('span').textContent = s==='saving'?'저장 중…':s==='error'?'저장 실패':'저장됨'; }
-function commit(){ bump(); store.schedule(); render(); }
+let dirtyN=0;
+function setSaved(s){ const p=$('#savedPill'); p.className='saved '+(s==='saved'?'':s); p.querySelector('span').textContent = s==='saving'?'저장 중…':s==='error'?'저장 실패 · 다시 시도':s==='dirty'?`변경 ${dirtyN}건 · 저장 필요`:'저장됨'; const b=$('#saveBtn'); if(b){ b.classList.toggle('dirty', s==='dirty'||s==='error'); b.disabled = s==='saved' || s==='saving'; } }
+function commit(){ bump(); dirtyN++; if(data.settings.autoSave){ store.schedule(); } else setSaved('dirty'); render(); }
+async function saveNow(){ if(!data) return; setSaved('saving'); await store.save(); }
 
 /* =========================================================
    시작 화면
@@ -809,7 +830,7 @@ function showErr(m){ const e=$('#splashErr'); e.hidden=false; e.textContent=m; }
 function enter(){
   $('#splash').hidden=true; $('#app').hidden=false;
   try{ const th=localStorage.getItem('hr-theme'); if(th) document.documentElement.dataset.theme=th; }catch{}
-  initFilters(); renderFoot(); render();
+  initFilters(); renderFoot(); setSaved('saved'); render();
 }
 
 /* =========================================================
@@ -841,7 +862,7 @@ function render(){
   const ref = refDate();
   $('#refLabel').textContent = '기준일 '+fmt(ref)+(data.settings.refDate?' (수동)':'');
   $('#navCnt').textContent = all.filter(r=>r.status==='ing'||r.status==='soon').length;
-  $('#footNote').innerHTML = `한도 <b class="num">${data.settings.baseMonths}개월</b>/자녀 (+${data.settings.extMonths} 배우자) · 직위·직무·자녀정보는 행 클릭 시 상세`;
+  $('#footNote').innerHTML = `<span class="hintbar">이름 클릭 = 상세 · 칸 클릭 = 바로 수정 (Enter ↓ · Tab → · Esc 취소) · 배지 클릭 = 토글 · 상태 클릭 = 실제 복직일</span>`;
 
   // 필터 옵션 (복수 선택)
   const years=[...new Set(all.flatMap(r=>{ const a=+r.start.slice(0,4), b=+r.end.slice(0,4); const out=[]; for(let y=a;y<=b;y++) out.push(String(y)); return out; }))].sort().reverse();
@@ -878,23 +899,66 @@ function render(){
     return;
   }
   const shown = list.slice(0, state.limitRows);
+  const EXTM=data.settings.extMonths;
+  $('#deptList').innerHTML=[...new Set(Object.values(data.employees).map(e=>e.dept).filter(Boolean))].map(d=>`<option value="${esc(d)}">`).join('');
   $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; const rowC = r.status==='plan'?'r-plan':(r.status==='ing'||r.status==='soon')?'r-ing':''; return `<tr data-id="${r.id}" class="${rowC} ${state.sel===r.id?'sel':''}">
     <td class="num" style="color:var(--ink3);padding-right:4px">${i+1}</td>
-    <td class="${R}">${pill(r)}</td>
-    <td class="bd vl"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg">임신중</span>':''}<span class="badge ${ordCls(r.ord)}">${esc(r.ord)}</span><span class="badge ${seqCls(r.seq)} num">${r.seq}차</span>${r.ext?`<span class="badge b-ext num">+${data.settings.extMonths}개월</span>`:''}</span></td>
-    <td>${esc(r.dept)}</td>
-    <td><span class="name">${esc(r.name)}</span><span class="sub num">${esc(r.emp)}</span></td>
-    <td class="num vl">${esc(r.grade)}</td>
-    <td class="num">${r.start}</td><td class="num vl">${r.end}</td>
+    <td class="ed st-td ${R}" data-f="returnDate" title="클릭: 실제 복직일 입력 (비우면 자동 판정)">${pill(r)}</td>
+    <td class="bd vl"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg tg" data-t="preg" title="클릭: 임신중 해제">임신중</span>':'<span class="badge ghost" data-t="preg" title="임신중으로 표시">임신</span>'}<span class="badge ${ordCls(r.ord)} ed-ord tg" data-t="ord" title="클릭: 자녀구분 변경">${esc(r.ord)}</span><span class="badge ${seqCls(r.seq)} num" title="분할차수(자동)">${r.seq}차</span>${r.ext?`<span class="badge b-ext num tg" data-t="ext" title="클릭: +${EXTM}개월 해제 (같은 자녀 전체)">+${EXTM}개월</span>`:`<span class="badge ghost" data-t="ext" title="+${EXTM}개월 적용 (배우자 조건)">+${EXTM}</span>`}</span></td>
+    <td class="ed" data-f="dept">${esc(r.dept)||'<span class="sub">—</span>'}</td>
+    <td><span class="name name-link" data-open="${r.id}" title="클릭: 상세 보기">${esc(r.name)}</span><span class="sub num">${esc(r.emp)}</span></td>
+    <td class="num ed vl" data-f="grade">${esc(r.grade)||'<span class="sub">—</span>'}</td>
+    <td class="num ed" data-f="start">${r.start}</td><td class="num ed vl" data-f="end">${r.end}</td>
     <td class="num vl ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':r.ret.moved?'<span class="sub">영업일 보정</span>':''}</td>
     <td class="num"><span class="v1">${mStr(r.planM)}</span><span class="sub">${mdStr(r.cur)} · ${r.plan}일</span></td>
     <td class="num ${R}"><span class="v1">${mStr(r.past)}</span>${r.prev.length?`<span class="sub">${r.prev.length}회</span>`:''}</td>
     <td class="num vl ${R}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.left<0?'−'+Math.abs(r.left):r.left}개월</span>${r.endIfContinue?`<span class="sub">→ ${r.endIfContinue}</span>`:''}</td>
-    <td class="memo-td ${R}"><div class="memo3" title="${esc(r.memoAll)}">${esc(r.memoAll)||'<span style="color:var(--ink3)">—</span>'}</div></td>
+    <td class="memo-td ed ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)||(!r.autoMemo?'<span style="color:var(--ink3)">—</span>':'')}</div></td>
   </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="13" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
-$('#tb').addEventListener('click', e=>{ const tr=e.target.closest('tr[data-id]'); if(tr) openDrawer(tr.dataset.id); });
+$('#tb').addEventListener('click', e=>{
+  const nm=e.target.closest('.name-link'); if(nm){ openDrawer(nm.dataset.open); return; }
+  const tg=e.target.closest('[data-t]'); if(tg){ toggleBadge(tg.closest('tr').dataset.id, tg.dataset.t, tg); return; }
+  const td=e.target.closest('td.ed'); if(td && !td.querySelector('.cell-in')) startEdit(td);
+});
+const EDIT_ORDER=['returnDate','dept','grade','start','end','memo'];
+function recOf(id){ return data.leaves.find(x=>x.id===id); }
+function applyEdit(rec, f, v){
+  if(f==='start'||f==='end'){ if(!isDate(v)) { toast('날짜 형식이 아님', true); return false; } const st=f==='start'?v:rec.start, en=f==='end'?v:rec.end; if(en<st){ toast('종료일이 시작일보다 앞섬', true); return false; } rec[f]=v; }
+  else if(f==='returnDate'){ if(v && !isDate(v)) { toast('날짜 형식이 아님', true); return false; } rec.returnDate=v; }
+  else if(f==='dept'||f==='grade'){ rec[f]=v; const e=data.employees[rec.emp]||(data.employees[rec.emp]={name:rec.name}); e[f]=v; }
+  else if(f==='memo'){ rec.memo=v; }
+  else if(f==='ord'){ rec.ord=v; }
+  else return false;
+  rec.updatedAt=new Date().toISOString(); return true;
+}
+function startEdit(td){
+  const tr=td.closest('tr'), id=tr.dataset.id, f=td.dataset.f, rec=recOf(id); if(!rec) return;
+  const cur = f==='memo' ? (rec.memo||'') : (rec[f]||'');
+  const el=document.createElement('input'); el.className='cell-in';
+  el.type = (f==='start'||f==='end'||f==='returnDate') ? 'date' : 'text'; el.value=cur;
+  if(f==='dept') el.setAttribute('list','deptList');
+  if(f==='returnDate'){ el.title='실제 복직일 · 비우고 Enter 하면 자동 판정으로 복귀'; }
+  td.innerHTML=''; td.appendChild(el); el.focus(); if(el.type==='text') el.select();
+  let done=false;
+  const finish=(commitIt, next)=>{ if(done) return; done=true; const v=el.value.trim();
+    if(commitIt && v!==cur){ if(applyEdit(rec,f,v)) commit(); else render(); } else render();
+    if(next) focusNext(id,f,next); };
+  el.onblur=()=>setTimeout(()=>finish(true),0);
+  el.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); finish(true,'down'); } else if(e.key==='Escape'){ e.preventDefault(); finish(false); } else if(e.key==='Tab'){ e.preventDefault(); finish(true, e.shiftKey?'left':'right'); } };
+}
+function focusNext(id,f,dir){
+  let tr=$(`#tb tr[data-id="${id}"]`); if(!tr) return; let nf=f;
+  if(dir==='down'){ tr=tr.nextElementSibling; } else if(dir==='up'){ tr=tr.previousElementSibling; } else { const i=EDIT_ORDER.indexOf(f); nf=EDIT_ORDER[i+(dir==='right'?1:-1)]; if(!nf){ tr=dir==='right'?tr.nextElementSibling:tr.previousElementSibling; nf=dir==='right'?EDIT_ORDER[0]:EDIT_ORDER[EDIT_ORDER.length-1]; } }
+  if(!tr||!tr.dataset.id) return; const td=tr.querySelector(`td.ed[data-f="${nf}"]`); if(td){ td.scrollIntoView({block:'nearest'}); startEdit(td); }
+}
+function toggleBadge(id, t, el){
+  const rec=recOf(id); if(!rec) return;
+  if(t==='ext'){ const on=!rec.extend6; const grp=data.leaves.filter(x=>childKey(x)===childKey(rec)); grp.forEach(x=>x.extend6=on); toast(on?`+${data.settings.extMonths}개월 적용 · 같은 자녀 ${grp.length}건`:`+${data.settings.extMonths}개월 해제 · 같은 자녀 ${grp.length}건`); commit(); }
+  else if(t==='preg'){ rec.kind = rec.kind==='육아휴직(임신중)' ? '육아휴직' : '육아휴직(임신중)'; commit(); }
+  else if(t==='ord'){ const sel=document.createElement('select'); sel.className='cell-in'; sel.style.minWidth='70px'; sel.style.height='24px'; ['첫째','둘째','셋째','넷째','기타'].forEach(o=>sel.add(new Option(o,o,false,o===rec.ord))); el.replaceWith(sel); sel.focus(); let done=false; const fin=(ok)=>{ if(done) return; done=true; if(ok && sel.value!==rec.ord){ applyEdit(rec,'ord',sel.value); commit(); } else render(); }; sel.onchange=()=>fin(true); sel.onblur=()=>setTimeout(()=>fin(true),0); sel.onkeydown=e=>{ if(e.key==='Escape') fin(false); }; }
+}
 function syncChips(){ $$('#chips button').forEach(b=>b.classList.toggle('on', b.dataset.s===''? state.s.size===0 : state.s.has(b.dataset.s))); }
 function toggleStatus(v){ if(!v) state.s.clear(); else if(state.s.has(v)) state.s.delete(v); else state.s.add(v); syncChips(); render(); }
 let _qT; $('#q').oninput=e=>{ state.q=e.target.value; clearTimeout(_qT); _qT=setTimeout(render, 160); };
@@ -1220,6 +1284,7 @@ function renderSettings(){
   $('#sCount').textContent = `육아휴직 ${data.leaves.length}건 · 직원 ${Object.keys(data.employees).length}명`;
   $('#sBase').value=data.settings.baseMonths; $('#sExt').value=data.settings.extMonths; $('#sSoon').value=data.settings.soonDays; $('#sRef').value=data.settings.refDate||''; $('#sHol').value=data.settings.holidays||'';
   $$('#sBiz button').forEach(b=>b.classList.toggle('on', (b.dataset.v==='1')===!!data.settings.bizAdjust));
+  $$('#sAuto button').forEach(b=>b.classList.toggle('on', (b.dataset.v==='1')===!!data.settings.autoSave));
   $('#sHolCnt').textContent = `${holidaySet().size}일 등록`;
   $('#sUA').textContent=navigator.userAgent.slice(0,90); $('#sXlsx').textContent = typeof window.XLSX!=='undefined' ? XLSX.version : '0.18.5 (필요 시 로드)';
 }
@@ -1228,6 +1293,7 @@ $('#sExt').onchange=e=>{ data.settings.extMonths=Math.max(0,+e.target.value||0);
 $('#sSoon').onchange=e=>{ data.settings.soonDays=Math.max(1,+e.target.value||30); commit(); };
 $('#sRef').onchange=e=>{ data.settings.refDate=isDate(e.target.value)?e.target.value:''; commit(); };
 $$('#sBiz button').forEach(b=>b.onclick=()=>{ data.settings.bizAdjust=b.dataset.v==='1'; commit(); renderSettings(); });
+$$('#sAuto button').forEach(b=>b.onclick=()=>{ data.settings.autoSave=b.dataset.v==='1'; commit(); renderSettings(); });
 $('#sHolSave').onclick=()=>{ data.settings.holidays=$('#sHol').value; commit(); renderSettings(); toast('공휴일 저장됨'); };
 $('#sPick').onclick=async()=>{ if(!store.supported) return toast('이 브라우저는 폴더 저장 미지원', true); try{ const old=data; await store.pick(); if(!data.leaves.length && old.leaves.length && confirm('새 폴더가 비어 있음. 현재 데이터를 새 폴더로 복사할까요?')){ data=old; await store.save(); } renderFoot(); renderSettings(); render(); toast('폴더 변경됨: '+store.dir.name); }catch(e){ if(e.name!=='AbortError') toast(e.message, true); } };
 $('#sJsonOut').onclick=exportJson;
@@ -1242,7 +1308,9 @@ $$('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 $$('.nav .soon').forEach(b=>b.onclick=()=>toast('다음 단계에서 추가 예정'));
 $('#themeBtn').onclick=()=>{ const r=document.documentElement; r.dataset.theme = r.dataset.theme==='dark'?'light':'dark'; try{ localStorage.setItem('hr-theme', r.dataset.theme); }catch{} };
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDrawer(); closeForm(); closeImport(); } });
-window.addEventListener('beforeunload', e=>{ if($('#savedPill').classList.contains('saving')){ e.preventDefault(); e.returnValue=''; } });
+window.addEventListener('beforeunload', e=>{ if(dirtyN>0 || $('#savedPill').classList.contains('saving')){ e.preventDefault(); e.returnValue=''; } });
+$('#saveBtn').onclick=saveNow;
+document.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveNow(); } });
 $('#modal').onclick=e=>{ if(e.target.id==='modal') closeForm(); };
 $('#imodal').onclick=e=>{ if(e.target.id==='imodal') closeImport(); };
 boot();
