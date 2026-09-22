@@ -190,6 +190,8 @@ tbody tr.r-ing:hover td{background:var(--row-ing-h)}
 tbody tr.r-plan:hover td{background:var(--row-plan-h)}
 tbody tr.sel td{box-shadow:inset 0 2px 0 var(--ac), inset 0 -2px 0 var(--ac)}
 td.bd{padding-left:8px;text-align:center}
+th.bc,td.bc{padding-left:4px;padding-right:4px}
+td.bc .badge{min-width:44px;justify-content:center}
 th.vl,td.vl{border-right:2px solid var(--line)}
 :root[data-theme="dark"] th.vl,:root[data-theme="dark"] td.vl{border-right-color:#46546a}
 .bds{display:inline-flex;gap:5px;align-items:center;justify-content:center}
@@ -464,7 +466,7 @@ td.ret .sub{opacity:.8}
           <thead><tr>
             <th data-k="" style="cursor:default">순번</th>
             <th data-k="status">상태</th>
-            <th data-k="" style="cursor:default" class="vl">구분</th>
+            <th data-k="kind" class="bc">임신</th><th data-k="ord" class="bc">자녀</th><th data-k="seq" class="bc">차수</th><th data-k="ext" class="bc vl">+6</th>
             <th data-k="dept">소속</th><th data-k="name">성명 / 사번</th><th data-k="grade" class="vl">직급</th>
             <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
             <th class="g vl" data-k="retDate">복직(퇴직)예정일<span class="auto">자동</span></th>
@@ -863,14 +865,14 @@ function render(){
     && (!q || [r.name,r.emp,r.dept,r.child,r.memoAll].some(v=>String(v||'').toLowerCase().includes(q))));
   const sk=state.sortK, sd=state.sortD;
   const isDateKey=['start','end','retDate','birth'].includes(sk);
-  list.sort((a,b)=>{ let x=a[sk], y=b[sk]; if(typeof x==='number'||typeof y==='number'){ x=+x||0; y=+y||0; return (x-y)*sd || (a.start<b.start?1:-1); } x=String(x??''); y=String(y??''); const c = isDateKey ? (x<y?-1:x>y?1:0) : cmpKo(x,y); return c*sd || (a.start<b.start?1:a.start>b.start?-1:0); });
+  list.sort((a,b)=>{ let x=a[sk], y=b[sk]; if(typeof x==='boolean'){ x=+x; y=+y; } if(typeof x==='number'||typeof y==='number'){ x=+x||0; y=+y||0; return (x-y)*sd || (a.start<b.start?1:-1); } x=String(x??''); y=String(y??''); const c = isDateKey ? (x<y?-1:x>y?1:0) : cmpKo(x,y); return c*sd || (a.start<b.start?1:a.start>b.start?-1:0); });
   const nf=[MS.year,MS.dept,MS.kind,MS.ord,MS.limit].filter(m=>m.sel.size).length+(S.size?1:0);
   $('#cnt').innerHTML = `${list.length}건 표시${nf?` · 필터 ${nf}개 <button type="button" style="color:var(--ac);font-weight:600" id="clearF">초기화</button>`:''}`;
   const cf=$('#clearF'); if(cf) cf.onclick=()=>{ [MS.year,MS.dept,MS.kind,MS.ord,MS.limit].forEach(m=>{ m.sel.clear(); m.renderPop(); }); state.s.clear(); syncChips(); render(); };
   $$('#tbl thead th').forEach(th=>{ const a=th.querySelector('.arr'); if(a) a.remove(); if(th.dataset.k===sk && sk){ const s=document.createElement('span'); s.className='arr'; s.textContent = sd>0?'▲':'▼'; th.appendChild(s); } });
 
   if(!all.length){
-    $('#tb').innerHTML = `<tr><td colspan="13" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
+    $('#tb').innerHTML = `<tr><td colspan="16" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
     return;
   }
   const shown = list.slice(0, state.limitRows);
@@ -879,7 +881,10 @@ function render(){
   $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; const rowC = r.status==='plan'?'r-plan':(r.status==='ing'||r.status==='soon')?'r-ing':''; return `<tr data-id="${r.id}" class="${rowC} ${state.sel===r.id?'sel':''}">
     <td class="num" style="color:var(--ink3);padding-right:4px">${i+1}</td>
     <td class="ed st-td ${R}" data-f="returnDate" title="클릭: 실제 복직일 입력 (비우면 자동 판정)">${pill(r)}</td>
-    <td class="bd vl"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg tg" data-t="preg" title="클릭: 임신중 해제">임신중</span>':'<span class="badge ghost" data-t="preg" title="임신중으로 표시">임신</span>'}<span class="badge ${ordCls(r.ord)} ed-ord tg" data-t="ord" title="클릭: 자녀구분 변경">${esc(r.ord)}</span><span class="badge ${seqCls(r.seq)} num" title="분할차수(자동)">${r.seq}차</span>${r.ext?`<span class="badge b-ext num tg" data-t="ext" title="클릭: +${EXTM}개월 해제 (같은 자녀 전체)">+${EXTM}개월</span>`:`<span class="badge ghost" data-t="ext" title="+${EXTM}개월 적용 (배우자 조건)">+${EXTM}</span>`}</span></td>
+    <td class="bd bc"><span class="bds">${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg tg" data-t="preg" title="클릭: 임신중 해제">임신중</span>':'<span class="badge ghost" data-t="preg" title="임신중으로 표시">임신</span>'}</span></td>
+    <td class="bd bc"><span class="bds"><span class="badge ${ordCls(r.ord)} ed-ord tg" data-t="ord" title="클릭: 자녀구분 변경">${esc(r.ord)}</span></span></td>
+    <td class="bd bc"><span class="bds"><span class="badge ${seqCls(r.seq)} num" title="분할차수(자동)">${r.seq}차</span></span></td>
+    <td class="bd bc vl"><span class="bds">${r.ext?`<span class="badge b-ext num tg" data-t="ext" title="클릭: +${EXTM}개월 해제 (같은 자녀 전체)">+${EXTM}</span>`:`<span class="badge ghost" data-t="ext" title="+${EXTM}개월 적용 (배우자 조건)">+${EXTM}</span>`}</span></td>
     <td class="ed" data-f="dept">${esc(r.dept)||'<span class="sub">—</span>'}</td>
     <td><span class="name name-link" data-open="${r.id}" title="클릭: 상세 보기">${esc(r.name)}</span><span class="sub num">${esc(r.emp)}</span></td>
     <td class="num ed vl" data-f="grade">${esc(r.grade)||'<span class="sub">—</span>'}</td>
@@ -889,7 +894,7 @@ function render(){
     <td class="num ${R}"><span class="v1">${mStr(r.past)}</span>${r.prev.length?`<span class="sub">${r.prev.length}회</span>`:''}</td>
     <td class="num vl ${R}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.left<0?'−'+Math.abs(r.left):r.left}개월</span>${r.endIfContinue?`<span class="sub">→ ${r.endIfContinue}</span>`:''}</td>
     <td class="memo-td ed ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)||(!r.autoMemo?'<span style="color:var(--ink3)">—</span>':'')}</div></td>
-  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="13" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
+  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="16" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
 $('#tb').addEventListener('click', e=>{
