@@ -15,8 +15,8 @@
   --info:#2F6FE4; --info-soft:rgba(47,111,228,.12);
   --ext:#7A4DD8; --ext-soft:rgba(122,77,216,.13);
   --row-ing:#FFFBE8; --row-ing-h:#FFF4C4; --row-plan:#FDF1F0; --row-plan-h:#F9E1DF;
-  --c1:#2F6FE4; --c1s:rgba(47,111,228,.09); --c2:#0E9F8A; --c2s:rgba(14,159,138,.10); --c3:#C2570E; --c3s:rgba(194,87,14,.10); --c4:#5B6470; --c4s:rgba(91,100,112,.10);
-  --preg:#C0397A; --preg-soft:rgba(192,57,122,.09);
+  --c1:#3B7BF0; --c1s:rgba(47,111,228,.09); --c2:#12A38C; --c2s:rgba(14,159,138,.10); --c3:#E07A1F; --c3s:rgba(194,87,14,.10); --c4:#6B7482; --c4s:rgba(91,100,112,.10);
+  --preg:#D2478C; --preg-soft:rgba(192,57,122,.09);
   --raise:inset 0 1px 0 var(--edge), 0 10px 24px -10px var(--sh-d), 0 3px 8px -2px rgba(120,135,160,.35);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(120,135,160,.3);
   --raise-hover:inset 0 1px 0 var(--edge), 0 16px 30px -12px var(--sh-d), 0 4px 10px -2px rgba(120,135,160,.35);
@@ -37,8 +37,8 @@
   --info:#6C9BFF; --info-soft:rgba(108,155,255,.16);
   --ext:#B08CFF; --ext-soft:rgba(176,140,255,.18);
   --row-ing:#2E2C1F; --row-ing-h:#3B381F; --row-plan:#332326; --row-plan-h:#42292C;
-  --c1:#6C9BFF; --c1s:rgba(108,155,255,.18); --c2:#3FCDB6; --c2s:rgba(63,205,182,.16); --c3:#F09A5A; --c3s:rgba(240,154,90,.16); --c4:#AAB5C7; --c4s:rgba(170,181,199,.16);
-  --preg:#F07AB5; --preg-soft:rgba(240,122,181,.16);
+  --c1:#3B7BF0; --c1s:rgba(108,155,255,.18); --c2:#12A38C; --c2s:rgba(63,205,182,.16); --c3:#E07A1F; --c3s:rgba(240,154,90,.16); --c4:#6B7482; --c4s:rgba(170,181,199,.16);
+  --preg:#D2478C; --preg-soft:rgba(240,122,181,.16);
   --raise:inset 0 1px 0 var(--edge), 0 12px 26px -10px var(--sh-d), 0 3px 8px -2px rgba(0,0,0,.4);
   --raise-sm:inset 0 1px 0 var(--edge), 0 4px 10px -4px var(--sh-d), 0 1px 3px rgba(0,0,0,.35);
   --raise-hover:inset 0 1px 0 var(--edge), 0 18px 32px -12px var(--sh-d), 0 4px 10px -2px rgba(0,0,0,.45);
@@ -168,15 +168,23 @@ tbody tr.r-ing:hover td{background:var(--row-ing-h)}
 tbody tr.r-plan:hover td{background:var(--row-plan-h)}
 tbody tr.sel td{box-shadow:inset 0 2px 0 var(--ac), inset 0 -2px 0 var(--ac)}
 td.bd{padding-left:8px}
-.bds{display:inline-flex;gap:4px;align-items:center}
+.bds{display:inline-flex;gap:5px;align-items:center}
 .v1{font-weight:700;font-size:1.04em}
 .pos{color:var(--ac)}
 td.memo-td{white-space:normal;min-width:220px;max-width:320px}
 .memo3{font-size:11.5px;line-height:1.4;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
-.b-c1{background:var(--c1s);color:var(--c1)}.b-c2{background:var(--c2s);color:var(--c2)}.b-c3{background:var(--c3s);color:var(--c3)}.b-c4{background:var(--c4s);color:var(--c4)}
-.b-s1{background:var(--bg2);color:var(--ink2);border-color:var(--line)}.b-s2{background:var(--warn-soft);color:var(--warn)}.b-s3{background:var(--bad-soft);color:var(--bad)}.b-s4{background:var(--ink);color:var(--bg)}
-.b-preg{background:var(--preg-soft);color:var(--preg)}
-.badge{padding:2px 7px;font-size:11px}
+/* 구분 배지: 채움형(자녀·+6·임신중) / 테두리형(차수) */
+.bds .badge{height:22px;padding:0 8px;font-size:12px;font-weight:700;border-radius:6px;letter-spacing:-.01em;line-height:1}
+.b-c1,.b-c2,.b-c3,.b-c4,.b-preg,.bds .b-ext{color:#fff;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
+.b-c1{background:var(--c1)}.b-c2{background:var(--c2)}.b-c3{background:var(--c3)}.b-c4{background:var(--c4)}
+.b-preg{background:var(--preg)}
+.bds .b-ext{background:var(--ext)}
+.b-s1,.b-s2,.b-s3,.b-s4{background:var(--surf2);border:1.5px solid currentColor;font-weight:800}
+.b-s1{color:#7B8494}.b-s2{color:#C98A00}.b-s3{color:var(--bad)}.b-s4{color:#fff;background:var(--ink);border-color:var(--ink)}
+:root[data-theme="dark"] .b-s1,:root[data-theme="dark"] .b-s2,:root[data-theme="dark"] .b-s3{background:transparent}
+.tfoot .badge{height:20px;padding:0 7px;font-size:11px;font-weight:700;border-radius:6px;line-height:1}
+.tfoot .b-c1,.tfoot .b-c2,.tfoot .b-c3,.tfoot .b-preg,.tfoot .b-ext{color:#fff}.tfoot .b-ext{background:var(--ext)}
+.kv .b-c1,.kv .b-c2,.kv .b-c3,.kv .b-c4{color:#fff;padding:1px 7px;border-radius:5px}
 
 thead th.st{z-index:3}
 .name{font-weight:600}
