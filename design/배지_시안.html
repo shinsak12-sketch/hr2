@@ -1,0 +1,115 @@
+<title>배지 디자인 시안</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#DDE3EC; --surf:#F7F9FC; --surf2:#FFFFFF; --ink:#1c2433; --ink2:#4a5670; --ink3:#6f7d95; --line:#cfd7e3; --line2:#e3e8f0;
+  --row-ing:#FFFBE8; --row-plan:#FDF1F0;
+  --ac:#00854A;
+  /* 공통 팔레트 */
+  --c-plan:#3B7BF0; --c-ing:#149A57; --c-soon:#D89600; --c-done:#D0453F;
+  --c-preg:#D2478C; --c-k1:#3B7BF0; --c-k2:#12A38C; --c-k3:#E07A1F; --c-s1:#7B8494; --c-s2:#C98A00; --c-s3:#D0453F; --c-ext:#7A4DD8;
+  --font:"Malgun Gothic","맑은 고딕","Noto Sans KR",sans-serif;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{ --bg:#181E27; --surf:#262F3B; --surf2:#2D3744; --ink:#E8EDF5; --ink2:#AAB5C7; --ink3:#6F7C92; --line:#344152; --line2:#2c3745; --row-ing:#2E2C1F; --row-plan:#332326; }
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --bg:#181E27; --surf:#262F3B; --surf2:#2D3744; --ink:#E8EDF5; --ink2:#AAB5C7; --ink3:#6F7C92; --line:#344152; --line2:#2c3745; --row-ing:#2E2C1F; --row-plan:#332326; } }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:13.5px;padding:24px 16px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px;letter-spacing:-.02em}
+.lead{color:var(--ink2);font-size:13px;margin:0 0 22px}
+.ver{background:var(--surf);border-radius:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 10px 24px -10px #aeb8c8,0 3px 8px -2px rgba(120,135,160,.35);padding:18px 20px;margin-bottom:22px}
+.ver h2{margin:0;font-size:16px;display:flex;align-items:center;gap:10px}
+.ver h2 .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--ac);color:#fff}
+.ver p{margin:6px 0 12px;color:var(--ink2);font-size:12.5px}
+.tw{overflow:auto;border-radius:12px;background:var(--surf2);border:1px solid var(--line2)}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}
+th{background:var(--surf);color:var(--ink2);font-weight:600;font-size:12px;padding:8px 7px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+td{padding:2px 7px;height:30px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap;background:var(--surf2);vertical-align:middle}
+tr.ing td{background:var(--row-ing)} tr.plan td{background:var(--row-plan)}
+th.vl,td.vl{border-right:2px solid var(--line)}
+td.no{color:var(--ink3);font-size:12px}
+td.nm{font-weight:600}
+.spec{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--ink2)}
+.spec b{color:var(--ink)}
+.pros{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin-top:10px;font-size:12.5px}
+.pros div{padding-left:14px;position:relative}
+.pros div:before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--ac)}
+.pros div.m:before{background:var(--c-done)}
+@media (max-width:640px){.pros{grid-template-columns:1fr}}
+
+/* ===== 공통 배지 뼈대 ===== */
+.b{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:20px;padding:0 8px;font-size:11.5px;font-weight:700;line-height:1;white-space:nowrap;letter-spacing:-.01em;min-width:44px}
+.b i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.g{opacity:0;border:1.5px dashed var(--line)!important;background:transparent!important;color:var(--ink3)!important;box-shadow:none!important}
+tr:hover .g{opacity:1}
+
+/* ===== A. 채움형 ===== */
+.A .b{border-radius:6px;color:#fff;background:var(--c);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 1px 2px rgba(0,0,0,.18)}
+.A .b i{background:#fff;opacity:.9}
+.A .b.s1{background:#8A93A3}
+
+/* ===== B. 테두리형 ===== */
+.B .b{border-radius:6px;color:var(--c);background:var(--surf2);border:1.5px solid var(--c);font-weight:800}
+.B .b i{background:var(--c)}
+
+/* ===== C. 연한 채움(틴트)형 ===== */
+.C .b{border-radius:999px;color:var(--c);background:var(--t);font-weight:700;padding:0 10px}
+.C .b i{background:var(--c)}
+:root[data-theme="dark"] .C .b{background:color-mix(in srgb, var(--c) 22%, transparent)}
+</style>
+
+<div class="wrap">
+  <h1>배지 디자인 시안 3종</h1>
+  <p class="lead">상태 · 임신 · 자녀 · 차수 · +6 다섯 종류를 하나의 규격(높이 20px · 굵기 · 최소폭 44px · 여백)으로 통일. 세 안의 차이는 "칠하는 방식"뿐. 행에 마우스 올리면 빈 칸의 점선(추가 가능) 배지가 보임</p>
+
+  <!-- ================= A ================= -->
+  <section class="ver A">
+    <h2><span class="tag">A</span>채움형 · 전부 진한 바탕 + 흰 글씨</h2>
+    <p>가장 또렷함. 색만 보고 상태를 읽을 수 있음. 대신 화면에 색 덩어리가 많아져 무거울 수 있음 → 채도를 한 단계 낮춘 색으로 조정</p>
+    <div class="tw"><table>
+      <thead><tr><th>No</th><th>상태</th><th>임신</th><th>자녀</th><th>차수</th><th class="vl">+6</th><th>소속</th><th>사번</th><th>성명</th></tr></thead>
+      <tbody>
+        <tr class="plan"><td class="no">1</td><td><span class="b" style="--c:var(--c-plan)"><i></i>예정</span></td><td><span class="b" style="--c:var(--c-preg)">임신중</span></td><td><span class="b" style="--c:var(--c-k2)">둘째</span></td><td><span class="b" style="--c:var(--c-s2)">2차</span></td><td class="vl"><span class="b g">+6</span></td><td>SMART강남</td><td>11600757</td><td class="nm">이지현</td></tr>
+        <tr class="plan"><td class="no">2</td><td><span class="b" style="--c:var(--c-plan)"><i></i>예정</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k1)">첫째</span></td><td><span class="b s1" style="--c:var(--c-s1)">1차</span></td><td class="vl"><span class="b" style="--c:var(--c-ext)">+6</span></td><td>SMART대구</td><td>11900033</td><td class="nm">강현주</td></tr>
+        <tr class="ing"><td class="no">3</td><td><span class="b" style="--c:var(--c-ing)"><i></i>휴직중</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k1)">첫째</span></td><td><span class="b s1" style="--c:var(--c-s1)">1차</span></td><td class="vl"><span class="b g">+6</span></td><td>외제강남센터</td><td>11800782</td><td class="nm">이다솜</td></tr>
+        <tr class="ing"><td class="no">4</td><td><span class="b" style="--c:var(--c-soon)"><i></i>복직 D-10</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k3)">셋째</span></td><td><span class="b" style="--c:var(--c-s3)">3차</span></td><td class="vl"><span class="b" style="--c:var(--c-ext)">+6</span></td><td>인천차량보상부</td><td>11412211</td><td class="nm">이현서</td></tr>
+        <tr><td class="no">5</td><td><span class="b" style="--c:var(--c-done)"><i></i>복직완료</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k2)">둘째</span></td><td><span class="b s1" style="--c:var(--c-s1)">1차</span></td><td class="vl"><span class="b g">+6</span></td><td>동서울차량보상부</td><td>11900866</td><td class="nm">서진아</td></tr>
+      </tbody></table></div>
+    <div class="pros"><div>흰 글씨라 어떤 행 배경(노랑·살구·흰색) 위에서도 동일하게 보임</div><div>색맹·저해상도 모니터에서도 구분 쉬움</div><div class="m">한 행에 배지 4~5개면 색 덩어리가 많아 시선이 분산될 수 있음</div><div class="m">1차(회색)와 +6 없음(빈칸)의 대비가 커서 회색이 "꺼진 것"처럼 보일 수 있음</div></div>
+  </section>
+
+  <!-- ================= B ================= -->
+  <section class="ver B">
+    <h2><span class="tag">B</span>테두리형 · 흰 바탕 + 색 테두리 + 색 글씨</h2>
+    <p>가볍고 정돈됨. 행 배경색(휴직중 노랑·예정 살구)이 배지에 가려지지 않아 행 상태가 먼저 읽힘. 글씨를 굵게(800) 써서 시인성 확보</p>
+    <div class="tw"><table>
+      <thead><tr><th>No</th><th>상태</th><th>임신</th><th>자녀</th><th>차수</th><th class="vl">+6</th><th>소속</th><th>사번</th><th>성명</th></tr></thead>
+      <tbody>
+        <tr class="plan"><td class="no">1</td><td><span class="b" style="--c:var(--c-plan)"><i></i>예정</span></td><td><span class="b" style="--c:var(--c-preg)">임신중</span></td><td><span class="b" style="--c:var(--c-k2)">둘째</span></td><td><span class="b" style="--c:var(--c-s2)">2차</span></td><td class="vl"><span class="b g">+6</span></td><td>SMART강남</td><td>11600757</td><td class="nm">이지현</td></tr>
+        <tr class="plan"><td class="no">2</td><td><span class="b" style="--c:var(--c-plan)"><i></i>예정</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k1)">첫째</span></td><td><span class="b" style="--c:var(--c-s1)">1차</span></td><td class="vl"><span class="b" style="--c:var(--c-ext)">+6</span></td><td>SMART대구</td><td>11900033</td><td class="nm">강현주</td></tr>
+        <tr class="ing"><td class="no">3</td><td><span class="b" style="--c:var(--c-ing)"><i></i>휴직중</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k1)">첫째</span></td><td><span class="b" style="--c:var(--c-s1)">1차</span></td><td class="vl"><span class="b g">+6</span></td><td>외제강남센터</td><td>11800782</td><td class="nm">이다솜</td></tr>
+        <tr class="ing"><td class="no">4</td><td><span class="b" style="--c:var(--c-soon)"><i></i>복직 D-10</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k3)">셋째</span></td><td><span class="b" style="--c:var(--c-s3)">3차</span></td><td class="vl"><span class="b" style="--c:var(--c-ext)">+6</span></td><td>인천차량보상부</td><td>11412211</td><td class="nm">이현서</td></tr>
+        <tr><td class="no">5</td><td><span class="b" style="--c:var(--c-done)"><i></i>복직완료</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:var(--c-k2)">둘째</span></td><td><span class="b" style="--c:var(--c-s1)">1차</span></td><td class="vl"><span class="b g">+6</span></td><td>동서울차량보상부</td><td>11900866</td><td class="nm">서진아</td></tr>
+      </tbody></table></div>
+    <div class="pros"><div>행 배경색이 그대로 보여서 "행 = 상태, 배지 = 속성"으로 역할이 분리됨</div><div>인쇄·흑백 복사에서도 테두리 덕에 형태 유지</div><div class="m">노란(2차) · 주황(셋째)처럼 밝은 색은 글씨로 쓰면 채움형보다 약해 보임</div><div class="m">빈칸의 점선 배지와 1차(회색 테두리)가 비슷해 보일 수 있음 → 1차는 테두리 색을 더 진하게</div></div>
+  </section>
+
+  <!-- ================= C ================= -->
+  <section class="ver C">
+    <h2><span class="tag">C</span>틴트형 · 연한 색 바탕 + 진한 색 글씨 · 알약 모양</h2>
+    <p>A와 B의 중간. 배경은 색을 살짝만 깔고 글씨로 구분. 상태 배지가 지금 쓰는 모양과 같아서 익숙함. 연한 바탕이 행 배경(노랑·살구)에 묻히지 않도록 불투명한 밝은 색으로 지정</p>
+    <div class="tw"><table>
+      <thead><tr><th>No</th><th>상태</th><th>임신</th><th>자녀</th><th>차수</th><th class="vl">+6</th><th>소속</th><th>사번</th><th>성명</th></tr></thead>
+      <tbody>
+        <tr class="plan"><td class="no">1</td><td><span class="b" style="--c:#2A62C9;--t:#DCE8FC"><i></i>예정</span></td><td><span class="b" style="--c:#B0306F;--t:#F9DDEB">임신중</span></td><td><span class="b" style="--c:#0E7F6D;--t:#D3F1EA">둘째</span></td><td><span class="b" style="--c:#9A6B00;--t:#FBEBBF">2차</span></td><td class="vl"><span class="b g">+6</span></td><td>SMART강남</td><td>11600757</td><td class="nm">이지현</td></tr>
+        <tr class="plan"><td class="no">2</td><td><span class="b" style="--c:#2A62C9;--t:#DCE8FC"><i></i>예정</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:#2A62C9;--t:#DCE8FC">첫째</span></td><td><span class="b" style="--c:#5B6470;--t:#E4E8EE">1차</span></td><td class="vl"><span class="b" style="--c:#6236C4;--t:#E8DEFB">+6</span></td><td>SMART대구</td><td>11900033</td><td class="nm">강현주</td></tr>
+        <tr class="ing"><td class="no">3</td><td><span class="b" style="--c:#0F7A45;--t:#D4EFDF"><i></i>휴직중</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:#2A62C9;--t:#DCE8FC">첫째</span></td><td><span class="b" style="--c:#5B6470;--t:#E4E8EE">1차</span></td><td class="vl"><span class="b g">+6</span></td><td>외제강남센터</td><td>11800782</td><td class="nm">이다솜</td></tr>
+        <tr class="ing"><td class="no">4</td><td><span class="b" style="--c:#9A6B00;--t:#FBEBBF"><i></i>복직 D-10</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:#B85A0E;--t:#FBE3CF">셋째</span></td><td><span class="b" style="--c:#B4302B;--t:#FADBD9">3차</span></td><td class="vl"><span class="b" style="--c:#6236C4;--t:#E8DEFB">+6</span></td><td>인천차량보상부</td><td>11412211</td><td class="nm">이현서</td></tr>
+        <tr><td class="no">5</td><td><span class="b" style="--c:#B4302B;--t:#FADBD9"><i></i>복직완료</span></td><td><span class="b g">임신</span></td><td><span class="b" style="--c:#0E7F6D;--t:#D3F1EA">둘째</span></td><td><span class="b" style="--c:#5B6470;--t:#E4E8EE">1차</span></td><td class="vl"><span class="b g">+6</span></td><td>동서울차량보상부</td><td>11900866</td><td class="nm">서진아</td></tr>
+      </tbody></table></div>
+    <div class="pros"><div>부드럽고 눈이 덜 피로함. 장시간 보는 대장에 적합</div><div>지금 상태 배지와 같은 계열이라 바꾸는 폭이 가장 작음</div><div class="m">연노랑 행 위의 노란 계열(2차 · 복직 D-n)은 대비가 약해짐 → 그 둘은 글씨를 더 진하게</div><div class="m">A보다 멀리서 식별력은 떨어짐</div></div>
+  </section>
+
+  <div class="spec"><b>공통 규격</b><span>높이 20px</span><span>최소폭 44px</span><span>좌우 여백 8px (C는 10px)</span><span>글자 11.5px 굵게</span><span>상태 배지만 앞에 점(●)</span><span>빈 칸은 행에 마우스 올렸을 때만 점선 배지</span><span>색 의미: 파랑=예정·첫째 / 초록=휴직중 / 노랑=임박·2차 / 빨강=완료·3차 / 청록=둘째 / 주황=셋째 / 자주=임신중 / 보라=+6</span></div>
+</div>
