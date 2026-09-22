@@ -179,12 +179,13 @@ tr:hover .badge.ghost{opacity:1}
 .card{border-radius:var(--r);box-shadow:var(--raise);background:var(--surf);padding:6px;flex:1;min-height:0;display:flex;flex-direction:column}
 .tw{overflow:auto;border-radius:14px;flex:1;min-height:0;background:var(--surf2);border:1px solid var(--line2);contain:content}
 table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13.5px}
-thead th{position:sticky;top:0;z-index:2;background:var(--surf);color:var(--ink2);font-weight:600;font-size:12px;padding:8px 10px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--line);cursor:pointer;user-select:none}
+thead th{position:sticky;top:0;z-index:2;background:var(--surf);color:var(--ink2);font-weight:600;font-size:12px;padding:8px 7px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--line);box-shadow:0 1px 0 var(--line);cursor:pointer;user-select:none}
 thead th.g{color:var(--ac)}
 thead th .auto{display:inline-block;margin-left:5px;font-size:9px;padding:1px 5px;border-radius:5px;background:var(--ac-soft);color:var(--ac);vertical-align:middle;letter-spacing:.04em}
 thead th .arr{font-size:10px;margin-left:3px;color:var(--ink3)}
-tbody td{padding:2px 10px;height:30px;white-space:nowrap;border-bottom:1px solid var(--line);vertical-align:middle;background:var(--surf2);line-height:1.25;text-align:center}
-thead th:last-child,td.memo-td{text-align:left}
+tbody td{padding:2px 7px;height:30px;white-space:nowrap;border-bottom:1px solid var(--line);vertical-align:middle;background:var(--surf2);line-height:1.25;text-align:center}
+td.memo-td,td.prog-td{text-align:left}
+thead th[data-k="memoAll"]{text-align:left}
 tbody tr{cursor:pointer}
 tbody tr.r-ing td{background:var(--row-ing)}
 tbody tr.r-plan td{background:var(--row-plan)}
@@ -193,14 +194,17 @@ tbody tr.r-ing:hover td{background:var(--row-ing-h)}
 tbody tr.r-plan:hover td{background:var(--row-plan-h)}
 tbody tr.sel td{box-shadow:inset 0 2px 0 var(--ac), inset 0 -2px 0 var(--ac)}
 td.bd{padding-left:8px;text-align:center}
-th.bc,td.bc{padding-left:4px;padding-right:4px}
-td.bc .badge{min-width:44px;justify-content:center}
+th.bc,td.bc{padding-left:3px;padding-right:3px}
+td.bc .badge{min-width:40px;justify-content:center}
 th.vl,td.vl{border-right:2px solid var(--line)}
 :root[data-theme="dark"] th.vl,:root[data-theme="dark"] td.vl{border-right-color:#46546a}
 .bds{display:inline-flex;gap:5px;align-items:center;justify-content:center}
 .v1{font-weight:700;font-size:1em;display:inline-block;line-height:1.25}
 .pos{color:var(--ac)}
-td.memo-td{white-space:normal;min-width:240px;max-width:360px;padding-top:4px;padding-bottom:4px}
+td.memo-td{white-space:normal;min-width:260px;max-width:380px;padding-top:4px;padding-bottom:4px}
+td.prog-td{white-space:normal;min-width:150px;max-width:220px;padding-top:4px;padding-bottom:4px}
+td.prog-td .cell-in{text-align:left;min-width:170px}
+thead th:last-child{text-align:center}
 .memo3{font-size:11px;line-height:1.3;color:var(--ink2);word-break:break-all}
 /* 구분 배지: 채움형(자녀·+6·임신중) / 테두리형(차수) */
 .bds .badge{height:19px;padding:0 7px;font-size:11.5px;font-weight:700;border-radius:6px;letter-spacing:-.01em;line-height:1}
@@ -488,7 +492,8 @@ td.ret .sub{opacity:.8}
             <th class="g" data-k="plan">사용(예정)기간<span class="auto">자동</span></th>
             <th class="g" data-k="pastDays">과거 사용기간<span class="auto">자동</span></th>
             <th class="g vl" data-k="leftDays">잔여기간<span class="auto">자동</span></th>
-            <th class="g" data-k="memoAll">비고<span class="auto">자동+수기</span></th>
+            <th class="g vl" data-k="memoAll">비고<span class="auto">자동+수기</span></th>
+            <th data-k="progress">진행</th>
           </tr></thead>
           <tbody id="tb"></tbody>
         </table></div>
@@ -574,7 +579,8 @@ td.ret .sub{opacity:.8}
             <div class="fi"><label>휴직 종료일 <em>*</em></label><div class="in"><input id="mEnd" type="date"></div></div>
             <div class="fi"><label>복직(퇴직)예정일 <span class="a">자동</span></label><div class="in ro"><b id="mReturn">—</b></div></div>
             <div class="fi"><label>실제 복직일 <span class="hint">(복직 처리 시)</span></label><div class="in"><input id="mRet" type="date"></div></div>
-            <div class="fi f2"><label>비고 <span class="a">자동 생성 + 수기</span></label><div class="in"><input id="mMemo" placeholder="추가 메모 (자동 생성분 뒤에 이어붙음)"></div></div>
+            <div class="fi"><label>비고 <span class="a">자동 생성 + 수기</span></label><div class="in"><input id="mMemo" placeholder="추가 메모"></div></div>
+            <div class="fi"><label>진행 <span class="hint">(담당자 메모)</span></label><div class="in"><input id="mProg" placeholder="예) 복직원 결재중"></div></div>
           </div>
         </div>
       </div>
@@ -864,7 +870,7 @@ function render(){
   let list = all.filter(r => MS.range.pass(r) && MS.kind.pass(r.kind) && MS.limit.pass(r.ext?'ext':'base')
     && (MS.year.sel.size===0 || [...MS.year.sel].some(y => r.start.slice(0,4)<=y && r.end.slice(0,4)>=y))
     && passStatus(r)
-    && (!q || [r.name,r.emp,r.dept,r.child,r.memoAll].some(v=>String(v||'').toLowerCase().includes(q))));
+    && (!q || [r.name,r.emp,r.dept,r.child,r.memoAll,r.progress].some(v=>String(v||'').toLowerCase().includes(q))));
   const sk=state.sortK, sd=state.sortD;
   const isDateKey=['start','end','retDate','birth'].includes(sk);
   list.sort((a,b)=>{ let x=a[sk], y=b[sk]; if(typeof x==='boolean'){ x=+x; y=+y; } if(typeof x==='number'||typeof y==='number'){ x=+x||0; y=+y||0; return (x-y)*sd || (a.start<b.start?1:-1); } x=String(x??''); y=String(y??''); const c = isDateKey ? (x<y?-1:x>y?1:0) : cmpKo(x,y); return c*sd || (a.start<b.start?1:a.start>b.start?-1:0); });
@@ -874,7 +880,7 @@ function render(){
   $$('#tbl thead th').forEach(th=>{ const a=th.querySelector('.arr'); if(a) a.remove(); if(th.dataset.k===sk && sk){ const s=document.createElement('span'); s.className='arr'; s.textContent = sd>0?'▲':'▼'; th.appendChild(s); } });
 
   if(!all.length){
-    $('#tb').innerHTML = `<tr><td colspan="17" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
+    $('#tb').innerHTML = `<tr><td colspan="18" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
     return;
   }
   const shown = list.slice(0, state.limitRows);
@@ -896,8 +902,9 @@ function render(){
     <td class="num" title="${mdStr(r.cur)} · ${mStr(r.planM)}"><span class="v1">${r.plan}일</span></td>
     <td class="num ${R}" title="${mStr(r.past)}${r.prev.length?' · '+r.prev.length+'회':''}">${r.pastDays?`<span class="v1">${r.pastDays}일</span>`:''}</td>
     <td class="num vl ${R}" title="${mStr(r.left)}${r.endIfContinue?' · 이어 쓰면 ~'+r.endIfContinue:''}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.leftDays<0?'−'+Math.abs(r.leftDays):r.leftDays}일</span></td>
-    <td class="memo-td ed ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
-  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="17" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
+    <td class="memo-td ed vl ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
+    <td class="prog-td ed" data-f="progress"><div class="memo3" style="color:var(--ink)">${esc(r.progress||'')}</div></td>
+  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="18" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
 $('#tb').addEventListener('click', e=>{
@@ -905,20 +912,21 @@ $('#tb').addEventListener('click', e=>{
   const tg=e.target.closest('[data-t]'); if(tg){ toggleBadge(tg.closest('tr').dataset.id, tg.dataset.t, tg); return; }
   const td=e.target.closest('td.ed'); if(td && !td.querySelector('.cell-in')) startEdit(td);
 });
-const EDIT_ORDER=['returnDate','dept','grade','start','end','memo'];
+const EDIT_ORDER=['returnDate','dept','grade','start','end','memo','progress'];
 function recOf(id){ return data.leaves.find(x=>x.id===id); }
 function applyEdit(rec, f, v){
   if(f==='start'||f==='end'){ if(!isDate(v)) { toast('날짜 형식이 아님', true); return false; } const st=f==='start'?v:rec.start, en=f==='end'?v:rec.end; if(en<st){ toast('종료일이 시작일보다 앞섬', true); return false; } rec[f]=v; }
   else if(f==='returnDate'){ if(v && !isDate(v)) { toast('날짜 형식이 아님', true); return false; } rec.returnDate=v; }
   else if(f==='dept'||f==='grade'){ rec[f]=v; const e=data.employees[rec.emp]||(data.employees[rec.emp]={name:rec.name}); e[f]=v; }
   else if(f==='memo'){ rec.memo=v; }
+  else if(f==='progress'){ rec.progress=v; }
   else if(f==='ord'){ rec.ord=v; }
   else return false;
   rec.updatedAt=new Date().toISOString(); return true;
 }
 function startEdit(td){
   const tr=td.closest('tr'), id=tr.dataset.id, f=td.dataset.f, rec=recOf(id); if(!rec) return;
-  const cur = f==='memo' ? (rec.memo||'') : (rec[f]||'');
+  const cur = (rec[f]||'');
   const el=document.createElement('input'); el.className='cell-in';
   el.type = (f==='start'||f==='end'||f==='returnDate') ? 'date' : 'text'; el.value=cur;
   if(f==='dept') el.setAttribute('list','deptList');
@@ -994,7 +1002,7 @@ function openDrawer(id){
         <div class="tl">${group.map(g=>`<div class="it ${g.id===r.id?'cur':g.status==='plan'?'fut':''}" data-id="${g.id}"><b>${g.seq}차</b> <span class="num" style="color:var(--ink2)">${fmtDot(g.start)} ~ ${fmtDot(g.end)}</span> <span class="num">(${mdStr(g.cur)} · ${mStr(g.planM)})</span><div class="d">${g.id===r.id?'현재 선택':ST[g.status][1].replace('D-','임박 D-'+Math.max(0,g.dleft))}</div></div>`).join('')}</div>
       </div>
       <div class="sec"><h4>비고 <span>자동 생성 + 수기</span></h4>
-        <div style="font-size:13px;line-height:1.7;word-break:break-all">${r.autoMemo?`<div><span class="badge b-ok" style="font-size:10px">자동</span> ${esc(r.autoMemo)}</div>`:''}${r.memo?`<div><span class="badge b-info" style="font-size:10px">수기</span> ${esc(r.memo)}</div>`:''}${!r.memoAll?'<span style="color:var(--ink3)">—</span>':''}</div>
+        <div style="font-size:13px;line-height:1.7;word-break:break-all">${r.autoMemo?`<div><span class="badge b-ok" style="font-size:10px">자동</span> ${esc(r.autoMemo)}</div>`:''}${r.memo?`<div><span class="badge b-info" style="font-size:10px">수기</span> ${esc(r.memo)}</div>`:''}${r.progress?`<div><span class="badge b-warn" style="font-size:10px">진행</span> ${esc(r.progress)}</div>`:''}${!r.memoAll&&!r.progress?'<span style="color:var(--ink3)">—</span>':''}</div>
       </div>
     </div>
     <div class="actions"><button class="btn" id="dCopy">복직안내 문구 복사</button><button class="btn pri" id="dEdit">수정</button></div>`;
@@ -1012,7 +1020,7 @@ $('#scrim').onclick=closeDrawer;
    등록 / 수정 폼
    ========================================================= */
 const F = { editId:null, kind:'육아휴직', ext:false };
-const fld = { emp:'#mEmp', name:'#mName', dept:'#mDept', grade:'#mGrade', pos:'#mPos', job:'#mJob', group:'#mGroup', ord:'#mOrd', child:'#mChild', birth:'#mBirth', start:'#mStart', end:'#mEnd', returnDate:'#mRet', memo:'#mMemo' };
+const fld = { emp:'#mEmp', name:'#mName', dept:'#mDept', grade:'#mGrade', pos:'#mPos', job:'#mJob', group:'#mGroup', ord:'#mOrd', child:'#mChild', birth:'#mBirth', start:'#mStart', end:'#mEnd', returnDate:'#mRet', memo:'#mMemo', progress:'#mProg' };
 function setKind(k){ F.kind=k; $$('#mKind button').forEach(b=>b.classList.toggle('on', b.dataset.v===k)); const preg=k==='육아휴직(임신중)'; $('#mChildLbl').innerHTML = preg?'자녀명 <span class="hint">(출산 전이면 비워도 됨)</span>':'자녀명 <em>*</em>'; $('#mBirthLbl').textContent = preg?'출산예정일':'자녀 생년월일'; }
 $$('#mKind button').forEach(b=>b.onclick=()=>{ setKind(b.dataset.v); calc(); });
 function setExt(v){ F.ext=!!v; $$('#mExt button').forEach(b=>b.classList.toggle('on', (b.dataset.v==='1')===F.ext)); }
@@ -1082,7 +1090,7 @@ $('#mSave').onclick=()=>{
   if(!ok) return toast('종료일이 시작일보다 앞섬', true);
   if(v.returnDate && !isDate(v.returnDate)) v.returnDate='';
   data.employees[v.emp]={ name:v.name, dept:v.dept, grade:v.grade, pos:v.pos, job:v.job, group:v.group };
-  const rec={ emp:v.emp, name:v.name, dept:v.dept, grade:v.grade, pos:v.pos, job:v.job, group:v.group, kind:v.kind, extend6:v.extend6, ord:v.ord, child:v.child, birth:isDate(v.birth)?v.birth:'', start:v.start, end:v.end, returnDate:v.returnDate, memo:v.memo, updatedAt:new Date().toISOString() };
+  const rec={ emp:v.emp, name:v.name, dept:v.dept, grade:v.grade, pos:v.pos, job:v.job, group:v.group, kind:v.kind, extend6:v.extend6, ord:v.ord, child:v.child, birth:isDate(v.birth)?v.birth:'', start:v.start, end:v.end, returnDate:v.returnDate, memo:v.memo, progress:v.progress, updatedAt:new Date().toISOString() };
   if(F.editId){ const i=data.leaves.findIndex(x=>x.id===F.editId); data.leaves[i]={...data.leaves[i], ...rec}; }
   else data.leaves.push({ id:uid(), createdAt:new Date().toISOString(), ...rec });
   closeForm(); commit(); toast(F.editId?'수정됨':'등록됨');
@@ -1111,6 +1119,7 @@ const FIELDS = [
   {k:'returnDate', n:'실제 복직일', syn:['실제복직일','복직일']},
   {k:'extend6', n:'+6개월 (배우자 조건)', syn:['추가6개월','6개월추가','배우자육아휴직','배우자사용','배우자','한도연장','연장','66','한도']},
   {k:'memo',  n:'비고',        syn:['비고','메모','특이사항']},
+  {k:'progress', n:'진행',     syn:['진행','진행상황','진행사항','처리상태','담당자메모']},
 ];
 const normH = v => String(v??'').replace(/[\s\n\r()（）_\-·.]/g,'').toLowerCase();
 const I = { wb:null, sheet:null, rows:[], hdr:0, map:{}, mode:'append', parsed:null };
@@ -1193,7 +1202,7 @@ function parseRows(){
     const g=k=> I.map[k]===undefined ? '' : row[I.map[k]];
     const empRaw=g('emp'); if(empRaw==='' && g('name')==='' && g('start')==='') return; // 빈 행
     const rec={ emp:String(empRaw).trim().replace(/\.0$/,''), name:String(g('name')).trim(), dept:String(g('dept')).trim(), grade:String(g('grade')).trim(), pos:String(g('pos')).trim(), job:String(g('job')).trim(), group:String(g('group')).trim(),
-      ord:String(g('ord')).trim(), child:String(g('child')).trim(), birth:toDateStr(g('birth')), start:toDateStr(g('start')), end:toDateStr(g('end')), returnDate:toDateStr(g('returnDate')), memo:String(g('memo')).replace(AUTO_MEMO_RE,'').trim().replace(/^[·,\s]+|[·,\s]+$/g,'') };
+      ord:String(g('ord')).trim(), child:String(g('child')).trim(), birth:toDateStr(g('birth')), start:toDateStr(g('start')), end:toDateStr(g('end')), returnDate:toDateStr(g('returnDate')), memo:String(g('memo')).replace(AUTO_MEMO_RE,'').trim().replace(/^[·,\s]+|[·,\s]+$/g,''), progress:String(g('progress')).trim() };
     const kindRaw=String(g('kind')); rec.kind = /임신/.test(kindRaw) ? '육아휴직(임신중)' : '육아휴직';
     const extRaw=String(g('extend6')).trim(); rec.extend6 = /^(y|yes|o|ㅇ|예|해당|true|1|18|\+?6|추가|연장)/i.test(extRaw);
     if(!rec.ord) rec.ord='첫째';
@@ -1240,10 +1249,10 @@ function iStep3(){
 async function exportXlsx(){
   if(!ensureXLSX()) return toast('엑셀 모듈 로드 실패', true);
   const all=enrichAll().slice().sort((a,b)=>cmpKo(a.dept,b.dept)||(a.start<b.start?-1:a.start>b.start?1:0));
-  const H=['순번','소속','사번','성명','직급','직위','직무','직군','발령구분','한도(개월)','+6개월','자녀구분','분할차수','자녀명','자녀생년월일','자녀 만나이','휴직 시작일','휴직 종료일','예정기간','예정기간(개월)','예정기간(일)','복직(퇴직)예정일','실제 복직일','사용기간(개월)','과거 사용기간합(개월)','잔여기간(개월)','잔여 이어쓸 때 종료일','상태','비고'];
-  const rows=all.map((r,i)=>[i+1,r.dept,r.emp,r.name,r.grade,r.pos,r.job,r.group,r.kind,r.limit,r.ext?'Y':'',r.ord,r.seq,r.child,r.birth,r.ageStr,r.start,r.end,mdStr(r.cur),r.planM,r.plan,r.ret.d,r.returnDate||'',r.usedM,r.past,r.left,r.endIfContinue||'',ST[r.status][1].replace('D-','D-'+Math.max(0,r.dleft)),r.memoAll]);
+  const H=['순번','소속','사번','성명','직급','직위','직무','직군','발령구분','한도(개월)','+6개월','자녀구분','분할차수','자녀명','자녀생년월일','자녀 만나이','휴직 시작일','휴직 종료일','예정기간','예정기간(개월)','예정기간(일)','복직(퇴직)예정일','실제 복직일','사용기간(개월)','과거 사용기간합(개월)','잔여기간(개월)','잔여 이어쓸 때 종료일','상태','비고','진행'];
+  const rows=all.map((r,i)=>[i+1,r.dept,r.emp,r.name,r.grade,r.pos,r.job,r.group,r.kind,r.limit,r.ext?'Y':'',r.ord,r.seq,r.child,r.birth,r.ageStr,r.start,r.end,mdStr(r.cur),r.planM,r.plan,r.ret.d,r.returnDate||'',r.usedM,r.past,r.left,r.endIfContinue||'',ST[r.status][1].replace('D-','D-'+Math.max(0,r.dleft)),r.memoAll,r.progress||'']);
   const ws=XLSX.utils.aoa_to_sheet([H,...rows]);
-  ws['!cols']=[4,16,10,8,6,6,10,8,14,8,7,8,7,8,12,12,12,12,12,10,8,14,12,10,12,10,14,10,40].map(w=>({wch:w}));
+  ws['!cols']=[4,16,10,8,6,6,10,8,14,8,7,8,7,8,12,12,12,12,12,10,8,14,12,10,12,10,14,10,40,20].map(w=>({wch:w}));
   ws['!freeze']={xSplit:4,ySplit:1};
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, '육아휴직');
   const emp=Object.entries(data.employees).map(([no,e])=>[no,e.name,e.dept,e.grade,e.pos,e.job,e.group]);
