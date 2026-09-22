@@ -191,7 +191,8 @@ td.memo-td{white-space:normal;min-width:220px;max-width:320px}
 :root[data-theme="dark"] .b-s1,:root[data-theme="dark"] .b-s2,:root[data-theme="dark"] .b-s3{background:transparent}
 .tfoot .badge{height:20px;padding:0 7px;font-size:11px;font-weight:700;border-radius:6px;line-height:1}
 .tfoot .b-c1,.tfoot .b-c2,.tfoot .b-c3,.tfoot .b-preg,.tfoot .b-ext{color:#fff}.tfoot .b-ext{background:var(--ext)}
-.kv .b-c1,.kv .b-c2,.kv .b-c3,.kv .b-c4{color:#fff;padding:1px 7px;border-radius:5px}
+.kv .b-c1,.kv .b-c2,.kv .b-c3,.kv .b-c4,.dh .b-c1,.dh .b-c2,.dh .b-c3,.dh .b-c4,.dh .b-preg,.dh .b-ext{color:#fff;padding:2px 8px;border-radius:6px}
+.dh .b-ext{background:var(--ext)}
 
 thead th.st{z-index:3}
 .name{font-weight:600;display:block;line-height:1.25}
@@ -247,14 +248,15 @@ td.ret .sub{opacity:.8}
 /* ---------- Drawer ---------- */
 .scrim{position:fixed;inset:0;background:rgba(20,26,34,.4);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
 .scrim.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surf);z-index:21;transform:translateX(104%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:-16px 0 40px rgba(0,0,0,.22);display:flex;flex-direction:column}
-.drawer.on{transform:none}
-.dh{display:flex;align-items:flex-start;gap:14px;padding:22px 24px 16px;border-bottom:1px solid var(--line);background:var(--surf2)}
+.drawer{position:fixed;left:50%;top:50%;width:min(1280px,96vw);max-height:92vh;background:var(--bg2);z-index:21;border-radius:22px;transform:translate(-50%,-50%) translateY(18px) scale(.98);opacity:0;pointer-events:none;transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .25s;box-shadow:0 30px 80px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}
+.drawer.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+.dh{display:flex;align-items:center;gap:14px;padding:16px 24px;border-bottom:1px solid var(--line);background:var(--surf);border-radius:22px 22px 0 0}
 .avatar{width:52px;height:52px;border-radius:16px;box-shadow:var(--raise-sm);background:var(--surf2);display:grid;place-items:center;font-weight:700;font-size:18px;color:var(--ac);flex:none}
 .dh h2{margin:0;font-size:18px}
 .dh .meta{font-size:12px;color:var(--ink2)}
 .dh .x{margin-left:auto}
-.db{overflow:auto;padding:18px 24px 90px;display:flex;flex-direction:column;gap:14px}
+.db{overflow:auto;padding:16px 24px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-content:start}
+.db .sec{margin:0}
 .sec{border-radius:var(--r);background:var(--surf2);border:1px solid var(--line2);box-shadow:var(--raise-sm);padding:16px 18px}
 .sec h4{margin:0 0 12px;font-size:12px;color:var(--ink3);letter-spacing:.06em;display:flex;align-items:center;gap:8px}
 .sec h4 span{margin-left:auto;font-size:11px;letter-spacing:0;color:var(--ac);font-weight:500}
@@ -262,7 +264,8 @@ td.ret .sub{opacity:.8}
 .kv div{font-size:13px}
 .kv label{display:block;font-size:11px;color:var(--ink3)}
 .kv .a{color:var(--ac);font-size:10px;margin-left:4px}
-.gauge{display:flex;align-items:center;gap:18px}
+.gauge{display:flex;align-items:center;gap:16px}
+.gauge .t b{font-size:24px}
 .gauge svg{flex:none}
 .gauge .t b{font-size:26px;letter-spacing:-.02em}
 .gauge .t small{display:block;color:var(--ink3);font-size:12px}
@@ -275,8 +278,8 @@ td.ret .sub{opacity:.8}
 .tl .it.fut:before{box-shadow:inset 0 0 0 2px var(--line)}
 .tl .it b{font-size:13px}
 .tl .it .d{font-size:12px;color:var(--ink2)}
-.actions{position:absolute;left:0;right:0;bottom:0;padding:14px 24px;display:flex;gap:10px;background:linear-gradient(to top,var(--surf) 70%,transparent)}
-.actions .btn{flex:1;justify-content:center;font-size:13px}
+.actions{padding:12px 24px 16px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--line2);background:var(--bg2)}
+.actions .btn{min-width:150px;justify-content:center;font-size:13px}
 
 /* ---------- Modal ---------- */
 .modal{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s;background:rgba(20,26,34,.35)}
@@ -370,6 +373,7 @@ td.ret .sub{opacity:.8}
   .main{padding:18px 16px 40px}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .mb{grid-template-columns:1fr}.calc{position:static}
+  .db{grid-template-columns:1fr}.drawer{width:100vw;max-height:100vh;border-radius:0}
   .grid{grid-template-columns:1fr 1fr}.grid .f3{grid-column:span 2}
   .g6,.g4{grid-column:span 12}
 }
@@ -909,7 +913,7 @@ function openDrawer(id){
     <div class="dh"><div class="avatar">${esc((r.name||'?')[0])}</div>
       <div><h2>${esc(r.name)} <span class="num" style="font-weight:400;color:var(--ink3);font-size:13px">${esc(r.emp)}</span></h2>
       <div class="meta">${esc([r.dept, [r.grade,r.pos].filter(Boolean).join(' '), [r.job,r.group].filter(Boolean).join(' / ')].filter(Boolean).join(' · '))}</div>
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${pill(r)}<span class="pill p-n">${esc(r.kind)}</span><span class="pill p-n">${r.seq}차</span>${r.ext?`<span class="pill p-ext">+${data.settings.extMonths}개월 · 한도 ${r.limit}개월</span>`:''}</div></div>
+      </div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:12px">${pill(r)}<span class="badge ${ordCls(r.ord)}">${esc(r.ord)}</span><span class="badge ${seqCls(r.seq)} num">${r.seq}차</span>${r.kind==='육아휴직(임신중)'?'<span class="badge b-preg">임신중</span>':''}${r.ext?`<span class="badge b-ext">+${data.settings.extMonths}개월 · 한도 ${r.limit}개월</span>`:''}</div>
       <button class="icon-btn x" id="dClose" aria-label="닫기">✕</button></div>
     <div class="db">
       <div class="sec"><h4>자녀 1명당 한도 사용 현황 <span>${esc(r.ord)} ${esc(r.child)}</span></h4>
