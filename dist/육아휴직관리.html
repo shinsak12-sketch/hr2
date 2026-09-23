@@ -130,6 +130,14 @@ td.ed.st-td{cursor:pointer}
 tr:hover .badge.ghost{opacity:1}
 .badge.ghost:hover{color:var(--ac)!important;border-color:var(--ac)!important}
 .hintbar{font-size:11.5px;color:var(--ink3)}
+.lnk{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:9px;border:1px solid var(--line2);background:var(--surf2);margin-bottom:6px;font-size:12.5px;cursor:pointer}
+.lnk:hover{border-color:var(--ac)}
+.lnk input{accent-color:var(--ac);width:15px;height:15px;margin:0}
+.lnk .k{font-weight:700;min-width:80px}
+.lnk .d{color:var(--ink2);font-family:var(--mono)}
+.lnk .n{margin-left:auto;font-weight:700}
+.lnk.other-k{opacity:.75}
+.k-tag{display:inline-block;padding:1px 7px;border-radius:5px;font-size:11px;font-weight:700;background:var(--bg2);color:var(--ink2);border:1px solid var(--line)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .top .sp{flex:1}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:13px;box-shadow:var(--raise-sm),0 2px 0 0 var(--line);background:var(--surf2);font-weight:600;font-size:13px;transition:transform .15s,box-shadow .2s;white-space:nowrap}
@@ -450,8 +458,8 @@ td.ret .sub{opacity:.8}
     <div class="brand"><div class="logo"><i></i></div><div><b>휴가·휴직 관리</b><small>오프라인 · 폴더 저장형</small></div></div>
     <div class="nav-h">제도별 대장</div>
     <nav class="nav">
-      <button class="on" data-view="list"><span class="dot"></span>육아휴직<span class="cnt" id="navCnt">0</span></button>
-      <button class="soon" title="다음 단계"><span class="dot"></span>육아휴직 外</button>
+      <button class="on" data-view="list" data-module="parental"><span class="dot"></span>육아휴직<span class="cnt" id="navCnt">0</span></button>
+      <button data-view="list" data-module="other"><span class="dot"></span>육아휴직 外<span class="cnt" id="navCnt2">0</span></button>
       <button class="soon" title="다음 단계"><span class="dot"></span>육아기단축근무</button>
       <button class="soon" title="다음 단계"><span class="dot"></span>출산전후휴가</button>
       <button class="soon" title="다음 단계"><span class="dot"></span>기타 8개 시트 …</button>
@@ -489,19 +497,7 @@ td.ret .sub{opacity:.8}
       </div>
       <div class="card">
         <div class="tw"><table id="tbl">
-          <thead><tr>
-            <th data-k="" style="cursor:default;padding-left:4px;padding-right:2px">No</th>
-            <th data-k="status">상태</th>
-            <th data-k="kind" class="bc">임신</th><th data-k="ext" class="bc vl">+6</th>
-            <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade" class="vl">직급</th><th data-k="ord">자녀</th><th data-k="seq">차수</th>
-            <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
-            <th class="g vl" data-k="retDate" title="복직(퇴직)예정일 = 종료일 + 1 · 자동">복직예정일</th>
-            <th class="g" data-k="plan" title="이번 차수 사용(예정) 일수 · 자동">사용기간</th>
-            <th class="g" data-k="pastDays" title="이전 차수 합계 · 자동">과거사용</th>
-            <th class="g vl" data-k="leftDays" title="잔여 · 자동">잔여</th>
-            <th class="g vl" data-k="memoAll" title="자동 생성 + 수기">비고</th>
-            <th data-k="progress">진행</th>
-          </tr></thead>
+          <thead></thead>
           <tbody id="tb"></tbody>
         </table></div>
       </div>
@@ -540,11 +536,16 @@ td.ret .sub{opacity:.8}
           </div>
         </div>
         <div class="gcard g6">
+          <h3>육아휴직 外 · 제도별 한도(일)</h3><p>빈칸이면 한도 없음(잔여 미표시). 가족돌봄휴직은 연단위(1.1~12.31)로 초기화되며 가족돌봄휴가 사용일을 함께 차감</p>
+          <div class="grid" id="sLimits2"></div>
+          <p class="hint" style="margin-top:8px">기본값: 공상휴직 유급·근속 산입, 의병휴직 80%, 나머지 무급·미산입. 등록 시 자동 채워지고 수정 가능</p>
+        </div>
+        <div class="gcard g6">
           <h3>위험 구역</h3><p>되돌릴 수 없음. 실행 전 JSON 백업 파일을 먼저 만들 것</p>
-          <div class="row"><button class="btn danger" id="sWipe">육아휴직 데이터 전체 삭제</button></div>
+          <div class="row"><button class="btn danger" id="sWipe">현재 대장 데이터 전체 삭제</button></div>
           <h3 style="margin-top:22px">정보</h3>
           <table class="info-tbl">
-            <tr><td>버전</td><td>육아휴직 모듈 0.10 (테스트) · 자동 임시저장 · 복구</td></tr>
+            <tr><td>버전</td><td>0.11 (테스트) · 육아휴직 + 육아휴직 外</td></tr>
             <tr><td>브라우저</td><td id="sUA" class="num" style="font-size:11px">—</td></tr>
             <tr><td>엑셀 엔진</td><td>SheetJS <span id="sXlsx" class="num"></span></td></tr>
           </table>
@@ -602,13 +603,59 @@ td.ret .sub{opacity:.8}
     <div class="mf"><button class="btn danger left" id="mDelete" hidden>삭제</button><button class="btn" id="mCancel">취소</button><button class="btn pri" id="mSave">저장</button></div>
   </div>
 </div>
+<!-- ===== 육아휴직 外 등록/수정 ===== -->
+<div class="modal" id="modal2">
+  <div class="box">
+    <div class="mh"><h2 id="m2Title">휴직 등록 (육아휴직 外)</h2><span class="hint">사번 입력 시 과거 내역이 아래에 표시됨</span><button class="icon-btn x" id="m2Close" aria-label="닫기">✕</button></div>
+    <div class="mb">
+      <div class="form">
+        <div class="fs"><h4><i>1</i>인적사항 <span class="hint">사번 입력 시 자동 채움</span></h4>
+          <div class="grid">
+            <div class="fi"><label>사번 <em>*</em></label><div class="in"><input id="n_emp" class="num" list="empList" autocomplete="off"></div></div>
+            <div class="fi"><label>성명 <em>*</em></label><div class="in"><input id="n_name"></div></div>
+            <div class="fi"><label>소속</label><div class="in"><input id="n_dept" list="deptList"></div></div>
+            <div class="fi"><label>직급</label><div class="in"><input id="n_grade"></div></div>
+            <div class="fi"><label>직위</label><div class="in"><input id="n_pos"></div></div>
+            <div class="fi"><label>직무</label><div class="in"><input id="n_job"></div></div>
+            <div class="fi"><label>직군</label><div class="in"><input id="n_group"></div></div>
+          </div>
+        </div>
+        <div class="fs"><h4><i>2</i>제도</h4>
+          <div class="grid">
+            <div class="fi"><label>발령구분 <em>*</em></label><div class="in"><select id="n_kind"></select></div></div>
+            <div class="fi"><label>사용차수 <span class="hint">(담당자 입력)</span></label><div class="in"><input id="n_seq" type="number" min="1" class="num"></div></div>
+            <div class="fi"><label>유급여부</label><div class="in"><select id="n_pay"><option>무급</option><option>유급</option><option>80%</option></select></div></div>
+            <div class="fi"><label>근속산입여부</label><div class="in"><select id="n_tenure"><option>미산입</option><option>산입</option></select></div></div>
+            <div class="fi f2"><label>사용사유</label><div class="in"><input id="n_reason" placeholder="예) 갑상선암 수술"></div></div>
+          </div>
+        </div>
+        <div class="fs"><h4><i>3</i>휴직 기간</h4>
+          <div class="grid">
+            <div class="fi"><label>휴직 시작일 <em>*</em></label><div class="in"><input id="n_start" type="date"></div></div>
+            <div class="fi"><label>휴직 종료일 <em>*</em></label><div class="in"><input id="n_end" type="date"></div></div>
+            <div class="fi"><label>복직(예정)일 <span class="a">자동</span></label><div class="in ro"><b id="n_ret">—</b></div></div>
+            <div class="fi"><label>실제 복직일 <span class="hint">(복직 처리 시)</span></label><div class="in"><input id="n_retDate" type="date"></div></div>
+            <div class="fi" id="n_extraWrap"><label>당해연도 가족돌봄휴가 사용일 <span class="hint">(수기 차감)</span></label><div class="in"><input id="n_extra" type="number" min="0" class="num" placeholder="0"></div></div>
+            <div class="fi"><label>비고</label><div class="in"><input id="n_memo"></div></div>
+            <div class="fi"><label>진행 <span class="hint">(담당자 메모)</span></label><div class="in"><input id="n_progress" placeholder="예) 복직원 결재중"></div></div>
+          </div>
+        </div>
+        <div class="fs"><h4><i>4</i>과거 내역 연결 <span class="hint">체크한 건의 일수가 과거사용기간으로 합산됨</span></h4>
+          <div id="n_links" class="hint">사번을 입력하면 이 사번의 휴직 내역이 표시됨</div>
+        </div>
+      </div>
+      <div class="calc" id="calc2"></div>
+    </div>
+    <div class="mf"><button class="btn danger left" id="m2Delete" hidden>삭제</button><button class="btn" id="m2Cancel">취소</button><button class="btn pri" id="m2Save">저장</button></div>
+  </div>
+</div>
 <datalist id="empList"></datalist>
 <datalist id="deptList"></datalist>
 
 <!-- ===== 엑셀 업로드 ===== -->
 <div class="modal" id="imodal">
   <div class="box" style="width:min(1040px,100%)">
-    <div class="mh"><h2>엑셀 업로드</h2><div class="steps" id="iSteps"><b class="on">1</b>파일<b>2</b>컬럼 매핑<b>3</b>확인</div><button class="icon-btn x" id="iClose" aria-label="닫기" style="margin-left:12px">✕</button></div>
+    <div class="mh"><h2 id="iTitle">엑셀 업로드</h2><div class="steps" id="iSteps"><b class="on">1</b>파일<b>2</b>컬럼 매핑<b>3</b>확인</div><button class="icon-btn x" id="iClose" aria-label="닫기" style="margin-left:12px">✕</button></div>
     <div class="mb one" id="iBody"></div>
     <div class="mf" id="iFoot"></div>
   </div>
@@ -670,8 +717,8 @@ function ageYears(birth, ref){ if(!isDate(birth)) return null; return (ref - D(b
    데이터 모델
    ========================================================= */
 let data = null;
-function freshData(){ return { meta:{version:1, module:'육아휴직', createdAt:new Date().toISOString(), updatedAt:null}, settings:{baseMonths:12, extMonths:6, soonDays:30, autoSave:false, refDate:''}, employees:{}, leaves:[] }; }
-function migrate(d){ const f=freshData(); d.meta = {...f.meta, ...(d.meta||{})}; d.settings={...f.settings, ...(d.settings||{})}; delete d.settings.limitDays; ['bizAdjust','bizChoice','holidays'].forEach(k=>delete d.settings[k]); d.employees=d.employees||{}; d.leaves=(d.leaves||[]).filter(x=>x&&!x.deleted); return d; }
+function freshData(){ return { meta:{version:1, module:'육아휴직', createdAt:new Date().toISOString(), updatedAt:null}, settings:{baseMonths:12, extMonths:6, soonDays:30, autoSave:false, refDate:'', limits2:{'가족돌봄휴직':90,'난임휴직':180,'의병휴직':180}}, employees:{}, leaves:[], leaves2:[] }; }
+function migrate(d){ const f=freshData(); d.meta = {...f.meta, ...(d.meta||{})}; d.settings={...f.settings, ...(d.settings||{})}; delete d.settings.limitDays; ['bizAdjust','bizChoice','holidays'].forEach(k=>delete d.settings[k]); d.employees=d.employees||{}; d.leaves=(d.leaves||[]).filter(x=>x&&!x.deleted); d.leaves2=(d.leaves2||[]).filter(x=>x&&!x.deleted); d.settings.limits2={...f.settings.limits2, ...(d.settings.limits2||{})}; return d; }
 function refDate(){ return isDate(data.settings.refDate) ? D(data.settings.refDate) : new Date(new Date().toDateString()); }
 const childKey = r => r.emp + '|' + (r.child||'') ;
 const round3 = x => Math.round(x*1000)/1000;
@@ -782,7 +829,7 @@ const store = {
     bump();
     this.pendingRecovery=null;
     if(autoTxt){ try{ const a=JSON.parse(autoTxt); const at=a.meta?.autosavedAt||''; const mt=data.meta.updatedAt||'';
-      const differs = JSON.stringify({l:a.leaves,e:a.employees,s:a.settings}) !== JSON.stringify({l:data.leaves,e:data.employees,s:data.settings});
+      const differs = JSON.stringify({l:a.leaves,l2:a.leaves2,e:a.employees,s:a.settings}) !== JSON.stringify({l:data.leaves,l2:data.leaves2,e:data.employees,s:data.settings});
       if(at > mt && differs) this.pendingRecovery={ data:migrate(a), at }; else await this.clearAutosave(); }catch{} }
   },
   autoT:null,
@@ -879,7 +926,52 @@ async function connectFolder(){
 /* =========================================================
    목록 렌더
    ========================================================= */
-let state = { q:'', s:new Set(), sel:null, sortK:'start', sortD:-1, view:'list', limitRows:150 };
+let state = { q:'', s:new Set(), sel:null, sortK:'start', sortD:-1, view:'list', limitRows:150, module:'parental' };
+const KINDS2=['가족돌봄휴직','공상휴직','난임휴직','명령휴직','무급휴직','의병휴직'];
+const KIND2_DEF={ '공상휴직':{pay:'유급',tenure:'산입'}, '의병휴직':{pay:'80%',tenure:'미산입'} };
+const kind2Def = k => KIND2_DEF[k] || {pay:'무급', tenure:'미산입'};
+const curArr = () => state.module==='other' ? data.leaves2 : data.leaves;
+const isOther = () => state.module==='other';
+let _cache2={key:'',out:null};
+function enrichOtherAll(){ const key=_ver+'|'+fmt(new Date()); if(_cache2.key!==key){ _cache2={key, out:enrichOther(data.leaves2)}; } return _cache2.out; }
+function enrichOther(list){
+  const ref=refDate(), t=fmt(ref), SOON=+data.settings.soonDays||30; const byId={}; list.forEach(r=>byId[r.id]=r);
+  const dayOf = r => (isDate(r.start)&&isDate(r.end)&&r.end>=r.start) ? days(r.start,r.end) : 0;
+  return list.map(r=>{
+    const e=data.employees[r.emp]||{};
+    const plan=dayOf(r);
+    const linked=(r.links||[]).map(id=>byId[id]).filter(Boolean);
+    const past=linked.reduce((s,x)=>s+dayOf(x),0);
+    const extra=+r.extraUsed||0;
+    const lim=data.settings.limits2[r.kind]; const limit=(lim===''||lim===null||lim===undefined)?null:+lim;
+    const left= limit===null ? null : limit-past-extra-plan;
+    const used= t<r.start?0 : t>r.end?plan : days(r.start,t);
+    const ret={d:addDays(r.end,1), moved:false}; const retDate=r.returnDate||ret.d;
+    const dleft=Math.round((D(r.end)-ref)/864e5);
+    const status = r.returnDate?'done' : t<r.start?'plan' : t>=retDate?'done' : dleft<=SOON?'soon' : 'ing';
+    const referencedBy=list.filter(x=>(x.links||[]).includes(r.id));
+    return {...r, name:r.name||e.name||'', dept:r.dept||e.dept||'', grade:r.grade||e.grade||'', pos:r.pos||e.pos||'', job:r.job||e.job||'', group:r.group||e.group||'',
+      seq:+r.seq||1, plan, past, extra, limit, left, used, ret, retDate, dleft, status, isDone:status==='done', linked, referencedBy,
+      spansYear: r.kind==='가족돌봄휴직' && r.start.slice(0,4)!==r.end.slice(0,4), pastDays:past, leftDays:left, memoAll:r.memo||'' };
+  });
+}
+const THEAD_P=`<tr>
+  <th data-k="" style="cursor:default;padding-left:4px;padding-right:2px">No</th><th data-k="status">상태</th>
+  <th data-k="kind" class="bc">임신</th><th data-k="ext" class="bc vl">+6</th>
+  <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade" class="vl">직급</th><th data-k="ord">자녀</th><th data-k="seq">차수</th>
+  <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
+  <th class="g vl" data-k="retDate" title="복직(퇴직)예정일 = 종료일 + 1 · 자동">복직예정일</th>
+  <th class="g" data-k="plan" title="이번 차수 사용(예정) 일수 · 자동">사용기간</th><th class="g" data-k="pastDays" title="이전 차수 합계 · 자동">과거사용</th><th class="g vl" data-k="leftDays" title="잔여 · 자동">잔여</th>
+  <th class="g vl" data-k="memoAll" title="자동 생성 + 수기">비고</th><th data-k="progress">진행</th></tr>`;
+const THEAD_O=`<tr>
+  <th data-k="" style="cursor:default;padding-left:4px;padding-right:2px">No</th><th data-k="status" class="vl">상태</th>
+  <th data-k="kind">발령구분</th><th data-k="pay">유급</th><th data-k="tenure" class="vl">산입</th>
+  <th data-k="dept">소속</th><th data-k="emp">사번</th><th data-k="name">성명</th><th data-k="grade" class="vl">직급</th><th data-k="seq">차수</th>
+  <th data-k="start">시작일</th><th data-k="end" class="vl">종료일</th>
+  <th class="g vl" data-k="retDate" title="복직(예정)일 = 종료일 + 1 · 자동">복직예정일</th>
+  <th class="g" data-k="plan" title="이번 건 일수 · 자동">사용기간</th><th class="g" data-k="pastDays" title="연결한 과거 건 합계 · 자동">과거사용</th><th class="g vl" data-k="leftDays" title="한도 − 과거 − 이번 · 한도 없는 제도는 빈칸">잔여</th>
+  <th data-k="reason" class="vl">사용사유</th><th data-k="memoAll" class="vl">비고</th><th data-k="progress">진행</th></tr>`;
+const NCOLS = () => isOther()?19:18;
 /* 복수 선택 드롭다운 */
 class MultiSel{
   constructor(el, label, onChange){ this.el=el; this.label=label; this.sel=new Set(); this.opts=[]; this.onChange=onChange; el.innerHTML=`<button type="button" class="ms-btn"><span class="t">${label}</span><span class="n"></span><span class="car">▼</span></button><div class="ms-pop"></div>`; el.querySelector('.ms-btn').onclick=e=>{ e.stopPropagation(); const o=el.classList.contains('open'); $$('.ms.open').forEach(x=>x.classList.remove('open')); if(!o) el.classList.add('open'); }; el.querySelector('.ms-pop').onclick=e=>e.stopPropagation(); }
@@ -920,31 +1012,36 @@ function renderFoot(){
 }
 function render(){
   if(!data) return;
-  const all = enrichAll();
+  const other=isOther();
+  const all = other ? enrichOtherAll() : enrichAll();
   const ref = refDate();
   $('#refLabel').textContent = '기준일 '+fmt(ref)+(data.settings.refDate?' (수동)':'');
-  $('#navCnt').textContent = all.filter(r=>r.status==='ing'||r.status==='soon').length;
+  $('#navCnt').textContent = enrichAll().filter(r=>r.status==='ing'||r.status==='soon').length;
+  $('#navCnt2').textContent = enrichOtherAll().filter(r=>r.status==='ing'||r.status==='soon').length;
+  const th=$('#tbl thead'); const want=other?'O':'P'; if(th.dataset.m!==want){ th.innerHTML=other?THEAD_O:THEAD_P; th.dataset.m=want; }
 
   // 필터 옵션 (복수 선택)
   const years=[...new Set(all.flatMap(r=>{ const a=+r.start.slice(0,4), b=+r.end.slice(0,4); const out=[]; for(let y=a;y<=b;y++) out.push(String(y)); return out; }))].sort().reverse();
   MS.year.setOptions(years, Object.fromEntries(years.map(y=>[y,y+'년'])));
-  MS.kind.setOptions(['육아휴직','육아휴직(임신중)'], {'육아휴직':'일반 육아휴직','육아휴직(임신중)':'임신중 사용'});
+  if(other){ MS.kind.label='발령구분'; MS.kind.setOptions(KINDS2); } else { MS.kind.label='임신중 구분'; MS.kind.setOptions(['육아휴직','육아휴직(임신중)'], {'육아휴직':'일반 육아휴직','육아휴직(임신중)':'임신중 사용'}); }
+  MS.kind.sync();
+  $('#fLimit').hidden = other;
   const BASE=+data.settings.baseMonths||12, EXT=+data.settings.extMonths||0;
   MS.limit.setOptions(['base','ext'], {base:`${BASE}개월 (기본)`, ext:`${BASE+EXT}개월 (+${EXT} 배우자)`});
 
-  const k = { ing: all.filter(r=>r.status==='ing'||r.status==='soon').length, soon: all.filter(r=>r.status==='soon').length, plan: all.filter(r=>r.status==='plan').length, over: all.filter(r=>r.left<0).length };
+  const k = { ing: all.filter(r=>r.status==='ing'||r.status==='soon').length, soon: all.filter(r=>r.status==='soon').length, plan: all.filter(r=>r.status==='plan').length, over: all.filter(r=>r.left!==null&&r.left<0).length };
   // 상태 칩에 건수 표시
   const cnts={ ing:k.ing, soon:k.soon, plan:k.plan, done:all.filter(r=>r.status==='done').length, over:k.over };
   $$('#chips button').forEach(b=>{ const v=b.dataset.s; const n=v===''?all.length:cnts[v]; const sp=b.querySelector('.n')||b.appendChild(Object.assign(document.createElement('span'),{className:'n'})); sp.textContent=n; b.classList.toggle('zero', n===0 && v!==''); });
 
   const q=state.q.trim().toLowerCase();
   const S=state.s;
-  const sig=[q,[...S].join(),MS.range.label(),...[MS.year,MS.kind,MS.limit].map(m=>[...m.sel].join()),state.sortK,state.sortD].join('#'); if(sig!==state._sig){ state._sig=sig; state.limitRows=150; }
-  const passStatus = r => S.size===0 || S.has(r.status) || (S.has('ing')&&r.status==='soon') || (S.has('over')&&r.left<0);
-  let list = all.filter(r => MS.range.pass(r) && MS.kind.pass(r.kind) && MS.limit.pass(r.ext?'ext':'base')
+  const sig=[state.module,q,[...S].join(),MS.range.label(),...[MS.year,MS.kind,MS.limit].map(m=>[...m.sel].join()),state.sortK,state.sortD].join('#'); if(sig!==state._sig){ state._sig=sig; state.limitRows=150; }
+  const passStatus = r => S.size===0 || S.has(r.status) || (S.has('ing')&&r.status==='soon') || (S.has('over')&&r.left!==null&&r.left<0);
+  let list = all.filter(r => MS.range.pass(r) && MS.kind.pass(r.kind) && (other || MS.limit.pass(r.ext?'ext':'base'))
     && (MS.year.sel.size===0 || [...MS.year.sel].some(y => r.start.slice(0,4)<=y && r.end.slice(0,4)>=y))
     && passStatus(r)
-    && (!q || [r.name,r.emp,r.dept,r.child,r.memoAll,r.progress].some(v=>String(v||'').toLowerCase().includes(q))));
+    && (!q || [r.name,r.emp,r.dept,r.child,r.memoAll,r.progress,r.reason,r.kind].some(v=>String(v||'').toLowerCase().includes(q))));
   const sk=state.sortK, sd=state.sortD;
   const isDateKey=['start','end','retDate','birth'].includes(sk);
   list.sort((a,b)=>{ let x=a[sk], y=b[sk]; if(typeof x==='boolean'){ x=+x; y=+y; } if(typeof x==='number'||typeof y==='number'){ x=+x||0; y=+y||0; return (x-y)*sd || (a.start<b.start?1:-1); } x=String(x??''); y=String(y??''); const c = isDateKey ? (x<y?-1:x>y?1:0) : cmpKo(x,y); return c*sd || (a.start<b.start?1:a.start>b.start?-1:0); });
@@ -954,9 +1051,10 @@ function render(){
   $$('#tbl thead th').forEach(th=>{ const a=th.querySelector('.arr'); if(a) a.remove(); if(th.dataset.k===sk && sk){ const s=document.createElement('span'); s.className='arr'; s.textContent = sd>0?'▲':'▼'; th.appendChild(s); } });
 
   if(!all.length){
-    $('#tb').innerHTML = `<tr><td colspan="17" style="background:var(--surf2)"><div class="empty"><b>등록된 육아휴직 건이 없음</b>엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
+    $('#tb').innerHTML = `<tr><td colspan="${NCOLS()}" style="background:var(--surf2)"><div class="empty"><b>등록된 ${other?'육아휴직 外':'육아휴직'} 건이 없음</b>설정 › 엑셀 업로드로 기존 대장을 불러오거나, 우측 상단 "휴직 등록"으로 직접 입력<br><button class="btn" onclick="openImport()">⬆ 엑셀 업로드</button></div></td></tr>`;
     return;
   }
+  if(other){ renderRowsOther(list); return; }
   const shown = list.slice(0, state.limitRows);
   const EXTM=data.settings.extMonths;
   $('#deptList').innerHTML=[...new Set(Object.values(data.employees).map(e=>e.dept).filter(Boolean))].map(d=>`<option value="${esc(d)}">`).join('');
@@ -978,16 +1076,44 @@ function render(){
     <td class="num vl ${R}" title="${mStr(r.left)}${r.endIfContinue?' · 이어 쓰면 ~'+r.endIfContinue:''}"><span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.leftDays<0?'−'+Math.abs(r.leftDays):r.leftDays}일</span></td>
     <td class="memo-td ed vl ${R}" data-f="memo"><div class="memo3" title="${esc(r.memoAll)}">${r.autoMemo?`<span style="color:var(--ink3)">${esc(r.autoMemo)}</span>${r.memo?' · ':''}`:''}${esc(r.memo)}</div></td>
     <td class="prog-td ed" data-f="progress"><div class="memo3" style="color:var(--ink)">${esc(r.progress||'')}</div></td>
-  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="17" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
+  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="${NCOLS()}" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
   const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
 }
+function renderRowsOther(list){
+  const shown=list.slice(0, state.limitRows);
+  $('#deptList').innerHTML=[...new Set(Object.values(data.employees).map(e=>e.dept).filter(Boolean))].map(d=>`<option value="${esc(d)}">`).join('');
+  $('#tb').innerHTML = shown.map((r,i)=>{ const R=r.isDone?'ret':''; const rowC = r.status==='plan'?'r-plan':(r.status==='ing'||r.status==='soon')?'r-ing':''; return `<tr data-id="${r.id}" class="${rowC} ${state.sel===r.id?'sel':''}">
+    <td class="num" style="color:var(--ink3);padding-left:4px;padding-right:2px;font-size:12px">${i+1}</td>
+    <td class="ed st-td vl ${R}" data-f="returnDate" title="클릭: 실제 복직일 입력 (비우면 자동 판정)">${r.isDone?`<span class="sub" style="display:inline;color:var(--ink3)">${r.returnDate?'복직 '+r.returnDate.slice(5):''}</span>`:pill(r)}</td>
+    <td class="ed" data-f="kind" style="font-weight:600">${esc(r.kind)}</td>
+    <td class="ed" data-f="pay" style="color:${r.pay==='유급'?'var(--ac)':r.pay==='80%'?'var(--warn)':'var(--ink2)'}">${esc(r.pay||'')}</td>
+    <td class="ed vl" data-f="tenure" style="color:${r.tenure==='산입'?'var(--ac)':'var(--ink2)'}">${esc(r.tenure||'')}</td>
+    <td class="ed" data-f="dept">${esc(r.dept)}</td>
+    <td class="num" style="color:var(--ink2)">${esc(r.emp)}</td>
+    <td><span class="name name-link" data-open="${r.id}" title="클릭: 상세 보기">${esc(r.name)}</span></td>
+    <td class="num ed vl" data-f="grade">${esc(r.grade)}</td>
+    <td class="num ed" data-f="seq" style="color:${r.seq>1?'var(--warn)':'var(--ink2)'};font-weight:${r.seq>1?'700':'400'}">${r.seq}차</td>
+    <td class="num ed" data-f="start">${r.start}</td><td class="num ed vl" data-f="end">${r.end}</td>
+    <td class="num vl ${R}"><span class="v1">${r.retDate}</span>${r.returnDate?'<span class="sub">실제 복직</span>':''}</td>
+    <td class="num ${R}"><span class="v1">${r.plan}일</span>${r.spansYear?'<span class="sub" style="color:var(--warn)">해 넘김</span>':''}</td>
+    <td class="num ${R}" title="${r.linked.length?'연결 '+r.linked.length+'건':''}${r.extra?' · 가족돌봄휴가 '+r.extra+'일':''}">${(r.past||r.extra)?`<span class="v1">${r.past+r.extra}일</span>`:''}</td>
+    <td class="num vl ${R}" title="${r.limit===null?'한도 없음 · 수기 관리':'한도 '+r.limit+'일'}">${r.left===null?'<span class="sub" style="display:inline">—</span>':`<span class="v1 ${r.left<0?'neg':r.left>0&&!r.isDone?'pos':''}">${r.left<0?'−'+Math.abs(r.left):r.left}일</span>`}</td>
+    <td class="ed vl" data-f="reason" style="white-space:normal;min-width:120px;max-width:200px;font-size:12px;text-align:left">${esc(r.reason||'')}</td>
+    <td class="memo-td ed vl ${R}" data-f="memo"><div class="memo3">${esc(r.memo||'')}</div></td>
+    <td class="prog-td ed" data-f="progress"><div class="memo3" style="color:var(--ink)">${esc(r.progress||'')}</div></td>
+  </tr>`; }).join('') + (list.length>shown.length ? `<tr class="more"><td colspan="${NCOLS()}" style="text-align:center;padding:14px;background:var(--surf2)"><button type="button" class="btn" id="moreBtn">${list.length-shown.length}건 더 보기 (전체 ${list.length}건)</button> <button type="button" class="btn" id="allBtn">전부 표시</button></td></tr>` : '');
+  const mb=$('#moreBtn'); if(mb){ mb.onclick=()=>{ state.limitRows+=150; render(); }; $('#allBtn').onclick=()=>{ state.limitRows=1e9; render(); }; }
+}
+$('#tbl thead').addEventListener('click', e=>{ const th=e.target.closest('th'); if(!th) return; const k=th.dataset.k; if(!k) return; if(state.sortK===k) state.sortD*=-1; else { state.sortK=k; state.sortD = ['start','end','retDate','plan','pastDays','leftDays'].includes(k)?-1:1; } render(); });
 $('#tb').addEventListener('click', e=>{
   const nm=e.target.closest('.name-link'); if(nm){ openDrawer(nm.dataset.open); return; }
-  const tg=e.target.closest('[data-t]'); if(tg){ toggleBadge(tg.closest('tr').dataset.id, tg.dataset.t, tg); return; }
+  const tg=e.target.closest('[data-t]'); if(tg && !isOther()){ toggleBadge(tg.closest('tr').dataset.id, tg.dataset.t, tg); return; }
   const td=e.target.closest('td.ed'); if(td && !td.querySelector('.cell-in')) startEdit(td);
 });
-const EDIT_ORDER=['returnDate','dept','grade','ord','start','end','memo','progress'];
-function recOf(id){ return data.leaves.find(x=>x.id===id); }
+const EDIT_ORDER_P=['returnDate','dept','grade','ord','start','end','memo','progress'];
+const EDIT_ORDER_O=['returnDate','kind','pay','tenure','dept','grade','seq','start','end','reason','memo','progress'];
+const EDIT_ORDER={ get order(){ return isOther()?EDIT_ORDER_O:EDIT_ORDER_P; }, indexOf(f){ return this.order.indexOf(f); }, get length(){ return this.order.length; } };
+function recOf(id){ return curArr().find(x=>x.id===id); }
 function applyEdit(rec, f, v){
   if(f==='start'||f==='end'){ if(!isDate(v)) { toast('날짜 형식이 아님', true); return false; } const st=f==='start'?v:rec.start, en=f==='end'?v:rec.end; if(en<st){ toast('종료일이 시작일보다 앞섬', true); return false; } rec[f]=v; }
   else if(f==='returnDate'){ if(v && !isDate(v)) { toast('날짜 형식이 아님', true); return false; } rec.returnDate=v; }
@@ -995,15 +1121,19 @@ function applyEdit(rec, f, v){
   else if(f==='memo'){ rec.memo=v; }
   else if(f==='progress'){ rec.progress=v; }
   else if(f==='ord'){ rec.ord=v; }
+  else if(f==='kind'){ if(!KINDS2.includes(v)) return false; rec.kind=v; const d=kind2Def(v); rec.pay=d.pay; rec.tenure=d.tenure; }
+  else if(f==='pay'||f==='tenure'||f==='reason'){ rec[f]=v; }
+  else if(f==='seq'){ const n=parseInt(v,10); if(!(n>=1)){ toast('차수는 1 이상 숫자', true); return false; } rec.seq=n; }
   else return false;
   rec.updatedAt=new Date().toISOString(); return true;
 }
 function startEdit(td){
   const tr=td.closest('tr'), id=tr.dataset.id, f=td.dataset.f, rec=recOf(id); if(!rec) return;
-  const cur = (rec[f]||'');
+  const cur = String(rec[f]??'');
   let el;
-  if(f==='ord'){ el=document.createElement('select'); el.className='cell-in'; el.style.minWidth='70px'; ['첫째','둘째','셋째','넷째','기타'].forEach(o=>el.add(new Option(o,o,false,o===cur))); }
-  else { el=document.createElement('input'); el.className='cell-in'; el.type = (f==='start'||f==='end'||f==='returnDate') ? 'date' : 'text'; el.value=cur; }
+  const SEL={ ord:['첫째','둘째','셋째','넷째','기타'], kind:KINDS2, pay:['무급','유급','80%'], tenure:['미산입','산입'] };
+  if(SEL[f]){ el=document.createElement('select'); el.className='cell-in'; el.style.minWidth='70px'; SEL[f].forEach(o=>el.add(new Option(o,o,false,o===String(cur)))); }
+  else { el=document.createElement('input'); el.className='cell-in'; el.type = (f==='start'||f==='end'||f==='returnDate') ? 'date' : f==='seq' ? 'number' : 'text'; el.value=cur; if(f==='seq'){ el.min=1; el.style.minWidth='60px'; } }
   if(f==='dept') el.setAttribute('list','deptList');
   if(f==='returnDate'){ el.title='실제 복직일 · 비우고 Enter 하면 자동 판정으로 복귀'; }
   td.innerHTML=''; td.appendChild(el); el.focus(); if(el.type==='text') el.select();
@@ -1017,7 +1147,7 @@ function startEdit(td){
 }
 function focusNext(id,f,dir){
   let tr=$(`#tb tr[data-id="${id}"]`); if(!tr) return; let nf=f;
-  if(dir==='down'){ tr=tr.nextElementSibling; } else if(dir==='up'){ tr=tr.previousElementSibling; } else { const i=EDIT_ORDER.indexOf(f); nf=EDIT_ORDER[i+(dir==='right'?1:-1)]; if(!nf){ tr=dir==='right'?tr.nextElementSibling:tr.previousElementSibling; nf=dir==='right'?EDIT_ORDER[0]:EDIT_ORDER[EDIT_ORDER.length-1]; } }
+  if(dir==='down'){ tr=tr.nextElementSibling; } else if(dir==='up'){ tr=tr.previousElementSibling; } else { const O=EDIT_ORDER.order; const i=O.indexOf(f); nf=O[i+(dir==='right'?1:-1)]; if(!nf){ tr=dir==='right'?tr.nextElementSibling:tr.previousElementSibling; nf=dir==='right'?O[0]:O[O.length-1]; } }
   if(!tr||!tr.dataset.id) return; const td=tr.querySelector(`td.ed[data-f="${nf}"]`); if(td){ td.scrollIntoView({block:'nearest'}); startEdit(td); }
 }
 function toggleBadge(id, t, el){
@@ -1030,12 +1160,12 @@ function syncChips(){ $$('#chips button').forEach(b=>b.classList.toggle('on', b.
 function toggleStatus(v){ if(!v) state.s.clear(); else if(state.s.has(v)) state.s.delete(v); else state.s.add(v); syncChips(); render(); }
 let _qT; $('#q').oninput=e=>{ state.q=e.target.value; clearTimeout(_qT); _qT=setTimeout(render, 160); };
 $$('#chips button').forEach(b=>b.onclick=()=>toggleStatus(b.dataset.s));
-$$('#tbl thead th').forEach(th=>th.onclick=()=>{ const k=th.dataset.k; if(!k) return; if(state.sortK===k) state.sortD*=-1; else { state.sortK=k; state.sortD = ['start','end','retDate','plan','pastDays','leftDays'].includes(k)?-1:1; } render(); });
 
 /* =========================================================
    상세 패널
    ========================================================= */
 function openDrawer(id){
+  if(isOther()) return openDrawer2(id);
   const all=enrichAll(); const r=all.find(x=>x.id===id); if(!r) return;
   state.sel=id; $$('#tb tr.sel').forEach(x=>x.classList.remove('sel')); const selTr=document.querySelector(`#tb tr[data-id="${id}"]`); if(selTr) selTr.classList.add('sel');
   const pct=Math.max(0,Math.min(1,(r.past+r.planM)/r.limit)), circ=2*Math.PI*34;
@@ -1173,12 +1303,12 @@ $('#mSave').onclick=()=>{
 };
 $('#mDelete').onclick=()=>{ const r=data.leaves.find(x=>x.id===F.editId); if(!r) return; if(!confirm(`${r.name} ${r.start}~${r.end} 건을 삭제할까요?`)) return; data.leaves=data.leaves.filter(x=>x.id!==F.editId); closeForm(); commit(); toast('삭제됨'); };
 $('#mCancel').onclick=closeForm; $('#mClose').onclick=closeForm;
-$('#addBtn').onclick=()=>openForm(null);
+$('#addBtn').onclick=()=>isOther()?openForm2(null):openForm(null);
 
 /* =========================================================
    엑셀 업로드 (3단계 마법사)
    ========================================================= */
-const FIELDS = [
+const FIELDS_P = [
   {k:'emp',   n:'사번',        req:true,  syn:['사번','사원번호','사원no','empno']},
   {k:'name',  n:'성명',        req:true,  syn:['성명','이름','성명한글']},
   {k:'dept',  n:'소속',        syn:['소속','부서','부서명','소속부서']},
@@ -1197,9 +1327,30 @@ const FIELDS = [
   {k:'memo',  n:'비고',        syn:['비고','메모','특이사항']},
   {k:'progress', n:'진행',     syn:['진행','진행상황','진행사항','처리상태','담당자메모']},
 ];
+const FIELDS_O = [
+  {k:'emp',   n:'사번',        req:true,  syn:['사번','사원번호','사원no','empno']},
+  {k:'name',  n:'성명',        req:true,  syn:['성명','이름','성명한글']},
+  {k:'dept',  n:'소속',        syn:['소속','부서','부서명','소속부서']},
+  {k:'grade', n:'직급',        syn:['직급','직급코드']},
+  {k:'pos',   n:'직위',        syn:['직위','직책']},
+  {k:'job',   n:'직무',        syn:['직무']},
+  {k:'group', n:'직군',        syn:['직군']},
+  {k:'kind',  n:'발령구분',    req:true,  syn:['발령구분','발령','휴직구분','휴직종류','구분']},
+  {k:'seq',   n:'사용차수',    syn:['사용차수','차수','분할차수','회차']},
+  {k:'pay',   n:'유급여부',    syn:['유급여부','유무급','급여여부','유급']},
+  {k:'tenure',n:'근속산입여부',syn:['근속산입여부','근속산입','근속','산입여부']},
+  {k:'reason',n:'사용사유',    syn:['사용사유','사유','휴직사유']},
+  {k:'start', n:'시작일',      req:true,  syn:['휴직시작일','시작일','휴직시작','시작','개시일','휴직개시일']},
+  {k:'end',   n:'종료일',      req:true,  syn:['휴직종료일','종료일','휴직종료','종료','만료일']},
+  {k:'returnDate', n:'실제 복직일', syn:['실제복직일','복직일']},
+  {k:'extraUsed', n:'가족돌봄휴가 사용일', syn:['가족돌봄휴가','돌봄휴가사용일','휴가사용일']},
+  {k:'memo',  n:'비고',        syn:['비고','메모','특이사항']},
+  {k:'progress', n:'진행',     syn:['진행','진행상황','진행사항','처리상태','담당자메모']},
+];
+const FIELDS = { get list(){ return isOther()?FIELDS_O:FIELDS_P; }, forEach(f){ this.list.forEach(f); }, filter(f){ return this.list.filter(f); }, map(f){ return this.list.map(f); } };
 const normH = v => String(v??'').replace(/[\s\n\r()（）_\-·.]/g,'').toLowerCase();
 const I = { wb:null, sheet:null, rows:[], hdr:0, map:{}, mode:'append', parsed:null };
-function openImport(){ I.wb=null; I.sheet=null; I.rows=[]; I.map={}; I.parsed=null; I.mode='append'; $('#imodal').classList.add('on'); iStep1(); }
+function openImport(){ $('#iTitle').textContent = `엑셀 업로드 · ${isOther()?'육아휴직 外':'육아휴직'}`; I.wb=null; I.sheet=null; I.rows=[]; I.map={}; I.parsed=null; I.mode='append'; $('#imodal').classList.add('on'); iStep1(); }
 function closeImport(){ $('#imodal').classList.remove('on'); }
 $('#iClose').onclick=closeImport; $('#sImport').onclick=openImport;
 function iSetStep(n){ $$('#iSteps b').forEach((b,i)=>b.classList.toggle('on', i===n-1)); }
@@ -1219,7 +1370,9 @@ async function loadWorkbook(file){
     const buf=await file.arrayBuffer();
     I.wb=XLSX.read(buf,{type:'array', cellDates:false, codepage:949});
     const names=I.wb.SheetNames;
-    const pick = names.find(n=>n.replace(/\s/g,'')==='육아휴직') || names.find(n=>n.includes('육아휴직')) || names[0];
+    const norm=n=>n.replace(/\s/g,'');
+    const pick = isOther() ? (names.find(n=>norm(n)==='육아휴직外'||norm(n)==='육아휴직외') || names.find(n=>n.includes('外')||n.includes('휴직외')) || names[0])
+                           : (names.find(n=>norm(n)==='육아휴직') || names.find(n=>n.includes('육아휴직')&&!n.includes('外')) || names[0]);
     I.fileName=file.name; selectSheet(pick);
   }catch(e){ console.error(e); toast('파일을 읽을 수 없음: '+e.message, true); }
 }
@@ -1271,6 +1424,7 @@ function toDateStr(v){
 }
 const AUTO_MEMO_RE=/\d+\s*차\s*\d{2,4}[.\-\/년]\s*\d{1,2}[.\-\/월]\s*\d{1,2}일?\s*[~∼-]\s*\d{2,4}[.\-\/년]\s*\d{1,2}[.\-\/월]\s*\d{1,2}일?\s*\(\s*\d+\s*일?\s*\)[,\s·;]*/g;
 function parseRows(){
+  if(isOther()) return parseRowsOther();
   const out=[], errs=[];
   const existKeys=new Set(data.leaves.map(r=>`${r.emp}|${r.child||''}|${r.start}`));
   const seen=new Set();
@@ -1292,8 +1446,31 @@ function parseRows(){
   });
   I.parsed=out;
 }
+function normKind2(v){ const t=String(v).replace(/\s/g,''); const hit=KINDS2.find(k=>t.includes(k.replace('휴직',''))); return hit||''; }
+function parseRowsOther(){
+  const out=[]; const existKeys=new Set(data.leaves2.map(r=>`${r.emp}|${r.kind}|${r.start}`)); const seen=new Set();
+  I.rows.slice(I.hdr+1).forEach((row,idx)=>{
+    const g=k=> I.map[k]===undefined ? '' : row[I.map[k]];
+    const empRaw=g('emp'); if(empRaw==='' && g('name')==='' && g('start')==='') return;
+    const kind=normKind2(g('kind')); const d=kind2Def(kind);
+    const payRaw=String(g('pay')).trim(); const pay = /80/.test(payRaw)?'80%':/유/.test(payRaw)?'유급':/무/.test(payRaw)?'무급':d.pay;
+    const tenRaw=String(g('tenure')).trim(); const tenure = /미|n|x|불/i.test(tenRaw)?'미산입':/산입|y|o|예/i.test(tenRaw)?'산입':d.tenure;
+    const seqN=parseInt(String(g('seq')).replace(/[^0-9]/g,''),10);
+    const rec={ emp:String(empRaw).trim().replace(/\.0$/,''), name:String(g('name')).trim(), dept:String(g('dept')).trim(), grade:String(g('grade')).trim(), pos:String(g('pos')).trim(), job:String(g('job')).trim(), group:String(g('group')).trim(),
+      kind, seq: seqN>=1?seqN:1, pay, tenure, reason:String(g('reason')).trim(), start:toDateStr(g('start')), end:toDateStr(g('end')), returnDate:toDateStr(g('returnDate')), extraUsed:+String(g('extraUsed')).replace(/[^0-9.]/g,'')||0, links:[], memo:String(g('memo')).trim(), progress:String(g('progress')).trim() };
+    const problems=[];
+    if(!rec.emp) problems.push('사번 없음'); if(!rec.name) problems.push('성명 없음'); if(!rec.kind) problems.push('발령구분 인식 불가: '+String(g('kind')).slice(0,10));
+    if(!rec.start) problems.push('시작일 인식 불가'); if(!rec.end) problems.push('종료일 인식 불가');
+    if(rec.start&&rec.end&&rec.end<rec.start) problems.push('종료<시작');
+    const key=`${rec.emp}|${rec.kind}|${rec.start}`;
+    const dup = existKeys.has(key) ? '기존 데이터와 중복' : seen.has(key) ? '파일 내 중복' : ''; seen.add(key);
+    out.push({ excelRow:I.hdr+idx+2, rec, problems, dup });
+  });
+  I.parsed=out;
+}
 function iStep3(){
   iSetStep(3);
+  if(isOther()) return iStep3Other();
   const rows=I.parsed; const okRows=rows.filter(r=>!r.problems.length); const bad=rows.length-okRows.length; const dups=okRows.filter(r=>r.dup).length;
   const willAdd = I.mode==='replace' ? okRows.filter(r=>r.dup!=='파일 내 중복').length : okRows.filter(r=>!r.dup).length;
   $('#iBody').innerHTML=`
@@ -1319,6 +1496,136 @@ function iStep3(){
   };
 }
 
+function iStep3Other(){
+  const rows=I.parsed; const okRows=rows.filter(r=>!r.problems.length); const bad=rows.length-okRows.length; const dups=okRows.filter(r=>r.dup).length;
+  const willAdd = I.mode==='replace' ? okRows.filter(r=>r.dup!=='파일 내 중복').length : okRows.filter(r=>!r.dup).length;
+  $('#iBody').innerHTML=`
+    <div class="stat" style="margin-bottom:14px"><div><b class="num">${rows.length}</b>읽은 행</div><div><b class="num" style="color:var(--ac)">${willAdd}</b>가져올 건</div><div><b class="num" style="color:var(--warn)">${dups}</b>중복(건너뜀)</div><div><b class="num" style="color:${bad?'var(--bad)':'inherit'}">${bad}</b>오류(제외)</div></div>
+    <div class="fs" style="margin-bottom:14px"><h4><i>ⅲ</i>가져오기 방식</h4>
+      <div class="seg" style="max-width:560px" id="iMode"><button data-v="append" class="${I.mode==='append'?'on':''}">기존 데이터에 추가 (중복 건너뜀)</button><button data-v="replace" class="${I.mode==='replace'?'on':''}">전체 교체 (기존 ${data.leaves2.length}건 삭제 후 넣기)</button></div>
+      <div class="alert info" style="margin-top:10px">ⓘ 과거 내역 연결은 자동으로 하지 않음. 업로드 후 각 건의 수정 화면에서 연결할 것. 사용차수는 엑셀 값 그대로 가져옴</div>
+    </div>
+    <div class="prev"><table><thead><tr><th>엑셀행</th><th>상태</th><th>사번</th><th>성명</th><th>소속</th><th>발령구분</th><th>차수</th><th>유급</th><th>산입</th><th>사유</th><th>시작일</th><th>종료일</th><th>비고</th></tr></thead><tbody>
+      ${rows.slice(0,300).map(r=>`<tr><td class="num">${r.excelRow}</td><td>${r.problems.length?`<span class="pill p-b">${esc(r.problems.join(', '))}</span>`:r.dup?`<span class="pill p-w">${r.dup}</span>`:'<span class="pill p-ok">OK</span>'}</td><td class="num">${esc(r.rec.emp)}</td><td>${esc(r.rec.name)}</td><td>${esc(r.rec.dept)}</td><td class="${r.rec.kind?'':'badcell'}">${esc(r.rec.kind)||'?'}</td><td class="num">${r.rec.seq}</td><td>${esc(r.rec.pay)}</td><td>${esc(r.rec.tenure)}</td><td>${esc(r.rec.reason)}</td><td class="num ${r.rec.start?'':'badcell'}">${r.rec.start||'?'}</td><td class="num ${r.rec.end?'':'badcell'}">${r.rec.end||'?'}</td><td class="memo">${esc(r.rec.memo)}</td></tr>`).join('')}
+    </tbody></table>${rows.length>300?`<div class="hint" style="padding:8px 12px">…외 ${rows.length-300}행</div>`:''}</div>`;
+  $$('#iMode button').forEach(b=>b.onclick=()=>{ I.mode=b.dataset.v; iStep3(); });
+  $('#iFoot').innerHTML=`<button class="btn" id="iBack">← 매핑 수정</button><button class="btn pri" id="iDo" ${willAdd?'':'disabled'}>${willAdd}건 가져오기</button>`;
+  $('#iBack').onclick=iStep2;
+  $('#iDo').onclick=()=>{
+    if(I.mode==='replace' && !confirm(`기존 ${data.leaves2.length}건을 삭제하고 ${willAdd}건으로 교체합니다. 계속할까요?`)) return;
+    if(I.mode==='replace') data.leaves2=[];
+    const seen=new Set(); let n=0;
+    okRows.forEach(r=>{ const key=`${r.rec.emp}|${r.rec.kind}|${r.rec.start}`; if(seen.has(key)) return; seen.add(key); if(I.mode==='append' && r.dup) return;
+      data.employees[r.rec.emp]={ ...(data.employees[r.rec.emp]||{}), name:r.rec.name, dept:r.rec.dept, grade:r.rec.grade, pos:r.rec.pos, job:r.rec.job, group:r.rec.group };
+      data.leaves2.push({ id:uid(), createdAt:new Date().toISOString(), source:`excel:${I.fileName}#${r.excelRow}`, ...r.rec }); n++; });
+    closeImport(); commit(); toast(`${n}건 가져옴${bad?` · 오류 ${bad}행 제외`:''}`);
+  };
+}
+
+/* =========================================================
+   육아휴직 外 · 등록 폼 / 상세
+   ========================================================= */
+const F2={ editId:null };
+const fld2={ emp:'#n_emp', name:'#n_name', dept:'#n_dept', grade:'#n_grade', pos:'#n_pos', job:'#n_job', group:'#n_group', kind:'#n_kind', seq:'#n_seq', pay:'#n_pay', tenure:'#n_tenure', reason:'#n_reason', start:'#n_start', end:'#n_end', returnDate:'#n_retDate', extraUsed:'#n_extra', memo:'#n_memo', progress:'#n_progress' };
+$('#n_kind').innerHTML=KINDS2.map(k=>`<option>${k}</option>`).join('');
+function openForm2(id){
+  F2.editId=id||null; const r=id? data.leaves2.find(x=>x.id===id) : null;
+  $('#m2Title').textContent = r?'휴직 수정 (육아휴직 外)':'휴직 등록 (육아휴직 外)'; $('#m2Delete').hidden=!r;
+  Object.entries(fld2).forEach(([k,s])=>{ $(s).value = r ? (r[k]??'') : ''; });
+  if(!r){ $('#n_kind').value=KINDS2[0]; $('#n_seq').value=1; const d=kind2Def(KINDS2[0]); $('#n_pay').value=d.pay; $('#n_tenure').value=d.tenure; }
+  F2.links=new Set(r?.links||[]); F2.payTouched=!!r;
+  $('#empList').innerHTML = Object.entries(data.employees).map(([no,e])=>`<option value="${esc(no)}">${esc(e.name)} · ${esc(e.dept||'')}</option>`).join('');
+  $('#deptList').innerHTML = [...new Set(Object.values(data.employees).map(e=>e.dept).filter(Boolean))].map(d=>`<option value="${esc(d)}">`).join('');
+  $('#modal2').classList.add('on'); renderLinks(); calc2(); setTimeout(()=>$('#n_emp').focus(), 100);
+}
+function closeForm2(){ $('#modal2').classList.remove('on'); }
+$('#m2Cancel').onclick=closeForm2; $('#m2Close').onclick=closeForm2; $('#modal2').onclick=e=>{ if(e.target.id==='modal2') closeForm2(); };
+$('#n_emp').addEventListener('input', ()=>{ const e=data.employees[$('#n_emp').value.trim()]; if(e){ ['name','dept','grade','pos','job','group'].forEach(k=>{ if(!$(fld2[k]).value || F2.autofilled) $(fld2[k]).value=e[k]||''; }); F2.autofilled=true; } renderLinks(); calc2(); });
+$('#n_kind').addEventListener('change', ()=>{ if(!F2.payTouched){ const d=kind2Def($('#n_kind').value); $('#n_pay').value=d.pay; $('#n_tenure').value=d.tenure; } renderLinks(); calc2(); });
+$('#n_pay').addEventListener('change', ()=>{ F2.payTouched=true; }); $('#n_tenure').addEventListener('change', ()=>{ F2.payTouched=true; });
+['n_start','n_end','n_extra','n_seq','n_retDate','n_reason','n_memo'].forEach(id=>$('#'+id).addEventListener('input', calc2));
+function readForm2(){ const v={}; Object.entries(fld2).forEach(([k,s])=>v[k]=$(s).value.trim()); v.seq=parseInt(v.seq,10)||1; v.extraUsed=+v.extraUsed||0; v.links=[...F2.links]; return v; }
+function renderLinks(){
+  const emp=$('#n_emp').value.trim(), kind=$('#n_kind').value; const box=$('#n_links');
+  if(!emp){ box.innerHTML='<span class="hint">사번을 입력하면 이 사번의 휴직 내역이 표시됨</span>'; return; }
+  const all=enrichOther(data.leaves2).filter(x=>x.emp===emp && x.id!==F2.editId).sort((a,b)=>a.start<b.start?-1:1);
+  const par=data.leaves.filter(x=>x.emp===emp).length;
+  if(!all.length){ box.innerHTML=`<span class="hint">이 사번의 육아휴직 外 내역 없음${par?` · 육아휴직 ${par}건은 별도 대장`:''}</span>`; return; }
+  box.innerHTML = all.map(x=>`<label class="lnk ${x.kind===kind?'':'other-k'}"><input type="checkbox" data-id="${x.id}" ${F2.links.has(x.id)?'checked':''}><span class="k">${esc(x.kind)}</span><span class="num d">${x.start} ~ ${x.end}</span><span class="k-tag">${x.seq}차</span>${x.reason?`<span class="hint">${esc(x.reason)}</span>`:''}<span class="n num">${x.plan}일</span></label>`).join('')
+    + `<div class="hint" style="margin-top:4px">같은 제도(${esc(kind)})는 진하게, 다른 제도는 흐리게 표시. 어느 쪽이든 체크하면 합산됨${par?` · 육아휴직 ${par}건은 별도 대장`:''}</div>`;
+  box.querySelectorAll('input').forEach(i=>i.onchange=()=>{ if(i.checked) F2.links.add(i.dataset.id); else F2.links.delete(i.dataset.id); calc2(); });
+}
+function calc2(){
+  const v=readForm2(); const ok=isDate(v.start)&&isDate(v.end)&&v.end>=v.start; const plan=ok?days(v.start,v.end):0;
+  const byId={}; data.leaves2.forEach(x=>byId[x.id]=x);
+  const past=[...F2.links].map(id=>byId[id]).filter(Boolean).reduce((s,x)=>s+((isDate(x.start)&&isDate(x.end)&&x.end>=x.start)?days(x.start,x.end):0),0);
+  const lim=data.settings.limits2[v.kind]; const limit=(lim===''||lim==null)?null:+lim;
+  const fam=v.kind==='가족돌봄휴직'; $('#n_extraWrap').style.display = fam?'':'none'; const extra=fam?v.extraUsed:0;
+  const left= limit===null?null : limit-past-extra-plan;
+  const ret= ok? addDays(v.end,1) : null; $('#n_ret').textContent = ret||'—';
+  const spans = fam && ok && v.start.slice(0,4)!==v.end.slice(0,4);
+  const overlap = ok && data.leaves2.some(x=>x.id!==F2.editId && x.emp===v.emp && x.start<=v.end && x.end>=v.start);
+  $('#calc2').innerHTML=`
+    <h4>자동 계산 · ${esc(v.kind)}${limit===null?' <span class="k-tag">한도 없음</span>':` <span class="k-tag">한도 ${limit}일</span>`}</h4>
+    <div class="big"><b class="num ${left!==null&&left<0?'neg':''}">${limit===null?'—':ok?(left<0?'−'+Math.abs(left):left):'—'}<span style="font-size:14px;font-weight:500">${limit===null?'':'일'}</span></b><small>${limit===null?'한도가 없는 제도 · 잔여는 담당자 수기 관리':`잔여 = 한도 ${limit} − 과거 ${past}${fam?' − 돌봄휴가 '+extra:''} − 이번 ${plan}`}</small></div>
+    <div class="row"><span>이번 사용기간</span><b class="num">${ok?plan+'일':'—'}</b></div>
+    <div class="row"><span>복직(예정)일</span><b class="num">${ret||'—'}</b></div>
+    <div class="row"><span>과거 사용기간 (연결 ${F2.links.size}건)</span><b class="num">${past}일</b></div>
+    ${fam?`<div class="row"><span>가족돌봄휴가 사용일 차감</span><b class="num">${extra}일</b></div>`:''}
+    <div class="row"><span>사용차수 (담당자 입력)</span><b class="num">${v.seq}차</b></div>
+    <div class="row"><span>유급 / 근속</span><b>${esc(v.pay)} / ${esc(v.tenure)}</b></div>
+    ${v.start&&v.end&&!ok?'<div class="alert bad">⚠ 종료일이 시작일보다 앞섬</div>':''}
+    ${overlap?'<div class="alert bad">⚠ 같은 직원의 다른 휴직 건과 기간이 겹침</div>':''}
+    ${left!==null&&left<0?`<div class="alert bad">⚠ 한도 ${Math.abs(left)}일 초과 · 저장은 가능</div>`:''}
+    ${spans?'<div class="alert">ⓘ 가족돌봄휴직은 연단위(1.1~12.31) 초기화 · 해를 넘기는 기간은 연도별로 나눠 등록 권장</div>':''}
+    ${v.pay==='80%'&&v.kind!=='의병휴직'?'<div class="alert">ⓘ 80%는 보통 의병휴직에만 해당 · 확인 필요</div>':''}`;
+  return {v, ok};
+}
+$('#m2Save').onclick=()=>{
+  const {v, ok}=calc2();
+  const miss=[]; if(!v.emp) miss.push('사번'); if(!v.name) miss.push('성명'); if(!v.kind) miss.push('발령구분'); if(!isDate(v.start)) miss.push('시작일'); if(!isDate(v.end)) miss.push('종료일');
+  if(miss.length) return toast('필수 입력: '+miss.join(', '), true);
+  if(!ok) return toast('종료일이 시작일보다 앞섬', true);
+  if(v.returnDate && !isDate(v.returnDate)) v.returnDate='';
+  data.employees[v.emp]={ ...(data.employees[v.emp]||{}), name:v.name, dept:v.dept, grade:v.grade, pos:v.pos, job:v.job, group:v.group };
+  const rec={ ...v, updatedAt:new Date().toISOString() };
+  if(F2.editId){ const i=data.leaves2.findIndex(x=>x.id===F2.editId); data.leaves2[i]={...data.leaves2[i], ...rec}; }
+  else data.leaves2.push({ id:uid(), createdAt:new Date().toISOString(), ...rec });
+  closeForm2(); commit(); toast(F2.editId?'수정됨':'등록됨');
+};
+$('#m2Delete').onclick=()=>{ const r=data.leaves2.find(x=>x.id===F2.editId); if(!r) return; if(!confirm(`${r.name} ${r.kind} ${r.start}~${r.end} 건을 삭제할까요?`)) return; data.leaves2=data.leaves2.filter(x=>x.id!==F2.editId); data.leaves2.forEach(x=>{ if(x.links) x.links=x.links.filter(id=>id!==F2.editId); }); closeForm2(); commit(); toast('삭제됨'); };
+function openDrawer2(id){
+  const all=enrichOtherAll(); const r=all.find(x=>x.id===id); if(!r) return;
+  state.sel=id; $$('#tb tr.sel').forEach(x=>x.classList.remove('sel')); const selTr=document.querySelector(`#tb tr[data-id="${id}"]`); if(selTr) selTr.classList.add('sel');
+  const pct = r.limit? Math.max(0,Math.min(1,(r.past+r.extra+r.plan)/r.limit)) : 0, circ=2*Math.PI*34;
+  $('#drawer').innerHTML=`
+    <div class="dh"><div class="avatar">${esc((r.name||'?')[0])}</div>
+      <div><h2>${esc(r.name)} <span class="num" style="font-weight:400;color:var(--ink3);font-size:13px">${esc(r.emp)}</span></h2>
+      <div class="meta">${esc([r.dept, [r.grade,r.pos].filter(Boolean).join(' '), [r.job,r.group].filter(Boolean).join(' / ')].filter(Boolean).join(' · '))}</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:12px">${pill(r)}<span class="k-tag">${esc(r.kind)}</span><span class="k-tag">${r.seq}차</span><span class="k-tag">${esc(r.pay)}</span><span class="k-tag">${esc(r.tenure)}</span></div>
+      <button class="icon-btn x" id="dClose" aria-label="닫기">✕</button></div>
+    <div class="db">
+      <div class="sec"><h4>한도 사용 현황 <span>${r.limit===null?'한도 없음':'한도 '+r.limit+'일'}</span></h4>
+        ${r.limit===null?`<div class="hint" style="font-size:13px">${esc(r.kind)}은 정해진 한도가 없음. 잔여는 담당자가 비고·진행에 수기 관리</div>`:`<div class="gauge">
+          <svg width="88" height="88" viewBox="0 0 88 88"><circle cx="44" cy="44" r="34" fill="none" stroke="var(--sh-d)" stroke-width="9" opacity=".5"/><circle cx="44" cy="44" r="34" fill="none" stroke="${r.left<0?'var(--bad)':'var(--ac)'}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct)}" transform="rotate(-90 44 44)"/><text x="44" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)" font-family="Segoe UI,Malgun Gothic,sans-serif">${Math.round(pct*100)}%</text></svg>
+          <div class="t"><b class="num ${r.left<0?'neg':''}">${r.left<0?'−'+Math.abs(r.left):r.left}일</b><small>잔여${r.kind==='가족돌봄휴직'?' · 연단위(1.1~12.31) 초기화':''}</small>
+            <div style="margin-top:8px;font-size:12px;color:var(--ink2)">과거 <b class="num">${r.past}일</b>${r.extra?` + 돌봄휴가 <b class="num">${r.extra}일</b>`:''} + 이번 <b class="num">${r.plan}일</b> = <b class="num">${r.past+r.extra+r.plan}일</b></div></div></div>`}</div>
+      <div class="sec"><h4>제도 정보</h4>
+        <div class="kv"><div><label>발령구분</label>${esc(r.kind)}</div><div><label>사용차수</label>${r.seq}차</div><div><label>유급여부</label>${esc(r.pay)}</div><div><label>근속산입</label>${esc(r.tenure)}</div><div style="grid-column:span 2"><label>사용사유</label>${esc(r.reason)||'<span class="sub">—</span>'}</div></div></div>
+      <div class="sec"><h4>이번 건</h4>
+        <div class="kv"><div><label>시작일</label><span class="num">${r.start}</span></div><div><label>종료일</label><span class="num">${r.end}</span></div><div><label>사용기간<span class="a">자동</span></label><span class="num">${r.plan}일</span>${r.spansYear?'<span class="sub" style="color:var(--warn)">해 넘김 · 연도별 분리 권장</span>':''}</div><div><label>복직(예정)일<span class="a">자동</span></label><span class="num">${r.ret.d}</span></div><div><label>경과<span class="a">자동</span></label><span class="num">${r.used}일 / ${r.plan}일</span></div>${r.returnDate?`<div><label>실제 복직일</label><span class="num" style="color:var(--bad)">${r.returnDate}</span></div>`:''}</div></div>
+      <div class="sec"><h4>연결한 과거 내역 <span>${r.linked.length}건 · ${r.past}일</span></h4>
+        ${r.linked.length?`<div class="tl">${r.linked.slice().sort((a,b)=>a.start<b.start?-1:1).map(x=>`<div class="it" data-id="${x.id}"><b>${esc(x.kind)}</b> <span class="num" style="color:var(--ink2)">${x.start} ~ ${x.end}</span> <span class="num">(${days(x.start,x.end)}일)</span><div class="d">${x.seq}차${x.reason?' · '+esc(x.reason):''}</div></div>`).join('')}</div>`:'<div class="hint">연결된 과거 건 없음 · 수정 화면에서 체크로 연결</div>'}
+        ${r.referencedBy.length?`<div class="hint" style="margin-top:8px">이 건을 과거 내역으로 참조하는 건: ${r.referencedBy.map(x=>x.start).join(', ')}</div>`:''}</div>
+      <div class="sec"><h4>비고 · 진행</h4><div style="font-size:13px;line-height:1.7">${r.memo?`<div><span class="badge b-info" style="font-size:10px;color:var(--info)">비고</span> ${esc(r.memo)}</div>`:''}${r.progress?`<div><span class="badge b-warn" style="font-size:10px;color:var(--warn)">진행</span> ${esc(r.progress)}</div>`:''}${!r.memo&&!r.progress?'<span style="color:var(--ink3)">—</span>':''}</div></div>
+    </div>
+    <div class="actions"><button class="btn" id="dCopy">복직안내 문구 복사</button><button class="btn pri" id="dEdit">수정</button></div>`;
+  $('#dClose').onclick=closeDrawer; $('#dEdit').onclick=()=>{ closeDrawer(); openForm2(r.id); };
+  $('#dCopy').onclick=async()=>{ const txt=`[복직 안내] ${r.name}(${r.emp}) ${r.dept}\n${r.kind} ${r.seq}차: ${r.start} ~ ${r.end} (${r.plan}일)\n복직 예정일: ${r.retDate}${r.limit!==null?`\n한도 ${r.limit}일 중 잔여: ${r.left}일`:''}`; try{ await navigator.clipboard.writeText(txt); toast('복직 안내 문구 복사됨'); }catch{ prompt('복사해서 사용', txt); } };
+  $$('#drawer .tl .it').forEach(el=>el.onclick=()=>openDrawer2(el.dataset.id));
+  $('#scrim').classList.add('on'); $('#drawer').classList.add('on');
+}
+
 /* =========================================================
    엑셀 내보내기 / JSON
    ========================================================= */
@@ -1334,8 +1641,13 @@ async function exportXlsx(){
   const emp=Object.entries(data.employees).map(([no,e])=>[no,e.name,e.dept,e.grade,e.pos,e.job,e.group]);
   const ws2=XLSX.utils.aoa_to_sheet([['사번','성명','소속','직급','직위','직무','직군'],...emp]); ws2['!cols']=[10,8,16,6,6,10,8].map(w=>({wch:w}));
   XLSX.utils.book_append_sheet(wb, ws2, '직원');
+  const all2=enrichOtherAll().slice().sort((a,b)=>cmpKo(a.dept,b.dept)||(a.start<b.start?-1:a.start>b.start?1:0));
+  const H3=['순번','소속','사번','성명','직급','직위','직무','직군','발령구분','사용차수','유급여부','근속산입여부','사용사유','시작일','종료일','복직(예정)일','실제 복직일','사용기간(일)','과거사용기간(일)','가족돌봄휴가 차감(일)','한도(일)','잔여기간(일)','상태','비고','진행'];
+  const ws3=XLSX.utils.aoa_to_sheet([H3,...all2.map((r,i)=>[i+1,r.dept,r.emp,r.name,r.grade,r.pos,r.job,r.group,r.kind,r.seq,r.pay,r.tenure,r.reason,r.start,r.end,r.ret.d,r.returnDate||'',r.plan,r.past,r.extra||'',r.limit??'',r.left??'',ST[r.status][1].replace('D-','D-'+Math.max(0,r.dleft)),r.memo||'',r.progress||''])]);
+  ws3['!cols']=[4,16,10,8,6,6,10,8,12,6,8,10,20,12,12,12,12,8,10,10,8,10,10,30,20].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws3, '육아휴직外');
   const buf=XLSX.write(wb,{bookType:'xlsx', type:'array'});
-  const name=`육아휴직_${fmt(new Date()).replaceAll('-','')}.xlsx`;
+  const name=`휴직대장_${fmt(new Date()).replaceAll('-','')}.xlsx`;
   try{ const path=await store.saveBinary('export', name, buf); toast(path?`저장됨: ${path}`:'다운로드 시작'); }catch(e){ toast('내보내기 실패: '+e.message, true); }
 }
 $('#sExport').onclick=exportXlsx;
@@ -1349,7 +1661,9 @@ function renderSettings(){
   $('#sMode').textContent = store.mode==='fs' ? '폴더 저장 (File System Access)' : '브라우저 저장 (localStorage) · 테스트용';
   $('#sFolder').textContent = store.mode==='fs' ? store.dir.name+'\\hr-data.json' : '—';
   $('#sSaved').textContent = store.lastSaved ? store.lastSaved.slice(0,19).replace('T',' ') : '—';
-  $('#sCount').textContent = `육아휴직 ${data.leaves.length}건 · 직원 ${Object.keys(data.employees).length}명`;
+  $('#sCount').textContent = `육아휴직 ${data.leaves.length}건 · 육아휴직 外 ${data.leaves2.length}건 · 직원 ${Object.keys(data.employees).length}명`;
+  $('#sLimits2').innerHTML = KINDS2.map(k=>`<div class="fi"><label>${k}</label><div class="in"><input type="number" min="0" class="num" data-k="${k}" value="${data.settings.limits2[k]??''}" placeholder="없음"></div></div>`).join('');
+  $$('#sLimits2 input').forEach(i=>i.onchange=()=>{ const v=i.value.trim(); data.settings.limits2[i.dataset.k]= v===''? null : Math.max(0,+v||0); commit(); });
   $('#sBase').value=data.settings.baseMonths; $('#sExt').value=data.settings.extMonths; $('#sSoon').value=data.settings.soonDays; $('#sRef').value=data.settings.refDate||'';
   $$('#sAuto button').forEach(b=>b.classList.toggle('on', (b.dataset.v==='1')===!!data.settings.autoSave));
   $('#sUA').textContent=navigator.userAgent.slice(0,90); $('#sXlsx').textContent = typeof window.XLSX!=='undefined' ? XLSX.version : '0.18.5 (필요 시 로드)';
@@ -1362,16 +1676,22 @@ $$('#sAuto button').forEach(b=>b.onclick=()=>{ data.settings.autoSave=b.dataset.
 $('#sPick').onclick=connectFolder;
 $('#sJsonOut').onclick=exportJson;
 $('#sJsonIn').onclick=()=>$('#fileJson').click();
-$('#sWipe').onclick=()=>{ if(!confirm(`육아휴직 ${data.leaves.length}건을 모두 삭제할까요? 되돌릴 수 없음.`)) return; if(prompt('확인을 위해 "삭제"라고 입력')!=='삭제') return; data.leaves=[]; commit(); renderSettings(); toast('전체 삭제됨'); };
+$('#sWipe').onclick=()=>{ const label=isOther()?'육아휴직 外':'육아휴직'; const arr=curArr(); if(!confirm(`현재 대장(${label}) ${arr.length}건을 모두 삭제할까요? 되돌릴 수 없음.`)) return; if(prompt('확인을 위해 "삭제"라고 입력')!=='삭제') return; if(isOther()) data.leaves2=[]; else data.leaves=[]; commit(); renderSettings(); toast('전체 삭제됨'); };
 
 /* =========================================================
    네비게이션 · 기타
    ========================================================= */
-function showView(v){ state.view=v; $('#viewList').hidden=v!=='list'; $('#viewSettings').hidden=v!=='settings'; $('#pageTitle').firstChild.textContent = v==='list'?'육아휴직 대장':'설정 · 백업'; $$('.nav button[data-view]').forEach(b=>b.classList.toggle('on', b.dataset.view===v)); if(v==='settings') renderSettings(); }
-$$('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+function showView(v, mod){
+  state.view=v; if(mod && mod!==state.module){ state.module=mod; state.s.clear(); syncChips(); MS.kind.sel.clear(); state.sel=null; closeDrawer(); }
+  $('#viewList').hidden=v!=='list'; $('#viewSettings').hidden=v!=='settings';
+  $('#pageTitle').firstChild.textContent = v==='list'?(isOther()?'육아휴직 外 대장':'육아휴직 대장'):'설정 · 엑셀 · 백업';
+  $$('.nav button[data-view]').forEach(b=>b.classList.toggle('on', b.dataset.view===v && (!b.dataset.module || b.dataset.module===state.module)));
+  if(v==='settings') renderSettings(); else render();
+}
+$$('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view, b.dataset.module));
 $$('.nav .soon').forEach(b=>b.onclick=()=>toast('다음 단계에서 추가 예정'));
 $('#themeBtn').onclick=()=>{ const r=document.documentElement; r.dataset.theme = r.dataset.theme==='dark'?'light':'dark'; try{ localStorage.setItem('hr-theme', r.dataset.theme); }catch{} };
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDrawer(); closeForm(); closeImport(); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDrawer(); closeForm(); closeForm2(); closeImport(); } });
 /* 창 닫기: 브라우저 정책상 문구는 바꿀 수 없고 브라우저 기본 경고창("변경사항이 저장되지 않을 수 있습니다")만 띄울 수 있음.
    대신 닫기 시도 순간 임시저장을 즉시 한 번 더 시도하고, 탭 전환/최소화 때도 임시저장해서 유실을 막음 */
 window.addEventListener('beforeunload', e=>{ if(dirtyN>0 || $('#savedPill').classList.contains('saving')){ store.autosave(); e.preventDefault(); e.returnValue='저장하지 않은 변경사항이 있습니다. 저장하시겠습니까?'; return e.returnValue; } });
