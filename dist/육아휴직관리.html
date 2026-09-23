@@ -105,6 +105,14 @@ button:disabled{opacity:.5;cursor:default}
 .saved.saving{color:var(--warn);background:var(--warn-soft)}.saved.saving i{background:var(--warn);animation:pulse 1s infinite}
 .saved.error{color:var(--bad);background:var(--bad-soft)}.saved.error i{background:var(--bad)}
 .saved.dirty{color:#9A6B00;background:var(--warn-soft)}.saved.dirty i{background:var(--warn)}
+.banner{display:flex;align-items:center;gap:12px;padding:9px 14px;border-radius:12px;margin-bottom:10px;font-size:13px;flex:none;border:1px solid transparent}
+.banner .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;flex:none}
+.banner div{flex:1;line-height:1.4}
+.banner .btn{padding:7px 12px;font-size:12.5px}
+.banner.warn{background:#FFF4D6;border-color:#F0D48A;color:#6B4E00}.banner.warn .ic{background:var(--warn);color:#fff}
+.banner.info{background:#E4ECFB;border-color:#B9CCF2;color:#1F3F80}.banner.info .ic{background:var(--info);color:#fff}
+:root[data-theme="dark"] .banner.warn{background:#3A3218;border-color:#6b5a1f;color:#F0D48A}
+:root[data-theme="dark"] .banner.info{background:#1f2c45;border-color:#33507f;color:#B9CCF2}
 #saveBtn.dirty{background:linear-gradient(180deg,#F5B400,#D89600);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 0 0 #9A6B00,0 8px 18px -8px var(--warn);animation:nudge 1.6s infinite}
 @keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-1px)}}
 /* 인라인 편집 */
@@ -450,9 +458,7 @@ td.ret .sub{opacity:.8}
     </nav>
     <div class="nav-h">데이터</div>
     <nav class="nav">
-      <button id="navImport"><span class="dot"></span>엑셀 업로드</button>
-      <button id="navExport"><span class="dot"></span>엑셀 내보내기</button>
-      <button data-view="settings"><span class="dot"></span>설정 · 백업</button>
+      <button data-view="settings"><span class="dot"></span>설정 · 엑셀 · 백업</button>
     </nav>
     <div class="foot"><b id="footMode">데이터 폴더</b><span class="path" id="footPath">—</span><br><span id="footSaved">저장 기록 없음</span></div>
   </aside>
@@ -463,12 +469,12 @@ td.ret .sub{opacity:.8}
       <span class="saved" id="savedPill"><i></i><span>저장됨</span></span>
       <span class="sp"></span>
       <button class="btn" id="saveBtn" title="Ctrl+S">💾 저장</button>
-      <button class="btn" id="btnImport">⬆ 엑셀 업로드</button>
-      <button class="btn" id="btnExport">⬇ 엑셀 내보내기</button>
       <button class="icon-btn" id="themeBtn" title="다크/라이트 전환" aria-label="테마 전환">◐</button>
       <button class="btn pri" id="addBtn">＋ 휴직 등록</button>
     </div>
 
+    <div class="banner warn" id="bnFolder" hidden><span class="ic">⚠</span><div><b>데이터 폴더가 연결되지 않음.</b> 지금은 이 브라우저 안에만 저장됨 → PC 교체·브라우저 캐시 삭제 시 데이터가 사라짐.</div><button class="btn" id="bnConnect">📁 폴더 연결</button></div>
+    <div class="banner info" id="bnRecover" hidden><span class="ic">↺</span><div><b>저장하지 않은 변경분이 있음.</b> <span id="bnRecoverTxt"></span> 마지막 저장본 대신 이 내용으로 복구할지 선택.</div><button class="btn pri" id="bnRestore">복구</button><button class="btn" id="bnDiscard">무시</button></div>
     <section id="viewList">
       <div class="filters" style="margin-bottom:10px">
         <label class="field search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="단어 검색"></label>
@@ -511,12 +517,18 @@ td.ret .sub{opacity:.8}
             <tr><td>마지막 저장</td><td id="sSaved" class="num">—</td></tr>
             <tr><td>등록 건수</td><td id="sCount" class="num">—</td></tr>
           </table>
-          <div class="fi" style="margin-top:12px"><label>저장 방식</label><div class="seg" id="sAuto" style="max-width:460px"><button data-v="0">수동 · 상단 저장 버튼 / Ctrl+S</button><button data-v="1">자동 · 변경 1초 후 저장</button></div></div>
+          <div class="fi" style="margin-top:12px"><label>본 파일 저장 방식</label><div class="seg" id="sAuto" style="max-width:460px"><button data-v="0">수동 · 상단 저장 버튼 / Ctrl+S</button><button data-v="1">자동 · 변경 1초 후 저장</button></div></div>
+          <p class="hint" style="margin-top:8px">안전장치: 어느 방식이든 변경 4초 후와 60초마다 <b>hr-data.autosave.json</b>에 임시저장됨. 저장 안 하고 종료해도 다음 실행 때 복구 여부를 물어봄</p>
           <div class="row">
-            <button class="btn" id="sPick">폴더 변경</button>
+            <button class="btn" id="sPick">폴더 연결 / 변경</button>
             <button class="btn" id="sJsonOut">JSON 백업 파일 만들기</button>
             <button class="btn" id="sJsonIn">JSON 불러오기</button>
           </div>
+        </div>
+        <div class="gcard g6">
+          <h3>엑셀</h3><p>처음 한 번 기존 대장을 업로드해서 시작. 이후에는 이 프로그램이 원본이고, 엑셀은 보고·공유용으로 내보내기만 사용</p>
+          <div class="row"><button class="btn pri" id="sImport">⬆ 엑셀 업로드 (기존 대장 가져오기)</button><button class="btn" id="sExport">⬇ 엑셀 내보내기</button></div>
+          <p class="hint" style="margin-top:12px">업로드 시 시트 선택 → 컬럼 자동 매핑 → 미리보기 → 추가/교체 선택. 내보내기는 데이터 폴더의 export 폴더에 날짜별 파일로 저장</p>
         </div>
         <div class="gcard g6">
           <h3>계산 기준</h3><p>개월 수는 엑셀 DATEDIF 방식(달력 개월 + 나머지일/해당월 일수, 소수 3자리 버림). 복직(퇴직)예정일은 종료일 + 1일. 변경 즉시 전체 목록에 반영. 기준일을 비우면 오늘 날짜 사용</p>
@@ -532,7 +544,7 @@ td.ret .sub{opacity:.8}
           <div class="row"><button class="btn danger" id="sWipe">육아휴직 데이터 전체 삭제</button></div>
           <h3 style="margin-top:22px">정보</h3>
           <table class="info-tbl">
-            <tr><td>버전</td><td>육아휴직 모듈 0.6 (테스트) · 인라인 편집 · 수동 저장</td></tr>
+            <tr><td>버전</td><td>육아휴직 모듈 0.10 (테스트) · 자동 임시저장 · 복구</td></tr>
             <tr><td>브라우저</td><td id="sUA" class="num" style="font-size:11px">—</td></tr>
             <tr><td>엑셀 엔진</td><td>SheetJS <span id="sXlsx" class="num"></span></td></tr>
           </table>
@@ -755,18 +767,34 @@ const store = {
   async tryReconnect(h){ const p=await h.queryPermission({mode:'readwrite'}); if(p==='granted'){ this.dir=h; this.mode='fs'; await this.load(); return true; } return false; },
   async requestReconnect(h){ const p=await h.requestPermission({mode:'readwrite'}); if(p==='granted'){ this.dir=h; this.mode='fs'; await this.load(); return true; } return false; },
   useLocal(){ this.mode='local'; return this.load(); },
+  pendingRecovery:null,
   async load(){
+    let autoTxt=null;
     if(this.mode==='fs'){
       const txt=await this.readText(this.dir,'hr-data.json');
       if(txt){ data=migrate(JSON.parse(txt)); this.lastSaved=data.meta.updatedAt; await this.backup(txt); }
       else { data=freshData(); await this.write(this.dir,'hr-data.json',JSON.stringify(data,null,2)); }
-      bump();
+      autoTxt=await this.readText(this.dir,'hr-data.autosave.json');
     } else {
-      let txt=null; try{ txt=localStorage.getItem('hr-leave-data'); }catch{}
+      let txt=null; try{ txt=localStorage.getItem('hr-leave-data'); autoTxt=localStorage.getItem('hr-leave-autosave'); }catch{}
       data = txt ? migrate(JSON.parse(txt)) : freshData(); this.lastSaved=data.meta.updatedAt;
     }
     bump();
+    this.pendingRecovery=null;
+    if(autoTxt){ try{ const a=JSON.parse(autoTxt); const at=a.meta?.autosavedAt||''; const mt=data.meta.updatedAt||'';
+      const differs = JSON.stringify({l:a.leaves,e:a.employees,s:a.settings}) !== JSON.stringify({l:data.leaves,e:data.employees,s:data.settings});
+      if(at > mt && differs) this.pendingRecovery={ data:migrate(a), at }; else await this.clearAutosave(); }catch{} }
   },
+  autoT:null,
+  scheduleAutosave(){ clearTimeout(this.autoT); this.autoT=setTimeout(()=>this.autosave(), 4000); },
+  async autosave(){
+    if(!data || dirtyN===0) return;
+    try{ const payload={...data, meta:{...data.meta, autosavedAt:new Date().toISOString()}}; const json=JSON.stringify(payload);
+      if(this.mode==='fs') await this.write(this.dir,'hr-data.autosave.json',json); else localStorage.setItem('hr-leave-autosave', json);
+      this.lastAuto=new Date(); setSaved('dirty');
+    }catch(e){ console.warn('autosave 실패', e); }
+  },
+  async clearAutosave(){ try{ if(this.mode==='fs') await this.dir.removeEntry('hr-data.autosave.json'); else localStorage.removeItem('hr-leave-autosave'); }catch{} this.lastAuto=null; },
   async backup(txt){
     try{
       const bd=await this.dir.getDirectoryHandle('backup',{create:true});
@@ -784,7 +812,7 @@ const store = {
     try{
       if(this.mode==='fs') await this.write(this.dir,'hr-data.json',json);
       else localStorage.setItem('hr-leave-data', json);
-      this.lastSaved=data.meta.updatedAt; dirtyN=0; setSaved('saved'); renderFoot();
+      this.lastSaved=data.meta.updatedAt; dirtyN=0; clearTimeout(this.autoT); await this.clearAutosave(); setSaved('saved'); renderFoot();
     }catch(e){ console.error(e); setSaved('error'); toast('저장 실패: '+e.message+' · 설정에서 JSON 백업을 먼저 만들 것', true); }
   },
   async saveBinary(sub, name, buf){
@@ -793,8 +821,9 @@ const store = {
   },
 };
 let dirtyN=0;
-function setSaved(s){ const p=$('#savedPill'); p.className='saved '+(s==='saved'?'':s); p.querySelector('span').textContent = s==='saving'?'저장 중…':s==='error'?'저장 실패 · 다시 시도':s==='dirty'?`변경 ${dirtyN}건 · 저장 필요`:'저장됨'; const b=$('#saveBtn'); if(b){ b.classList.toggle('dirty', s==='dirty'||s==='error'); b.disabled = s==='saved' || s==='saving'; } }
-function commit(){ bump(); dirtyN++; if(data.settings.autoSave){ store.schedule(); } else setSaved('dirty'); render(); }
+function setSaved(s){ const p=$('#savedPill'); p.className='saved '+(s==='saved'?'':s); p.querySelector('span').textContent = s==='saving'?'저장 중…':s==='error'?'저장 실패 · 다시 시도':s==='dirty'?`변경 ${dirtyN}건 · 저장 필요${store.lastAuto?` (임시저장 ${p2(store.lastAuto.getHours())}:${p2(store.lastAuto.getMinutes())})`:''}`:'저장됨'; const b=$('#saveBtn'); if(b){ b.classList.toggle('dirty', s==='dirty'||s==='error'); b.disabled = s==='saved' || s==='saving'; } }
+function commit(){ bump(); dirtyN++; if(data.settings.autoSave){ store.schedule(); } else { setSaved('dirty'); store.scheduleAutosave(); } render(); }
+setInterval(()=>{ if(data && dirtyN>0 && !data.settings.autoSave) store.autosave(); }, 60000);
 async function saveNow(){ if(!data) return; setSaved('saving'); await store.save(); }
 
 /* =========================================================
@@ -811,7 +840,7 @@ async function boot(){
       btn('','↻',`지난 폴더 다시 연결: ${saved.name}`,'브라우저가 권한을 다시 물어봄. 허용 1회 클릭', async()=>{ try{ if(await store.requestReconnect(saved)) enter(); else showErr('권한이 거부됨. 폴더를 다시 선택'); }catch(e){ showErr(e.message); } });
     }
     btn(saved?'sec':'','📁', saved?'다른 폴더 선택':'데이터 폴더 선택', '예) D:\\인사\\휴가관리 · 없으면 새 폴더 만들어 선택', async()=>{ try{ await store.pick(); enter(); }catch(e){ if(e.name!=='AbortError') showErr(e.message); } });
-    btn('sec','🧪','폴더 없이 브라우저에만 저장 (테스트용)','이 PC 이 브라우저에만 남음. 캐시 삭제 시 사라지므로 JSON 백업 필수', async()=>{ await store.useLocal(); enter(); });
+    btn('sec','🧪','폴더 없이 브라우저에만 저장 (테스트용)','이 PC 이 브라우저에만 남음. 화면 상단에 경고가 계속 표시됨', async()=>{ await store.useLocal(); enter(); });
     note.innerHTML='엣지·크롬 86 이상에서 폴더 저장 가능. 파일은 <b>hr-data.json</b> 하나이며 메모장으로도 열림.';
   } else {
     btn('','🧪','브라우저 저장으로 시작','이 브라우저는 폴더 저장 기능이 없음 (엣지·크롬 권장). 설정에서 JSON 백업 파일을 수시로 만들 것', async()=>{ await store.useLocal(); enter(); });
@@ -822,7 +851,29 @@ function showErr(m){ const e=$('#splashErr'); e.hidden=false; e.textContent=m; }
 function enter(){
   $('#splash').hidden=true; $('#app').hidden=false;
   try{ const th=localStorage.getItem('hr-theme'); if(th) document.documentElement.dataset.theme=th; }catch{}
-  initFilters(); renderFoot(); setSaved('saved'); render();
+  initFilters(); renderFoot(); setSaved('saved'); renderBanners(); render();
+}
+function renderBanners(){
+  $('#bnFolder').hidden = store.mode==='fs';
+  const pr=store.pendingRecovery; $('#bnRecover').hidden = !pr;
+  if(pr){ $('#bnRecoverTxt').textContent = `자동 임시저장 ${pr.at.slice(0,16).replace('T',' ')} · ${pr.data.leaves.length}건 (현재 저장본 ${data.leaves.length}건).`; }
+}
+$('#bnRestore').onclick=()=>{ const pr=store.pendingRecovery; if(!pr) return; data=pr.data; store.pendingRecovery=null; bump(); dirtyN=1; setSaved('dirty'); renderBanners(); render(); toast('임시저장분 복구됨 · 확인 후 저장 버튼을 누를 것'); };
+$('#bnDiscard').onclick=async()=>{ store.pendingRecovery=null; await store.clearAutosave(); renderBanners(); toast('임시저장분 삭제됨'); };
+$('#bnConnect').onclick=connectFolder;
+async function connectFolder(){
+  if(!store.supported) return toast('이 브라우저는 폴더 저장 미지원 · Edge/Chrome 사용', true);
+  const cur=data;
+  try{
+    const h=await window.showDirectoryPicker({mode:'readwrite', id:'hr-leave'});
+    const existing=await store.readText(h,'hr-data.json');
+    let useCur=true;
+    if(existing){ const ex=migrate(JSON.parse(existing)); if(ex.leaves.length && !confirm(`선택한 폴더에 이미 데이터(${ex.leaves.length}건)가 있음.\n확인 = 현재 화면 데이터(${cur.leaves.length}건)로 덮어쓰기\n취소 = 폴더의 데이터를 불러오기`)) useCur=false; }
+    store.dir=h; store.mode='fs'; await idb.set('dir', h);
+    if(useCur){ data=cur; await store.save(); } else { await store.load(); }
+    try{ localStorage.removeItem('hr-leave-data'); localStorage.removeItem('hr-leave-autosave'); }catch{}
+    bump(); renderFoot(); renderBanners(); render(); if(state.view==='settings') renderSettings(); toast('폴더 연결됨: '+h.name+' · 이제 이 폴더에 저장됨');
+  }catch(e){ if(e.name!=='AbortError') toast('폴더 연결 실패: '+e.message, true); }
 }
 
 /* =========================================================
@@ -1150,7 +1201,7 @@ const normH = v => String(v??'').replace(/[\s\n\r()（）_\-·.]/g,'').toLowerCa
 const I = { wb:null, sheet:null, rows:[], hdr:0, map:{}, mode:'append', parsed:null };
 function openImport(){ I.wb=null; I.sheet=null; I.rows=[]; I.map={}; I.parsed=null; I.mode='append'; $('#imodal').classList.add('on'); iStep1(); }
 function closeImport(){ $('#imodal').classList.remove('on'); }
-$('#iClose').onclick=closeImport; $('#btnImport').onclick=openImport; $('#navImport').onclick=openImport;
+$('#iClose').onclick=closeImport; $('#sImport').onclick=openImport;
 function iSetStep(n){ $$('#iSteps b').forEach((b,i)=>b.classList.toggle('on', i===n-1)); }
 function iStep1(){
   iSetStep(1);
@@ -1287,7 +1338,7 @@ async function exportXlsx(){
   const name=`육아휴직_${fmt(new Date()).replaceAll('-','')}.xlsx`;
   try{ const path=await store.saveBinary('export', name, buf); toast(path?`저장됨: ${path}`:'다운로드 시작'); }catch(e){ toast('내보내기 실패: '+e.message, true); }
 }
-$('#btnExport').onclick=exportXlsx; $('#navExport').onclick=exportXlsx;
+$('#sExport').onclick=exportXlsx;
 async function exportJson(){ const name=`hr-data_backup_${fmt(new Date()).replaceAll('-','')}_${p2(new Date().getHours())}${p2(new Date().getMinutes())}.json`; const json=JSON.stringify(data,null,2); try{ const path=await store.saveBinary('backup', name, new Blob([json],{type:'application/json'})); toast(path?`백업 저장: ${path}`:'다운로드 시작'); }catch(e){ toast('백업 실패: '+e.message, true); } }
 $('#fileJson').onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(!f) return; try{ const d=migrate(JSON.parse(await f.text())); if(!confirm(`이 파일의 ${d.leaves.length}건으로 현재 데이터(${data.leaves.length}건)를 교체할까요?`)) return; data=d; commit(); renderSettings(); toast('JSON 불러옴'); }catch(err){ toast('JSON 읽기 실패: '+err.message, true); } };
 
@@ -1308,7 +1359,7 @@ $('#sExt').onchange=e=>{ data.settings.extMonths=Math.max(0,+e.target.value||0);
 $('#sSoon').onchange=e=>{ data.settings.soonDays=Math.max(1,+e.target.value||30); commit(); };
 $('#sRef').onchange=e=>{ data.settings.refDate=isDate(e.target.value)?e.target.value:''; commit(); };
 $$('#sAuto button').forEach(b=>b.onclick=()=>{ data.settings.autoSave=b.dataset.v==='1'; commit(); renderSettings(); });
-$('#sPick').onclick=async()=>{ if(!store.supported) return toast('이 브라우저는 폴더 저장 미지원', true); try{ const old=data; await store.pick(); if(!data.leaves.length && old.leaves.length && confirm('새 폴더가 비어 있음. 현재 데이터를 새 폴더로 복사할까요?')){ data=old; await store.save(); } renderFoot(); renderSettings(); render(); toast('폴더 변경됨: '+store.dir.name); }catch(e){ if(e.name!=='AbortError') toast(e.message, true); } };
+$('#sPick').onclick=connectFolder;
 $('#sJsonOut').onclick=exportJson;
 $('#sJsonIn').onclick=()=>$('#fileJson').click();
 $('#sWipe').onclick=()=>{ if(!confirm(`육아휴직 ${data.leaves.length}건을 모두 삭제할까요? 되돌릴 수 없음.`)) return; if(prompt('확인을 위해 "삭제"라고 입력')!=='삭제') return; data.leaves=[]; commit(); renderSettings(); toast('전체 삭제됨'); };
@@ -1321,7 +1372,11 @@ $$('.nav button[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 $$('.nav .soon').forEach(b=>b.onclick=()=>toast('다음 단계에서 추가 예정'));
 $('#themeBtn').onclick=()=>{ const r=document.documentElement; r.dataset.theme = r.dataset.theme==='dark'?'light':'dark'; try{ localStorage.setItem('hr-theme', r.dataset.theme); }catch{} };
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDrawer(); closeForm(); closeImport(); } });
-window.addEventListener('beforeunload', e=>{ if(dirtyN>0 || $('#savedPill').classList.contains('saving')){ e.preventDefault(); e.returnValue=''; } });
+/* 창 닫기: 브라우저 정책상 문구는 바꿀 수 없고 브라우저 기본 경고창("변경사항이 저장되지 않을 수 있습니다")만 띄울 수 있음.
+   대신 닫기 시도 순간 임시저장을 즉시 한 번 더 시도하고, 탭 전환/최소화 때도 임시저장해서 유실을 막음 */
+window.addEventListener('beforeunload', e=>{ if(dirtyN>0 || $('#savedPill').classList.contains('saving')){ store.autosave(); e.preventDefault(); e.returnValue='저장하지 않은 변경사항이 있습니다. 저장하시겠습니까?'; return e.returnValue; } });
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden' && dirtyN>0) store.autosave(); });
+window.addEventListener('pagehide', ()=>{ if(dirtyN>0) store.autosave(); });
 $('#saveBtn').onclick=saveNow;
 document.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveNow(); } });
 $('#modal').onclick=e=>{ if(e.target.id==='modal') closeForm(); };
